@@ -1,0 +1,75 @@
+# Configuración del editor para U SYSTEM.
+# Regla del proyecto: todo el código en inglés y PascalCase; solo los comentarios en español.
+# La nomenclatura de TypeScript se valida con ESLint (ver docs/Guides/CodingConventions.md).
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{ts,tsx,js,jsx,json,yml,yaml,md}]
+indent_size = 2
+
+[*.cs]
+# Namespaces con archivo de bloque (file-scoped)
+csharp_style_namespace_declarations = file_scoped:warning
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_diagnostic.IDE1006.severity = warning
+
+# Constantes en PascalCase (se declara antes que los campos privados)
+dotnet_naming_rule.constants_pascal.severity = warning
+dotnet_naming_rule.constants_pascal.symbols = constants
+dotnet_naming_rule.constants_pascal.style = pascal_case_style
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.required_modifiers = const
+
+# Campos privados: _ + PascalCase
+dotnet_naming_rule.private_fields_pascal.severity = warning
+dotnet_naming_rule.private_fields_pascal.symbols = private_fields
+dotnet_naming_rule.private_fields_pascal.style = private_field_style
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+
+dotnet_naming_style.private_field_style.required_prefix = _
+dotnet_naming_style.private_field_style.capitalization = pascal_case
+
+# Variables locales en PascalCase
+dotnet_naming_rule.local_variables_pascal.severity = warning
+dotnet_naming_rule.local_variables_pascal.symbols = local_variables
+dotnet_naming_rule.local_variables_pascal.style = pascal_case_style
+
+dotnet_naming_symbols.local_variables.applicable_kinds = local
+
+# Parámetros en PascalCase
+dotnet_naming_rule.parameters_pascal.severity = warning
+dotnet_naming_rule.parameters_pascal.symbols = parameters
+dotnet_naming_rule.parameters_pascal.style = pascal_case_style
+
+dotnet_naming_symbols.parameters.applicable_kinds = parameter
+
+dotnet_naming_style.pascal_case_style.capitalization = pascal_case
+
+# Propiedades, métodos, tipos e interfaces
+dotnet_naming_rule.types_pascal.severity = warning
+dotnet_naming_rule.types_pascal.symbols = types
+dotnet_naming_rule.types_pascal.style = pascal_case_style
+
+dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum, delegate
+
+dotnet_naming_rule.members_pascal.severity = warning
+dotnet_naming_rule.members_pascal.symbols = members
+dotnet_naming_rule.members_pascal.style = pascal_case_style
+
+dotnet_naming_symbols.members.applicable_kinds = property, method, event
+
+[*.sql]
+indent_size = 2
+
+[*.{sh,bash}]
+indent_size = 2

@@ -1,0 +1,95 @@
+-- =====================================================================
+-- U SYSTEM | Trámites, notificaciones y configuración
+-- Motor: MySQL 8.x | Tablas y columnas en PascalCase (inglés)
+-- Regla del proyecto: solo los comentarios van en español
+-- =====================================================================
+USE USystem;
+
+CREATE TABLE IF NOT EXISTS ProcedureTypes (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Code VARCHAR(20) NOT NULL,
+  Name VARCHAR(150) NOT NULL,
+  PaymentConceptId INT NULL,
+  IsActive TINYINT(1) NOT NULL DEFAULT 1,
+  CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CreatedBy BIGINT NULL,
+  UpdatedAt DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+  UpdatedBy BIGINT NULL,
+  DeletedAt DATETIME NULL,
+  PRIMARY KEY (Id),
+  UNIQUE KEY UqProcedureTypesCode (Code),
+  CONSTRAINT FkProcedureTypesPaymentConceptId FOREIGN KEY (PaymentConceptId) REFERENCES PaymentConcepts (Id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS Procedures (
+  Id BIGINT NOT NULL AUTO_INCREMENT,
+  ProcedureTypeId INT NOT NULL,
+  StudentId BIGINT NOT NULL,
+  FolioNumber VARCHAR(30) NOT NULL,
+  Status VARCHAR(20) NOT NULL DEFAULT 'Requested',
+  RequestedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  IssuedAt DATETIME NULL,
+  FilePath VARCHAR(500) NULL,
+  UserId BIGINT NOT NULL,
+  CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CreatedBy BIGINT NULL,
+  UpdatedAt DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+  UpdatedBy BIGINT NULL,
+  DeletedAt DATETIME NULL,
+  PRIMARY KEY (Id),
+  UNIQUE KEY UqProceduresFolioNumber (FolioNumber),
+  CONSTRAINT FkProceduresProcedureTypeId FOREIGN KEY (ProcedureTypeId) REFERENCES ProcedureTypes (Id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT FkProceduresStudentId FOREIGN KEY (StudentId) REFERENCES Students (Id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT FkProceduresUserId FOREIGN KEY (UserId) REFERENCES Users (Id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS NotificationTemplates (
+  Id INT NOT NULL AUTO_INCREMENT,
+  Code VARCHAR(50) NOT NULL,
+  SubjectLine VARCHAR(200) NOT NULL,
+  Body TEXT NOT NULL,
+  IsActive TINYINT(1) NOT NULL DEFAULT 1,
+  CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CreatedBy BIGINT NULL,
+  UpdatedAt DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+  UpdatedBy BIGINT NULL,
+  DeletedAt DATETIME NULL,
+  PRIMARY KEY (Id),
+  UNIQUE KEY UqNotificationTemplatesCode (Code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS Notifications (
+  Id BIGINT NOT NULL AUTO_INCREMENT,
+  TemplateId INT NOT NULL,
+  StudentId BIGINT NULL,
+  RecipientEmail VARCHAR(150) NOT NULL,
+  Status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+  SentAt DATETIME NULL,
+  ErrorMessage VARCHAR(500) NULL,
+  RetryCount TINYINT NOT NULL DEFAULT 0,
+  CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CreatedBy BIGINT NULL,
+  UpdatedAt DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+  UpdatedBy BIGINT NULL,
+  DeletedAt DATETIME NULL,
+  PRIMARY KEY (Id),
+  KEY IxNotificationsStatus (Status),
+  CONSTRAINT FkNotificationsTemplateId FOREIGN KEY (TemplateId) REFERENCES NotificationTemplates (Id) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT FkNotificationsStudentId FOREIGN KEY (StudentId) REFERENCES Students (Id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE IF NOT EXISTS SystemSettings (
+  Id INT NOT NULL AUTO_INCREMENT,
+  SettingKey VARCHAR(100) NOT NULL,
+  SettingValue VARCHAR(500) NOT NULL,
+  ValueType VARCHAR(20) NOT NULL DEFAULT 'String',
+  Category VARCHAR(50) NOT NULL,
+  Description VARCHAR(255) NULL,
+  CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CreatedBy BIGINT NULL,
+  UpdatedAt DATETIME NULL ON UPDATE CURRENT_TIMESTAMP,
+  UpdatedBy BIGINT NULL,
+  DeletedAt DATETIME NULL,
+  PRIMARY KEY (Id),
+  UNIQUE KEY UqSystemSettingsSettingKey (SettingKey)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
