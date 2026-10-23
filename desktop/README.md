@@ -182,7 +182,9 @@ La paleta sale del logo y vive en `app/Theme.ts` (`USystemTheme` claro y `USyste
 - [x] **Carreras** y **Materias** (`/careers`, `/subjects`): CRUD completo sobre el CRUD genérico de `shared/crud`.
 - [x] **Roles** (`/roles`): listado y editor de permisos agrupado por módulo (con selección por módulo completo).
 - [x] **Bitácora** (`/audit-logs`): filtros por módulo, acción y fechas; detalle con valores antes/después.
-- [ ] Periodos cuatrimestrales (con abrir/cerrar) y planes de estudio (malla y seriación).
+- [x] **Periodos** (/academic-terms): calendario, abrir/cerrar y periodo en curso.
+- [x] **Planes de estudio** (/study-plans): datos, malla por cuatrimestre, seriación y marcar vigente.
+- [x] **Recuperación de contraseña**: /forgot-password y /reset-password con el token de la API.
 
 > Los catálogos CRUD se declaran en `modules/<Módulo>/model/<Módulo>Config.ts` (columnas, campos y
 > servicios) y las pantallas son `CrudListPage` / `CrudFormPage` de `shared/crud`: el patrón MVVM se

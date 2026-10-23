@@ -16,7 +16,7 @@
 - [x] Un solo periodo abierto o en curso (`AcademicTerms.OnlyOneInProgress`) y cerrado de solo lectura.
 - [x] `GET /academic-terms/current` devuelve el periodo en curso o el último abierto.
 - [x] Auditoría de alta, edición, apertura y cierre.
-- [ ] Pantalla de periodos en el desktop.
+- [x] Pantalla de periodos en el desktop.
 
 ## 1. Objetivo
 
@@ -74,35 +74,35 @@ Carpeta: `desktop/src/modules/AcademicTerms/`
 ## 7. Plan de construcción
 
 ### A. Base de datos
-- [ ] Script(s) `02_AcademicCatalogs` ejecutado(s) y revisado(s).
-- [ ] Permisos `AcademicTerms.*` presentes en `99_SeedData.sql` y asignados a roles.
+- [x] Script(s) `02_AcademicCatalogs` ejecutado(s) y revisado(s).
+- [x] Permisos `AcademicTerms.*` presentes en `99_SeedData.sql` y asignados a roles.
 
 ### B. API (.NET 8, capas)
-- [ ] `AcademicTerm` (Entity) → `IAcademicTermRepository` / `AcademicTermRepository`
-- [ ] `IAcademicTermService` / `AcademicTermService`; DTOs `AcademicTermDto`, `CreateAcademicTermRequest`, `UpdateAcademicTermRequest`; validadores
-- [ ] `AcademicTermsController` con `[RequirePermission]` en cada acción
-- [ ] Registro de DI en `AddAcademicTermsModule()`
-- [ ] Eventos de auditoría (`IAuditService`) donde aplique
-- [ ] Documentación Swagger y ejemplos
+- [x] `AcademicTerm` (Entity) → `IAcademicTermRepository` / `AcademicTermRepository`
+- [x] `IAcademicTermService` / `AcademicTermService`; DTOs `AcademicTermDto`, `CreateAcademicTermRequest`, `UpdateAcademicTermRequest`; validadores
+- [x] `AcademicTermsController` con `[RequirePermission]` en cada acción
+- [x] Registro de DI en `AddAcademicTermsModule()`
+- [x] Eventos de auditoría (`IAuditService`) donde aplique
+- [x] Documentación Swagger y ejemplos
 
 ### C. Desktop (MVVM)
-- [ ] Model: tipos y `AcademicTermsService`
-- [ ] ViewModels (hooks) con validaciones y manejo de errores
-- [ ] Views con AXZY UI; ruta y entrada de menú protegidas por permiso
+- [x] Model: tipos y `AcademicTermsService`
+- [x] ViewModels (hooks) con validaciones y manejo de errores
+- [x] Views con AXZY UI; ruta y entrada de menú protegidas por permiso
 
 ### D. Pruebas
-- [ ] Unitarias de servicios (reglas de negocio de la sección 3)
+- [x] Unitarias de servicios (reglas de negocio de la sección 3)
 - [ ] Integración de repositorios contra MySQL de pruebas
 - [ ] Pruebas de ViewModels
 - [ ] Caso de prueba por cada criterio de aceptación
 
 ### E. Cierre
-- [ ] Criterios de aceptación cumplidos
+- [x] Criterios de aceptación cumplidos
 - [ ] Revisión de seguridad (permisos, datos sensibles)
-- [ ] Documentación actualizada
+- [x] Documentación actualizada
 
 ## 8. Criterios de aceptación
 
-- [ ] Se crea el calendario de un cuatrimestre.
-- [ ] Un periodo cerrado no admite cambios.
-- [ ] No se permiten dos periodos en curso.
+- [x] Se crea el calendario de un cuatrimestre.
+- [x] Un periodo cerrado no admite cambios.
+- [x] No se permiten dos periodos en curso.

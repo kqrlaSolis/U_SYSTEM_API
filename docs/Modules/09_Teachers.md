@@ -95,3 +95,13 @@ Carpeta: `desktop/src/modules/Teachers/`
 
 - [ ] Se registra un docente con sus materias.
 - [ ] No se eliminan docentes con grupos.
+
+## Estado (Fase 2 en curso)
+
+- [x] Permisos `Teachers.*` sembrados en `99_SeedData.sql` y asignados a roles.
+- [x] `Teacher` (Entity) → `ITeacherRepository` / `TeacherRepository` (unicidad con borrados lógicos, grupos por docente).
+- [x] `ITeacherService` / `TeacherService` con auditoría, `Teachers.NotFound`, `Teachers.EmployeeNumberTaken`, `Teachers.EmailTaken` y `Teachers.InUse`.
+- [x] DTOs `TeacherDto`, `CreateTeacherRequest`, `UpdateTeacherRequest`, validadores y `TeacherMapper`.
+- [x] `TeachersController` con `[RequirePermission]` en cada acción y `AddTeachersModule()` registrado.
+- [x] Pruebas unitarias del servicio (5) y verificación HTTP real (alta, listado y edición contra MySQL `railway`).
+- [x] Pantalla de docentes en el desktop (`/teachers`): listado con búsqueda, alta/edición y baja sobre el CRUD genérico.

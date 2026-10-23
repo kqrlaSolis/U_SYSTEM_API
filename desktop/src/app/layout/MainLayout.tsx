@@ -1,4 +1,5 @@
 import { ITLayout } from '@axzydev/axzy_ui_system';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LogoUrl from '../../assets/brand/UsystemIcon.svg';
@@ -17,6 +18,7 @@ export function MainLayout() {
   const NavigationItems = useNavigationItems();
   const Language = NormalizeLanguage(Translation.i18n.language);
   const CurrentUser = Auth.CurrentUser;
+  const [IsCollapsed, SetIsCollapsed] = useState(false);
 
   const ToggleLanguage = () => {
     void ChangeLanguage(Language === 'en' ? 'es' : 'en');
@@ -30,7 +32,9 @@ export function MainLayout() {
   return (
     <ITLayout
       topBar={{
-        logoText: Translation.t('Common.AppName'),
+        // Icono grande de la marca al extremo izquierdo de la barra superior
+        logo: <img className="USystemNavbarLogo" src={LogoUrl} alt="" width={40} height={40} />,
+        // logoText: Translation.t('Common.AppName'),
         userMenu: {
           userName: CurrentUser?.FullName ?? Translation.t('Common.AppName'),
           userEmail: CurrentUser?.Email ?? '',
@@ -50,7 +54,7 @@ export function MainLayout() {
         // Acciones de la barra superior: cambio de idioma
         children: (
           <AppButton
-            Variant="text"
+            Variant="filled"
             Size="sm"
             Label={Language === 'es' ? 'EN' : 'ES'}
             AriaLabel={Translation.t('Common.Language')}
@@ -60,10 +64,11 @@ export function MainLayout() {
       }}
       sidebar={{
         navigationItems: NavigationItems,
-        brand: {
-          logo: <img src={LogoUrl} alt="" width={28} height={28} />,
-          text: Translation.t('Common.AppName'),
-        },
+        // El colapso lo controla la app para ajustar el resaltado del icono
+        isCollapsed: IsCollapsed,
+        onToggleCollapse: () => SetIsCollapsed((Current) => !Current),
+        expandOnHover: true,
+        className: IsCollapsed ? 'USystemSidebar USystemSidebarCollapsed' : 'USystemSidebar',
       }}
     >
       <Outlet />

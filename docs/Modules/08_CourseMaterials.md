@@ -95,3 +95,11 @@ Carpeta: `desktop/src/modules/CourseMaterials/`
 
 - [ ] Se adjunta un archivo a una materia.
 - [ ] Se rechazan formatos o tamaños no permitidos.
+
+## Estado (Fase 2 en curso)
+
+- [x] `CourseMaterial` (Entity) → `ICourseMaterialRepository` / `CourseMaterialRepository`.
+- [x] `ICourseMaterialService` / `CourseMaterialService` con auditoría y `CourseMaterials.NotFound`.
+- [x] DTOs `CourseMaterialDto`, `CreateCourseMaterialRequest`, `UpdateCourseMaterialRequest` y validadores.
+- [x] `CourseMaterialsController` con `[RequirePermission(CourseMaterials.*)]` y `AddCourseMaterialsModule()`.
+- [x] Pruebas unitarias del servicio (3), verificación HTTP real y pantalla de desktop (`/course-materials`).

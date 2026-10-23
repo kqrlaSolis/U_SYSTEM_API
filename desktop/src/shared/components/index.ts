@@ -11,6 +11,8 @@ export { ConfirmDialog } from './ConfirmDialog';
 export type { ConfirmDialogProps } from './ConfirmDialog';
 export { DataTable } from './DataTable';
 export type { DataTableColumn, DataTableColumnType, DataTableProps } from './DataTable';
+export { FilterBar } from './FilterBar';
+export type { FilterBarProps, FilterField } from './FilterBar';
 export { FormField } from './FormField';
 export type { FormFieldProps } from './FormField';
 export { LottieAnimation } from './LottieAnimation';

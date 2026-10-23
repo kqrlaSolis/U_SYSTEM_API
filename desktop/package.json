@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "concurrently -k -n renderer,electron -c cyan,magenta \"npm:dev:renderer\" \"npm:dev:electron\"",
     "dev:renderer": "vite",
-    "dev:electron": "wait-on tcp:127.0.0.1:5173 && npm run build:electron && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "dev:electron": "wait-on tcp:localhost:5173 && npm run build:electron && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 node scripts/StartElectron.cjs",
     "build:electron": "tsc -p electron/tsconfig.json && node scripts/WriteElectronManifest.cjs",
     "build": "tsc --noEmit && vite build",
     "icons": "node scripts/GenerateIcons.mjs",
@@ -18,7 +18,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "start": "npm run build:electron && electron .",
+    "start": "npm run build:electron && node scripts/StartElectron.cjs",
     "dist:win": "npm run version:bump && npm run build && npm run build:electron && electron-builder --win",
     "dist:linux": "npm run version:bump && npm run build && npm run build:electron && electron-builder --linux",
     "dist:mac": "npm run version:bump && npm run build && npm run build:electron && electron-builder --mac"

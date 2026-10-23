@@ -1,4 +1,4 @@
-// Parámetros de paginación compartidos por todos los listados de la API.
+// Parámetros de paginación y filtros compartidos por los listados de la API.
 namespace USystem.Domain.Common;
 
 public class PagedQuery
@@ -27,6 +27,24 @@ public class PagedQuery
     public string? SortBy { get; set; }
 
     public bool Descending { get; set; }
+
+    // --- Filtros opcionales: cada repositorio usa los que le aplican ---
+    public int? CareerId { get; set; }
+
+    public int? StudyPlanId { get; set; }
+
+    public int? AcademicTermId { get; set; }
+
+    public string? Status { get; set; }
+
+    public string? Level { get; set; }
+
+    public string? Modality { get; set; }
+
+    public bool? IsActive { get; set; }
+
+    // Solo planes de estudio: vigente o no
+    public bool? IsCurrent { get; set; }
 
     // Desplazamiento que usan los repositorios al consultar
     public int Skip => (Page - 1) * PageSize;

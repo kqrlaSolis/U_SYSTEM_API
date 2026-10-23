@@ -97,3 +97,11 @@ Carpeta: `desktop/src/modules/Enrollments/`
 
 - [ ] No se inscribe sin documentos validados ni pago.
 - [ ] Cancelar libera el cupo del grupo.
+
+## Estado (Fase 2 en curso)
+
+- [x] `IEnrollmentRepository` / `EnrollmentRepository` (inscripción por alumno y periodo, grupos asignados, conteo por grupo para cupo).
+- [x] `EnrollmentDto`, `CreateEnrollmentRequest` y `CreateEnrollmentRequestValidator` (ids obligatorios y al menos un grupo).
+- [x] `EnrollmentService` / `EnrollmentsController`: alta (`Type = Enrollment`, `Status = Draft`), validación de grupo abierto y cupo, `EnrolledCount`, cancelación y auditoría.
+- [x] Pruebas unitarias (duplicado por periodo, cupo lleno, cancelación) y verificación HTTP real (`Draft` → `Cancelled`).
+- [x] Pantalla de inscripciones en el desktop (`/enrollments`) con alumno, periodo, carrera y grupos.

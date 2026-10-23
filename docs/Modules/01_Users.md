@@ -20,7 +20,7 @@
 - [x] `AddUsersModule()` y 27 pruebas nuevas (75 en total en la solución).
 - [x] Desktop: login real contra `/api/v1/auth/login` (`UsernameOrEmail`) y contrato con `Roles`.
 - [x] Desktop: perfil (`/profile`), cambio de contraseña (`/change-password`) y formulario de usuarios con roles, estado y contraseña temporal.
-- [ ] Pantallas de recuperación de contraseña (olvidé mi contraseña / restablecer) en el desktop.
+- [x] Pantallas de recuperación de contraseña (/forgot-password y /reset-password) en el desktop.
 - [ ] Envío real del correo de recuperación (proveedor SMTP pendiente).
 
 ## 1. Objetivo

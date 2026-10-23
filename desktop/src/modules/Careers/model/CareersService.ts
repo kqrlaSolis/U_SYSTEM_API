@@ -6,8 +6,13 @@ const CareersPath = '/api/v1/careers';
 
 // Servicio del módulo: sin estado de UI y sin conocer React
 export const CareersService = {
-  async GetPaged(Page: number, PageSize: number, Search: string): Promise<PagedResult<Career>> {
-    return HttpClient.Get<PagedResult<Career>>(CareersPath, { Page, PageSize, Search });
+  async GetPaged(
+    Page: number,
+    PageSize: number,
+    Search: string,
+    Filters: Record<string, string> = {},
+  ): Promise<PagedResult<Career>> {
+    return HttpClient.Get<PagedResult<Career>>(CareersPath, { Page, PageSize, Search, ...Filters });
   },
 
   async GetById(Id: number): Promise<Career> {

@@ -64,14 +64,14 @@ describe('useCrudListViewModel', () => {
     });
 
     expect(RenderedHook.result.current.Items).toHaveLength(1);
-    expect(Mocks.List).toHaveBeenCalledWith(1, 20, '');
+    expect(Mocks.List).toHaveBeenCalledWith(1, 20, '', {});
 
     act(() => {
       RenderedHook.result.current.SetPage(2);
     });
 
     await waitFor(() => {
-      expect(Mocks.List).toHaveBeenLastCalledWith(2, 20, '');
+      expect(Mocks.List).toHaveBeenLastCalledWith(2, 20, '', {});
     });
   });
 

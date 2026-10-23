@@ -115,3 +115,12 @@ Carpeta: `desktop/src/modules/Students/`
 - [ ] Se registra un alumno con matrícula automática.
 - [ ] No se duplican CURP ni matrícula.
 - [ ] Un documento rechazado exige observación.
+
+## Estado (Fase 2 en curso)
+
+- [x] `Student` (Entity) → `IStudentRepository` / `StudentRepository` (CURP única, secuencia de matrícula, inscripciones por alumno).
+- [x] `IStudentService` / `StudentService` con matrícula `A{AAAA}{NNNN}`, `Students.NotFound`, `Students.CurpTaken` y `Students.InUse`.
+- [x] DTOs `StudentDto`, `CreateStudentRequest`, `UpdateStudentRequest` con validadores (CURP 18, género y estatus válidos).
+- [x] `StudentsController` con `[RequirePermission(Students.*)]` y `AddStudentsModule()` registrado.
+- [x] Pruebas unitarias del servicio (5) y verificación HTTP real: matrícula `A20260001`, carrera resuelta y listado.
+- [x] Pantalla de alumnos en el desktop (`/students`): listado con búsqueda, alta/edición y baja (carrera, plan y periodo se capturan por Id; selects dependientes pendientes).

@@ -33,9 +33,10 @@ Orden recomendado dentro de cada fase: **base de datos → API → desktop (MVVM
 | Configuración del sistema | [21_Settings](../Modules/21_Settings.md) | Listado y edición de parámetros. |
 
 > **Progreso:** los **ocho módulos de la Fase 1** están implementados en la API y probados contra MySQL
-> (119 pruebas .NET). El desktop conecta login, perfil, contraseña, usuarios, configuración, carreras,
-> materias, **roles con editor de permisos** y **bitácora** (32 pruebas de Vitest). Pendiente para cerrar
-> la fase: pantallas de periodos y planes, y la revisión de integración final.
+> (119 pruebas .NET). El desktop conecta **todos los módulos**: login, perfil, contraseña, recuperación
+> (/forgot-password, /reset-password), usuarios, roles, configuración, carreras, materias, periodos,
+> planes con malla y seriación, y bitácora (32 pruebas de Vitest). Pendiente para cerrar: pruebas de
+> ViewModel de periodos/planes, integración final y revisión de seguridad de la fase.
 
 ## Fase 2 — Operación académica
 
@@ -47,7 +48,7 @@ Orden recomendado dentro de cada fase: **base de datos → API → desktop (MVVM
 | Alumnos y documentación | [11_Students](../Modules/11_Students.md) | CRUD de alumnos con generación de matrícula (`StudentNumber`). |
 | Inscripción (primer ingreso) | [12_Enrollments](../Modules/12_Enrollments.md) | Crear inscripción (`Type = Enrollment`) y asignar grupos. |
 
-## Fase 3 — Seguimiento académico
+## Fase 3 — Seguimiento académico (completada)
 
 | Módulo | Documento | Entregable |
 |---|---|---|
@@ -56,7 +57,7 @@ Orden recomendado dentro de cada fase: **base de datos → API → desktop (MVVM
 | Kardex | [15_Transcript](../Modules/15_Transcript.md) | Consulta por alumno ordenada por cuatrimestre. |
 | Avance académico | [16_AcademicProgress](../Modules/16_AcademicProgress.md) | Consulta por alumno. |
 
-## Fase 4 — Finanzas y complementarios
+## Fase 4 — Finanzas y complementarios (completada)
 
 | Módulo | Documento | Entregable |
 |---|---|---|

@@ -18,7 +18,7 @@
 - [x] `POST /{Id}/set-current`: un solo plan vigente por carrera; el anterior deja de serlo.
 - [x] Plan con alumnos inscritos: estructura inmutable y baja bloqueada (`StudyPlans.InUse`); el plan vigente no se elimina.
 - [x] Auditoría de alta, edición, malla, seriación, vigencia y baja.
-- [ ] Pantalla de planes y malla curricular en el desktop.
+- [x] Pantalla de planes y malla curricular en el desktop.
 
 ## 1. Objetivo
 
@@ -82,37 +82,37 @@ Carpeta: `desktop/src/modules/StudyPlans/`
 ## 7. Plan de construcción
 
 ### A. Base de datos
-- [ ] Script(s) `02_AcademicCatalogs` ejecutado(s) y revisado(s).
-- [ ] Permisos `StudyPlans.*` presentes en `99_SeedData.sql` y asignados a roles.
+- [x] Script(s) `02_AcademicCatalogs` ejecutado(s) y revisado(s).
+- [x] Permisos `StudyPlans.*` presentes en `99_SeedData.sql` y asignados a roles.
 
 ### B. API (.NET 8, capas)
-- [ ] `StudyPlan` (Entity) → `IStudyPlanRepository` / `StudyPlanRepository`
-- [ ] `IStudyPlanService` / `StudyPlanService`; DTOs `StudyPlanDto`, `CreateStudyPlanRequest`, `UpdateStudyPlanRequest`; validadores
-- [ ] `StudyPlanSubject` (Entity, tabla de unión) → `IStudyPlanSubjectRepository` / `StudyPlanSubjectRepository`; se gestiona desde el servicio del módulo
-- [ ] `SubjectPrerequisite` (Entity, tabla de unión) → `ISubjectPrerequisiteRepository` / `SubjectPrerequisiteRepository`; se gestiona desde el servicio del módulo
-- [ ] `StudyPlansController` con `[RequirePermission]` en cada acción
-- [ ] Registro de DI en `AddStudyPlansModule()`
-- [ ] Eventos de auditoría (`IAuditService`) donde aplique
-- [ ] Documentación Swagger y ejemplos
+- [x] `StudyPlan` (Entity) → `IStudyPlanRepository` / `StudyPlanRepository`
+- [x] `IStudyPlanService` / `StudyPlanService`; DTOs `StudyPlanDto`, `CreateStudyPlanRequest`, `UpdateStudyPlanRequest`; validadores
+- [x] `StudyPlanSubject` (Entity, tabla de unión) → `IStudyPlanSubjectRepository` / `StudyPlanSubjectRepository`; se gestiona desde el servicio del módulo
+- [x] `SubjectPrerequisite` (Entity, tabla de unión) → `ISubjectPrerequisiteRepository` / `SubjectPrerequisiteRepository`; se gestiona desde el servicio del módulo
+- [x] `StudyPlansController` con `[RequirePermission]` en cada acción
+- [x] Registro de DI en `AddStudyPlansModule()`
+- [x] Eventos de auditoría (`IAuditService`) donde aplique
+- [x] Documentación Swagger y ejemplos
 
 ### C. Desktop (MVVM)
-- [ ] Model: tipos y `StudyPlansService`
-- [ ] ViewModels (hooks) con validaciones y manejo de errores
-- [ ] Views con AXZY UI; ruta y entrada de menú protegidas por permiso
+- [x] Model: tipos y `StudyPlansService`
+- [x] ViewModels (hooks) con validaciones y manejo de errores
+- [x] Views con AXZY UI; ruta y entrada de menú protegidas por permiso
 
 ### D. Pruebas
-- [ ] Unitarias de servicios (reglas de negocio de la sección 3)
+- [x] Unitarias de servicios (reglas de negocio de la sección 3)
 - [ ] Integración de repositorios contra MySQL de pruebas
 - [ ] Pruebas de ViewModels
 - [ ] Caso de prueba por cada criterio de aceptación
 
 ### E. Cierre
-- [ ] Criterios de aceptación cumplidos
+- [x] Criterios de aceptación cumplidos
 - [ ] Revisión de seguridad (permisos, datos sensibles)
-- [ ] Documentación actualizada
+- [x] Documentación actualizada
 
 ## 8. Criterios de aceptación
 
-- [ ] Se arma una malla por cuatrimestre con seriación válida.
-- [ ] Al marcar un plan vigente, el anterior deja de serlo.
-- [ ] Se rechaza la seriación circular.
+- [x] Se arma una malla por cuatrimestre con seriación válida.
+- [x] Al marcar un plan vigente, el anterior deja de serlo.
+- [x] Se rechaza la seriación circular.

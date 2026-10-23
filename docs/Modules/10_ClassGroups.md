@@ -97,3 +97,11 @@ Carpeta: `desktop/src/modules/ClassGroups/`
 
 - [ ] Se detecta el empalme de horario de un docente.
 - [ ] No se excede el cupo.
+
+## Estado (Fase 2 en curso)
+
+- [x] `ClassGroup` + `ClassGroupSchedule` → `IClassGroupRepository` / `ClassGroupRepository` (código único por periodo, reemplazo de horarios, grupos con inscritos).
+- [x] `IClassGroupService` / `ClassGroupService` con auditoría y reglas `ClassGroups.NotFound`, `CodeTaken`, `InUse`, `InvalidCapacity`, `InvalidSchedule`.
+- [x] DTOs (`ClassGroupDto` con horarios, `Create/UpdateClassGroupRequest`) y validadores (día 1-7, horas HH:mm, inicio < fin).
+- [x] `ClassGroupsController` con `[RequirePermission(ClassGroups.*)]` y `AddClassGroupsModule()`.
+- [x] Pruebas unitarias (4), verificación HTTP real con horarios y pantalla de desktop (`/class-groups`).

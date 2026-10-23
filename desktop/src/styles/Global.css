@@ -162,6 +162,40 @@ body {
   border-radius: 0.75rem;
 }
 
+.USystemModuleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.USystemModuleCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  background-color: var(--usystem-surface-strong);
+  border: 1px solid var(--usystem-border);
+  border-radius: 0.75rem;
+  transition: border-color 150ms ease, transform 150ms ease;
+}
+
+.USystemModuleCard:hover {
+  border-color: var(--usystem-brand);
+  transform: translateY(-1px);
+}
+
+.USystemModuleName {
+  font-weight: 600;
+  color: var(--usystem-brand);
+}
+
+.USystemModuleHint {
+  font-size: 0.8rem;
+  color: var(--usystem-text-muted);
+}
+
 .USystemLottie {
   width: 100%;
   max-width: 420px;
@@ -258,6 +292,26 @@ body {
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
 }
 
+/* Marca en el navbar (icono grande al extremo izquierdo) ------------------ */
+.USystemNavbarLogo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+/* Sidebar colapsado: el riel mide 72px y el nav usa px-4 con items px-3, así
+   que el icono de 20px desborda su propio fondo y el resaltado se ve partido.
+   Al centrar y quitar el padding, el resaltado cubre el icono completo. */
+.USystemSidebarCollapsed nav {
+  padding-inline: 0.5rem;
+}
+
+.USystemSidebarCollapsed nav [role='button'] {
+  justify-content: center;
+  padding-inline: 0;
+}
+
 .USystemLoginBanner {
   display: block;
   width: 100%;
@@ -277,6 +331,17 @@ body {
   font-size: 0.9rem;
   text-align: center;
   color: var(--usystem-text-muted);
+}
+
+.USystemLoginLink {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--usystem-brand);
+  text-decoration: none;
+}
+
+.USystemLoginLink:hover {
+  text-decoration: underline;
 }
 
 .USystemLoginFooter {

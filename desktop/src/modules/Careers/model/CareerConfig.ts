@@ -17,6 +17,8 @@ export const CareerConfig: CrudConfig<Career, CareerRequest> = {
   PermissionEdit: 'Careers.Edit',
   PermissionDelete: 'Careers.Delete',
 
+  Filters: [{ Field: 'IsActive', LabelKey: 'Careers.Filters.Active', OptionsKey: 'ActiveStatus' }],
+
   Columns: [
     { Field: 'Code', HeaderKey: 'Careers.Columns.Code' },
     { Field: 'Name', HeaderKey: 'Careers.Columns.Name' },
@@ -47,7 +49,7 @@ export const CareerConfig: CrudConfig<Career, CareerRequest> = {
     IsActive: 'true',
   },
 
-  List: (Page, PageSize, Search) => CareersService.GetPaged(Page, PageSize, Search),
+  List: (Page, PageSize, Search, Filters) => CareersService.GetPaged(Page, PageSize, Search, Filters),
   Load: (Id) => CareersService.GetById(Id),
   Create: (Request) => CareersService.Create(Request),
   Update: (Id, Request) => CareersService.Update(Id, Request),

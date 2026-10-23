@@ -64,6 +64,11 @@ public class SubjectRepository : ISubjectRepository
             Source = Source.Where(Subject => Subject.Code.Contains(Search) || Subject.Name.Contains(Search));
         }
 
+        if (Query.IsActive is not null)
+        {
+            Source = Source.Where(Subject => Subject.IsActive == Query.IsActive);
+        }
+
         var TotalCount = await Source.CountAsync(Cancellation);
         var Items = await Source
             .OrderBy(Subject => Subject.Name)

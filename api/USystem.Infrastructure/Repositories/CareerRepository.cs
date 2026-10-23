@@ -62,6 +62,21 @@ public class CareerRepository : ICareerRepository
             Source = Source.Where(Career => Career.Code.Contains(Search) || Career.Name.Contains(Search));
         }
 
+        if (!string.IsNullOrWhiteSpace(Query.Level))
+        {
+            Source = Source.Where(Career => Career.Level == Query.Level);
+        }
+
+        if (!string.IsNullOrWhiteSpace(Query.Modality))
+        {
+            Source = Source.Where(Career => Career.Modality == Query.Modality);
+        }
+
+        if (Query.IsActive is not null)
+        {
+            Source = Source.Where(Career => Career.IsActive == Query.IsActive);
+        }
+
         var TotalCount = await Source.CountAsync(Cancellation);
         var Items = await Source
             .OrderBy(Career => Career.Name)

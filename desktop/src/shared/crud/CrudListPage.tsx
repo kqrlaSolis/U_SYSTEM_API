@@ -1,7 +1,7 @@
 import { ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppButton, DataTable, SearchBox } from '../components';
+import { AppButton, DataTable, FilterBar, SearchBox } from '../components';
 import type { DataTableColumn } from '../components';
 import type { CrudConfig, CrudRow } from './CrudTypes';
 import { useCrudListViewModel } from './useCrudListViewModel';
@@ -25,7 +25,7 @@ export function CrudListPage<TRow extends CrudRow, TRequest>({
     Render: Column.Render,
   }));
 
-  if (ViewModel.CanEdit || ViewModel.CanDelete) {
+  if (ViewModel.CanEdit || ViewModel.CanDelete || Config.RowActions !== undefined) {
     Columns.push({
       Field: 'Id',
       Header: Translation.t('Common.Actions'),
@@ -42,6 +42,7 @@ export function CrudListPage<TRow extends CrudRow, TRequest>({
               OnClick={() => Navigator(`${Config.Route}/${Row.Id}`)}
             />
           )}
+          {Config.RowActions !== undefined && Config.RowActions(Row, ViewModel.Reload)}
           {ViewModel.CanDelete && (
             <AppButton
               Label={Translation.t('Common.Delete')}
@@ -91,6 +92,15 @@ export function CrudListPage<TRow extends CrudRow, TRequest>({
             {Translation.t('Common.Total')}: {ViewModel.TotalCount}
           </ITText>
         </div>
+
+        {Config.Filters !== undefined && Config.Filters.length > 0 && (
+          <FilterBar
+            Fields={Config.Filters}
+            Values={ViewModel.Filters}
+            OnChange={ViewModel.SetFilter}
+            OnClear={ViewModel.ClearFilters}
+          />
+        )}
 
         <DataTable<TRow>
           Columns={Columns}
