@@ -1,0 +1,15 @@
+# Contexto para `railway up`: la imagen solo necesita la API
+desktop/
+node_modules/
+**/node_modules/
+**/bin/
+**/obj/
+release/
+dist/
+dist-electron/
+.git/
+docs/
+tools/
+*.md
+.env
+.env.*
