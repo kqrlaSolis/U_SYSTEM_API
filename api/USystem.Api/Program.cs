@@ -36,7 +36,8 @@ public class Program
         // Siempre primero: cualquier excepción posterior sale con el sobre ApiResponse
         App.UseMiddleware<ExceptionHandlingMiddleware>();
 
-        if (App.Environment.IsDevelopment())
+        // Swagger en desarrollo o cuando el despliegue lo habilita con Swagger__Enabled=true
+        if (App.Environment.IsDevelopment() || App.Configuration.GetValue<bool>("Swagger:Enabled"))
         {
             App.UseSwagger();
             App.UseSwaggerUI(Options =>
@@ -48,6 +49,16 @@ public class Program
         App.UseAuthorization();
         App.MapControllers();
         App.MapHealthChecks("/health");
+
+        // Raíz informativa: abrir el dominio del servicio no debe devolver 404
+        App.MapGet("/", () => Results.Json(new
+        {
+            Name = "U SYSTEM API",
+            Environment = App.Environment.EnvironmentName,
+            Version = App.GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0",
+            Health = "/health",
+            Swagger = App.Configuration.GetValue<bool>("Swagger:Enabled") ? "/swagger" : "habilitar con Swagger__Enabled=true",
+        })).AllowAnonymous();
 
         App.Run();
     }
