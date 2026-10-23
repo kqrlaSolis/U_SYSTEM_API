@@ -1,9 +1,0 @@
-node_modules/
-dist/
-dist-electron/
-release/
-coverage/
-.env
-.env.local
-*.log
-.DS_Store
