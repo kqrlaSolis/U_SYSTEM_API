@@ -29,8 +29,8 @@ Registro único de pendientes de U SYSTEM. Cada fase cierra solo cuando los íte
 | Pendiente | Tipo | Nota |
 |---|---|---|
 | Editor visual de horarios en ClassGroups | UX | Hoy se capturan como texto `día inicio-fin; …` |
-| Selects dependientes en Students y Enrollments | UX | Carrera, plan, periodo y grupos se capturan por Id |
-| Botón de cancelar inscripción en el desktop | Funcional | La API ya expone `POST /enrollments/{Id}/cancel` y libera cupo; falta el botón en la lista |
+| Selects dependientes en Students y Enrollments | UX | El asistente ya usa selects de alumno/periodo/carrera y lista grupos disponibles; faltan los selects en las pantallas de Students y Enrollments |
+| ~~Botón de cancelar inscripción en el desktop~~ | Resuelto | `RowActions` en el CRUD genérico: la lista de inscripciones cancela y recarga (la API libera cupo) |
 | ~~Recuperar `EnrolledCount` al cancelar una inscripción~~ | Resuelto | `EnrollmentService.CancelAsync` libera el cupo de cada grupo y se verificó por HTTP (2 → 1) |
 | Documentación sin bloquear inscripción (gracia 3 meses) | Regla | Implementada: `Warnings` con `Enrollments.DocumentsPending`; solo los adeudos bloquean. Falta **persistir la fecha límite** por inscripción |
 | ~~Validar que el periodo exista en inscripciones/reinscripciones~~ | Resuelto | `EnrollmentService` valida el periodo y devuelve `AcademicTerms.NotFound` |

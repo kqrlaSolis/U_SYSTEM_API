@@ -1,0 +1,17 @@
+# Contexto de build mínimo: el desktop no se compila ni se copia a la imagen
+desktop/
+.git/
+.github/
+docs/
+tools/
+.env
+.env.*
+*.md
+release/
+**/bin/
+**/obj/
+**/node_modules/
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.log
