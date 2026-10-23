@@ -1,4 +1,5 @@
-# Integración continua de U SYSTEM: API en .NET 8 y desktop en Electron + React.
+# Integración continua de U SYSTEM: API en .NET 8.
+# El desktop vive en su propio repo, por eso aquí solo se construye y prueba la API.
 name: CI
 
 on:
@@ -26,29 +27,5 @@ jobs:
       - name: Pruebas
         run: dotnet test USystem.sln --no-build --configuration Release --logger "console;verbosity=minimal"
 
-  desktop:
-    name: Desktop (Node 22)
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: desktop
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: npm
-          cache-dependency-path: desktop/package-lock.json
-
-      - name: Instalar dependencias
-        run: npm ci
-
-      - name: Tipos y build
-        run: npm run build
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Pruebas
-        run: npm test
+      - name: Formato
+        run: dotnet format USystem.sln --verify-no-changes --severity warn
