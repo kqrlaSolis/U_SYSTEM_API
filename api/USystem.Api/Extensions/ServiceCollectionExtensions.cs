@@ -111,9 +111,9 @@ public static class ServiceCollectionExtensions
 
         Services.AddCors(Options => Options.AddPolicy(CorsPolicyName, Policy =>
         {
-            // Solo el origen del desktop; en producción se restringe al dominio real
+            // Orígenes del desktop: Vite en desarrollo y el renderer file:// empaquetado
             var AllowedOrigins = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                ?? new[] { "http://localhost:5173" };
+                ?? new[] { "http://localhost:5173", "http://127.0.0.1:5173", "null" };
 
             Policy.WithOrigins(AllowedOrigins).AllowAnyHeader().AllowAnyMethod();
         }));
