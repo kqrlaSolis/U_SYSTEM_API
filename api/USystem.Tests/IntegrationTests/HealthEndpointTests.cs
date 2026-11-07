@@ -2,7 +2,12 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using USystem.Api.HealthChecks;
 
 namespace USystem.Tests.IntegrationTests;
 
@@ -16,6 +21,22 @@ public class ApiFactory : WebApplicationFactory<USystem.Api.Program>
         Environment.SetEnvironmentVariable("Jwt__SecretKey", new string('t', 64));
         Environment.SetEnvironmentVariable("Database__AutoDetectServerVersion", "false");
     }
+
+    // Las pruebas no dependen de MySQL: se quita el chequeo de base de datos de /health
+    // (DatabaseHealthCheckTests lo prueba por separado)
+    protected override void ConfigureWebHost(IWebHostBuilder Builder)
+        => Builder.ConfigureTestServices(Services =>
+            Services.PostConfigure<HealthCheckServiceOptions>(Options =>
+            {
+                var DatabaseChecks = Options.Registrations
+                    .Where(Registration => Registration.Name == DatabaseHealthCheck.Name)
+                    .ToList();
+
+                foreach (var Registration in DatabaseChecks)
+                {
+                    Options.Registrations.Remove(Registration);
+                }
+            }));
 }
 
 public class HealthEndpointTests : IClassFixture<ApiFactory>

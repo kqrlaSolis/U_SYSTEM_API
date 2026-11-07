@@ -22,6 +22,13 @@ public class ClassGroupServiceTests
             .Setup(Unit => Unit.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
+        // El simulacro ejecuta el bloque como lo haría la transacción real
+        UnitOfWork
+            .Setup(Unit => Unit.ExecuteInTransactionAsync(
+                It.IsAny<Func<CancellationToken, Task>>(),
+                It.IsAny<CancellationToken>()))
+            .Returns((Func<CancellationToken, Task> Operation, CancellationToken Cancellation) => Operation(Cancellation));
+
         Repository
             .Setup(Repo => Repo.GetSchedulesAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<ClassGroupSchedule>());

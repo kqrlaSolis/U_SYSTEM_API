@@ -23,6 +23,9 @@ public class Program
 
         var Builder = WebApplication.CreateBuilder(Args);
 
+        // En producción no se arranca con la cadena de respaldo de localhost
+        DatabaseConfiguration.EnsureConfigured(Builder.Configuration, Builder.Environment);
+
         Builder.Host.UseSerilog((Context, LoggerConfiguration) =>
             LoggerConfiguration.ReadFrom.Configuration(Context.Configuration));
 

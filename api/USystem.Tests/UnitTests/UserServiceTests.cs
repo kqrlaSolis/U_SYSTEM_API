@@ -33,6 +33,13 @@ public class UserServiceTests
             .Setup(Unit => Unit.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
+        // El simulacro ejecuta el bloque como lo haría la transacción real
+        _UnitOfWork
+            .Setup(Unit => Unit.ExecuteInTransactionAsync(
+                It.IsAny<Func<CancellationToken, Task>>(),
+                It.IsAny<CancellationToken>()))
+            .Returns((Func<CancellationToken, Task> Operation, CancellationToken Cancellation) => Operation(Cancellation));
+
         _Hasher
             .Setup(Hasher => Hasher.Hash(It.IsAny<string>()))
             .Returns("hashed-password");
@@ -160,6 +167,55 @@ public class UserServiceTests
         Assert.True(Response.User.MustChangePassword);
         Assert.False(string.IsNullOrWhiteSpace(Response.TemporaryPassword));
         Assert.Null(PasswordPolicy.Validate(Response.TemporaryPassword));
+    }
+
+    [Fact]
+    public async Task CreateSavesUserRolesAndAuditInOneTransaction()
+    {
+        var Service = BuildService();
+        SetupRoleCatalog();
+
+        _Users
+            .Setup(Repository => Repository.ExistsByEmailAsync(
+                It.IsAny<string>(),
+                It.IsAny<long?>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+        _Users
+            .Setup(Repository => Repository.ExistsByUsernameAsync(
+                It.IsAny<string>(),
+                It.IsAny<long?>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
+        _Users
+            .Setup(Repository => Repository.GetRoleNamesAsync(It.IsAny<long>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new[] { "ReadOnly" });
+
+        // Si la asignación de roles falla, el error sale de la transacción y no se registra en bitácora
+        _Users
+            .Setup(Repository => Repository.ReplaceRolesAsync(
+                It.IsAny<long>(),
+                It.IsAny<IReadOnlyCollection<int>>(),
+                It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new InvalidOperationException("roles"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => Service.CreateAsync(BuildCreateRequest()));
+
+        _UnitOfWork.Verify(
+            Unit => Unit.ExecuteInTransactionAsync(
+                It.IsAny<Func<CancellationToken, Task>>(),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+        _Audit.Verify(
+            Audit => Audit.LogAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string?>(),
+                It.IsAny<object?>(),
+                It.IsAny<object?>(),
+                It.IsAny<CancellationToken>()),
+            Times.Never);
     }
 
     [Fact]

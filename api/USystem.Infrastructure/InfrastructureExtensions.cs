@@ -20,7 +20,7 @@ public static class InfrastructureExtensions
         var ConnectionString = Configuration.GetConnectionString("DefaultConnection");
         if (string.IsNullOrWhiteSpace(ConnectionString))
         {
-            // La API arranca para responder /health, pero cualquier consulta falla con un error explícito
+            // Solo desarrollo y pruebas: en producción Program.cs se detiene antes de llegar aquí
             ConnectionString = "Server=localhost;Port=3306;Database=USystem;User=USystemApp;Password=CHANGE_ME;";
         }
 

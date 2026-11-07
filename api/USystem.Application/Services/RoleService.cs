@@ -105,20 +105,24 @@ public class RoleService : IRoleService
             IsActive = true,
         };
 
-        await _RoleRepository.AddAsync(NewRole, Cancellation);
-        await _UnitOfWork.SaveChangesAsync(Cancellation);
+        // Rol, permisos y bitácora se guardan juntos: si algo falla no queda un rol sin permisos
+        await _UnitOfWork.ExecuteInTransactionAsync(async Ct =>
+        {
+            await _RoleRepository.AddAsync(NewRole, Ct);
+            await _UnitOfWork.SaveChangesAsync(Ct);
 
-        await _RoleRepository.ReplacePermissionsAsync(NewRole.Id, PermissionIds, Cancellation);
-        await _UnitOfWork.SaveChangesAsync(Cancellation);
+            await _RoleRepository.ReplacePermissionsAsync(NewRole.Id, PermissionIds, Ct);
+            await _UnitOfWork.SaveChangesAsync(Ct);
 
-        await _AuditService.LogAsync(
-            "Create",
-            "Roles",
-            nameof(Role),
-            NewRole.Id.ToString(CultureInfo.InvariantCulture),
-            null,
-            new { NewRole.Name, Permissions = Request.PermissionCodes },
-            Cancellation);
+            await _AuditService.LogAsync(
+                "Create",
+                "Roles",
+                nameof(Role),
+                NewRole.Id.ToString(CultureInfo.InvariantCulture),
+                null,
+                new { NewRole.Name, Permissions = Request.PermissionCodes },
+                Ct);
+        }, Cancellation);
 
         return await GetByIdAsync(NewRole.Id, Cancellation);
     }

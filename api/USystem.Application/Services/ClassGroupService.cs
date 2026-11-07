@@ -80,32 +80,36 @@ public class ClassGroupService : IClassGroupService
             Status = Request.Status.Trim(),
         };
 
-        await _GroupRepository.AddAsync(NewGroup, Cancellation);
-        await _UnitOfWork.SaveChangesAsync(Cancellation);
-
-        foreach (var Schedule in Request.Schedules)
+        // Grupo, horarios y bitácora se guardan juntos: si algo falla no queda un grupo sin horario
+        await _UnitOfWork.ExecuteInTransactionAsync(async Ct =>
         {
-            await _GroupRepository.AddScheduleAsync(
-                new ClassGroupSchedule
-                {
-                    ClassGroupId = NewGroup.Id,
-                    DayOfWeek = (byte)Schedule.DayOfWeek,
-                    StartTime = ClassGroupScheduleRequest.ParseTime(Schedule.StartTime),
-                    EndTime = ClassGroupScheduleRequest.ParseTime(Schedule.EndTime),
-                },
-                Cancellation);
-        }
+            await _GroupRepository.AddAsync(NewGroup, Ct);
+            await _UnitOfWork.SaveChangesAsync(Ct);
 
-        await _UnitOfWork.SaveChangesAsync(Cancellation);
+            foreach (var Schedule in Request.Schedules)
+            {
+                await _GroupRepository.AddScheduleAsync(
+                    new ClassGroupSchedule
+                    {
+                        ClassGroupId = NewGroup.Id,
+                        DayOfWeek = (byte)Schedule.DayOfWeek,
+                        StartTime = ClassGroupScheduleRequest.ParseTime(Schedule.StartTime),
+                        EndTime = ClassGroupScheduleRequest.ParseTime(Schedule.EndTime),
+                    },
+                    Ct);
+            }
 
-        await _AuditService.LogAsync(
-            "Create",
-            "ClassGroups",
-            nameof(ClassGroup),
-            NewGroup.Id.ToString(CultureInfo.InvariantCulture),
-            null,
-            new { NewGroup.AcademicTermId, NewGroup.SubjectId, NewGroup.TeacherId, NewGroup.Code },
-            Cancellation);
+            await _UnitOfWork.SaveChangesAsync(Ct);
+
+            await _AuditService.LogAsync(
+                "Create",
+                "ClassGroups",
+                nameof(ClassGroup),
+                NewGroup.Id.ToString(CultureInfo.InvariantCulture),
+                null,
+                new { NewGroup.AcademicTermId, NewGroup.SubjectId, NewGroup.TeacherId, NewGroup.Code },
+                Ct);
+        }, Cancellation);
 
         return ToDto(NewGroup, await _GroupRepository.GetSchedulesAsync(NewGroup.Id, Cancellation));
     }
