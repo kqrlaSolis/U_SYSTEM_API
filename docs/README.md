@@ -40,11 +40,13 @@ docs/
 ## Por dónde empezar
 
 1. [`Architecture/Overview.md`](Architecture/Overview.md) y [`Architecture/Phases.md`](Architecture/Phases.md).
-2. [`Guides/QuickStart.md`](Guides/QuickStart.md) para levantar el ambiente.
-3. [`DataModel/README.md`](DataModel/README.md) para crear la base de datos.
-4. [`Modules/README.md`](Modules/README.md) para el detalle de cada módulo.
-5. [`Guides/HowToAddAModule.md`](Guides/HowToAddAModule.md) antes de construir el primer módulo.
-6. [`Architecture/Internationalization.md`](Architecture/Internationalization.md) y
+2. [`Architecture/LayeredStructure.md`](Architecture/LayeredStructure.md) — estructura en capas: bibliotecas,
+   clases, objetos de datos, referencias y esquema de la interfaz gráfica.
+3. [`Guides/QuickStart.md`](Guides/QuickStart.md) para levantar el ambiente.
+4. [`DataModel/README.md`](DataModel/README.md) para crear la base de datos.
+5. [`Modules/README.md`](Modules/README.md) para el detalle de cada módulo.
+6. [`Guides/HowToAddAModule.md`](Guides/HowToAddAModule.md) antes de construir el primer módulo.
+7. [`Architecture/Internationalization.md`](Architecture/Internationalization.md) y
    [`Operations/Storage.md`](Operations/Storage.md) para i18n y archivos.
 
 ## Fases

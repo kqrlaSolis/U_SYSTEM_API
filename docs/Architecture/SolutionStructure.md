@@ -102,3 +102,6 @@ Api ──► Application ──► Domain ◄── Infrastructure
 
 > Las variables locales y los parámetros en PascalCase son una decisión del proyecto, no del estándar de
 > C#. Ver `Guides/CodingConventions.md` y la configuración de `.editorconfig`.
+
+Documento de entrega con la justificación capa por capa (bibliotecas, clases, objetos de datos,
+referencias entre proyectos y esquema de pantallas): [`LayeredStructure.md`](LayeredStructure.md).
