@@ -29,6 +29,6 @@ logs/
 *.log
 
 
-#desktop
-desktop
-desktop/
+# #desktop
+# desktop
+# desktop/
