@@ -40,7 +40,8 @@ public class Program
         App.UseMiddleware<ExceptionHandlingMiddleware>();
 
         // Swagger en desarrollo o cuando el despliegue lo habilita con Swagger__Enabled=true
-        if (App.Environment.IsDevelopment() || App.Configuration.GetValue<bool>("Swagger:Enabled"))
+        var SwaggerEnabled = App.Environment.IsDevelopment() || App.Configuration.GetValue<bool>("Swagger:Enabled");
+        if (SwaggerEnabled)
         {
             App.UseSwagger();
             App.UseSwaggerUI(Options =>
@@ -60,7 +61,7 @@ public class Program
             Environment = App.Environment.EnvironmentName,
             Version = App.GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0",
             Health = "/health",
-            Swagger = App.Configuration.GetValue<bool>("Swagger:Enabled") ? "/swagger" : "habilitar con Swagger__Enabled=true",
+            Swagger = SwaggerEnabled ? "/swagger" : "habilitar con Swagger__Enabled=true",
         })).AllowAnonymous();
 
         App.Run();

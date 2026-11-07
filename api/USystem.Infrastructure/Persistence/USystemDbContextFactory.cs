@@ -1,4 +1,4 @@
-// Fábrica para `dotnet ef`: usa la cadena de conexión del entorno o del archivo .env.
+// Fábrica para `dotnet ef`: lee ConnectionStrings__DefaultConnection de las variables del proceso (no carga .env).
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -6,7 +6,7 @@ namespace USystem.Infrastructure.Persistence;
 
 public class USystemDbContextFactory : IDesignTimeDbContextFactory<USystemDbContext>
 {
-    private static readonly ServerVersion _FallbackVersion = new MySqlServerVersion(new Version(8, 0, 36));
+    private static readonly ServerVersion _FallbackVersion = new MySqlServerVersion(new Version(8, 4, 11));
 
     public USystemDbContext CreateDbContext(string[] Args)
     {

@@ -8,7 +8,7 @@ namespace USystem.Infrastructure.Persistence;
 
 public static class MySqlVersionResolver
 {
-    private static readonly ServerVersion _FallbackVersion = new MySqlServerVersion(new Version(8, 0, 36));
+    private static readonly ServerVersion _FallbackVersion = new MySqlServerVersion(new Version(8, 4, 11));
 
     public static ServerVersion Resolve(IConfiguration Configuration)
     {

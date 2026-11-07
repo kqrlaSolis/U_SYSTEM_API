@@ -36,32 +36,38 @@ USystem/
 └── tools/               Generador de documentación, aplicador de scripts SQL y chequeo de S3
 ```
 
-## Cómo levantar el ambiente
+## Cómo correrlo
+
+Hay dos ambientes: **local** (tu computadora, lee `.env`) y **producción** (Railway, lee sus variables).
+Los dos usan el mismo MySQL de Railway. Guía completa: [`docs/Operations/Environments.md`](docs/Operations/Environments.md).
+
+### Local
 
 ```bash
-# 1. Base de datos (MySQL 8.4 en Railway, base `railway`). La cadena vive en .env.
-python -m pip install -r tools/Requirements.txt
-python tools/ApplyMySqlScripts.py --target-database railway
+# 1. Una sola vez: crea tu .env y llénalo (cadena de MySQL, Jwt__SecretKey, AWS_*)
+cp .env.example .env
 
-# 2. Crear el administrador inicial (una sola vez, con la contraseña de Seed__AdminPassword en .env)
-dotnet run --project api/USystem.Api -- --seed-admin
-
-# 3. API: http://localhost:5000, Swagger en /swagger, salud en /health
+# 2. API: Swagger en http://localhost:5000/swagger, salud en /health
 dotnet run --project api/USystem.Api
 
-# 4. Pruebas (unitarias, integración y, con USYSTEM_RUN_DB_TESTS=1, contra la base real)
+# 3. Pruebas (no necesitan base de datos)
 dotnet test
-
-# 5. Desktop
-cd desktop
-npm install
-npm run dev
 ```
 
-Login de desarrollo del administrador inicial: usuario `Administrator` y la contraseña definida en
-`Seed__AdminPassword` de `.env` (cámbiala en el primer ingreso; se guarda hasheada).
-`.env` no se versiona; la plantilla es [`.env.example`](.env.example) y la cadena de MySQL está documentada
-en [`docs/DataModel/README.md`](docs/DataModel/README.md#conexión).
+Solo si la base está vacía:
+
+```bash
+python -m pip install -r tools/Requirements.txt
+python tools/ApplyMySqlScripts.py --target-database railway        # crea tablas y datos semilla
+dotnet run --project api/USystem.Api -- --seed-admin                 # primer administrador (Seed__AdminPassword en .env)
+```
+
+### Producción (Railway)
+
+1. En el servicio de la API → **Variables**, pega el bloque de
+   [`Environments.md`](docs/Operations/Environments.md#correr-en-producción-railway) (una sola vez).
+2. Haz push a `main` o corre `railway up`.
+3. Revisa que `https://<tu-dominio>/health` diga `Healthy`.
 
 ## Documentación
 

@@ -9,9 +9,8 @@
 
 ## 1. Base de datos
 
-La instancia de desarrollo está en Railway (MySQL 8.4): `iriguchi.proxy.rlwy.net:45128`, base `railway`.
-La cadena completa, en formato URI y en formato .NET, está en `ConnectionStrings__DefaultConnection` de
-`.env` y documentada en [`DataModel/README.md`](../DataModel/README.md#conexión).
+La base está en Railway (MySQL 8.4, base `railway`) y la comparten local y producción. Primero crea tu
+`.env` siguiendo [`Operations/Environments.md`](../Operations/Environments.md#correr-en-local).
 
 Sin cliente `mysql` (recomendado en Windows):
 
@@ -24,7 +23,7 @@ Con cliente `mysql`:
 
 ```bash
 cd docs/DataModel/Scripts
-mysql -h iriguchi.proxy.rlwy.net -P 45128 -u root -p < RunAll.sql
+mysql -h <HOST> -P <PUERTO> -u root -p < RunAll.sql   # datos de MYSQL_PUBLIC_URL en Railway
 ```
 
 Al final, crear el usuario administrador inicial con el comando de la API (la contraseña se hashea con
@@ -88,11 +87,10 @@ AWS_ENDPOINT_URL=http://localhost:9000   # solo MinIO local
 
 ## 3. API
 
-1. Abrir `USystem.sln` en Visual Studio (o usar `dotnet run --project api/USystem.Api`).
-2. Verificar la cadena de conexión en `.env` (`ConnectionStrings__DefaultConnection`); la API carga el
-   `.env` de la raíz del repositorio al arrancar.
-3. Configurar `Jwt__SecretKey` (mínimo 32 caracteres) y las variables `Storage__*` por entorno.
-4. Ejecutar `USystem.Api`; Swagger queda en `/swagger` y el chequeo de salud en `/health`.
+1. Tener el `.env` listo (ver [`Operations/Environments.md`](../Operations/Environments.md)); la API lo carga
+   al arrancar.
+2. Abrir `USystem.sln` en Visual Studio (perfil **http**) o usar `dotnet run --project api/USystem.Api`.
+3. Swagger queda en <http://localhost:5000/swagger> y el chequeo de salud (incluye MySQL) en `/health`.
 
 ## 4. Desktop
 

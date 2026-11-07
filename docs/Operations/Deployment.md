@@ -9,17 +9,9 @@
 
 ## Variables de entorno
 
-| Variable | Uso |
-|---|---|
-| `ConnectionStrings__DefaultConnection` | Cadena de conexión MySQL |
-| `Jwt__SecretKey` | Firma del JWT |
-| `Smtp__Host`, `Smtp__Port`, `Smtp__User`, `Smtp__Password`, `Smtp__From` | Correo (proveedor pendiente de definir) |
-| `AWS_REGION` | `us-east-2` |
-| `AWS_BUCKET_NAME` | `cfsp-s3-bucket-prod` |
-| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Credenciales del bucket (nunca en el repositorio) |
-| `AWS_ENDPOINT_URL` | Opcional, para MinIO en desarrollo |
-
-Los secretos no se guardan en el repositorio ni en `SystemSettings`. Ver [`Secrets.md`](Secrets.md).
+La lista completa, qué va en local y qué en producción, y el bloque listo para pegar en Railway están en
+[`Environments.md`](Environments.md). Los secretos no se guardan en el repositorio ni en `SystemSettings`
+(ver [`Secrets.md`](Secrets.md)).
 
 ## Base de datos
 
@@ -28,18 +20,11 @@ Los secretos no se guardan en el repositorio ni en `SystemSettings`. Ver [`Secre
 - `lower_case_table_names=0` en todos los ambientes.
 - `RunAll.sql` solo en instalaciones nuevas; en producción se aplican scripts incrementales.
 
-### Instancia actual de desarrollo
+### Instancia actual
 
-| Dato | Valor |
-|---|---|
-| Proveedor | Railway (MySQL 8.4.11) |
-| Host / puerto | `iriguchi.proxy.rlwy.net` / `45128` |
-| Base de datos | `railway` (37 tablas, 2 vistas tras `RunAll.sql` con `--target-database`) |
-| Usuario | `root` |
-
-La cadena está en `ConnectionStrings__DefaultConnection` de `.env` y documentada en
-[`DataModel/README.md`](../DataModel/README.md#conexión). Los scripts se aplican con
-`python tools/ApplyMySqlScripts.py`. La credencial viajó por chat: **rotarla antes de producción**.
+MySQL 8.4.11 en Railway, base `railway`, compartida por local y producción. La API de producción se conecta
+por la red interna con referencias `${{MySQL.…}}` (ver [`Environments.md`](Environments.md)). Los scripts se
+aplican con `python tools/ApplyMySqlScripts.py --target-database railway`.
 
 ## Almacenamiento
 
@@ -67,18 +52,20 @@ Cada comando ejecuta `npm run version:bump` antes de compilar: sube la versión 
 
 ## Ambientes
 
-| Ambiente | Uso | Base de datos |
-|----------|-----|---------------|
-| Development | Desarrollo local | `USystem` local |
-| Staging | Pruebas y capacitación | `USystemStaging` |
-| Production | Operación de la escuela | `USystem` |
+| Ambiente | Uso | Dónde corre | Base de datos |
+|----------|-----|-------------|---------------|
+| Development | Desarrollo local | `dotnet run` en tu computadora | MySQL de Railway (conexión pública) |
+| Production | Operación de la escuela | Railway (Docker) | MySQL de Railway (red interna) |
+
+No hay Staging ni QA. Detalle en [`Environments.md`](Environments.md).
 
 ## Orden de despliegue
 
 1. Respaldo de la base de datos y del bucket.
 2. Aplicar el script o la migración incremental.
-3. Publicar la API y verificar `/health` (Swagger solo en Staging).
+3. Publicar la API y verificar `/health` (responde `Healthy` solo si llega a MySQL).
 4. Publicar el desktop para los tres sistemas.
-5. Prueba de humo: login, listado de alumnos, carga de un documento y un pago de prueba en Staging.
+5. Prueba de humo: login, listado de alumnos y carga de un documento. Como no hay Staging y la base
+   es compartida, evita pagos de prueba o bórralos al terminar.
 
-> Swagger se deshabilita o se protege en producción.
+> Swagger está apagado en producción; se enciende solo para demos con `Swagger__Enabled=true`.
