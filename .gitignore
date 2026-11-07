@@ -28,7 +28,5 @@ Thumbs.db
 logs/
 *.log
 
-
-# #desktop
-# desktop
-# desktop/
+# Respaldos de permisos de Windows generados en esta máquina
+.dsh-acl-recovery/

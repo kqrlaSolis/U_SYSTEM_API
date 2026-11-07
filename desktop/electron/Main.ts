@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain, Menu, session, shell } from 'electron';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import NodePath from 'node:path';
 import NodeUrl from 'node:url';
 
@@ -93,18 +93,45 @@ async function OpenExternalUrl(Url: string): Promise<boolean> {
   }
 }
 
+// El manifiesto lo genera WriteElectronManifest.cjs a partir de desktop/.env,
+// así la app empaquetada conoce la API sin duplicar la URL en el código.
+const EnvironmentFilePath = NodePath.join(__dirname, 'Environment.json');
+
+function ReadApiBaseUrl(): string {
+  try {
+    const Raw = readFileSync(EnvironmentFilePath, 'utf8');
+    const Parsed = JSON.parse(Raw) as { ApiBaseUrl?: string };
+    if (typeof Parsed.ApiBaseUrl === 'string' && Parsed.ApiBaseUrl.length > 0) {
+      return Parsed.ApiBaseUrl;
+    }
+  } catch {
+    // Sin manifiesto se usan las variables de entorno o el valor de desarrollo
+  }
+  return process.env.VITE_API_BASE_URL ?? 'http://localhost:5000';
+}
+
+function ResolveApiOrigin(Url: string): string {
+  try {
+    return new NodeUrl.URL(Url).origin;
+  } catch {
+    return Url;
+  }
+}
+
 // CSP solo en producción: en desarrollo Vite inyecta scripts inline para el HMR.
 function ApplyContentSecurityPolicy(): void {
   if (IsDevelopment) {
     return;
   }
 
+  const ApiOrigin = ResolveApiOrigin(ReadApiBaseUrl());
+
   session.defaultSession.webRequest.onHeadersReceived((Details, Callback) => {
     Callback({
       responseHeaders: {
         ...Details.responseHeaders,
         'Content-Security-Policy': [
-          "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' http://localhost:5000;",
+          `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' ${ApiOrigin};`,
         ],
       },
     });

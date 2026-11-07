@@ -8,6 +8,7 @@ export default defineConfig({
   // Tailwind v4 procesa @import "tailwindcss" y las capas de Global.css.
   plugins: [Tailwindcss(), ReactPlugin()],
   server: {
+    host: '127.0.0.1',
     port: 5173,
     strictPort: true,
   },
