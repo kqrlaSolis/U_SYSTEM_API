@@ -23,6 +23,9 @@ public class Program
 
         var Builder = WebApplication.CreateBuilder(Args);
 
+        // En producción no se arranca con la cadena de respaldo de localhost
+        DatabaseConfiguration.EnsureConfigured(Builder.Configuration, Builder.Environment);
+
         Builder.Host.UseSerilog((Context, LoggerConfiguration) =>
             LoggerConfiguration.ReadFrom.Configuration(Context.Configuration));
 
@@ -37,7 +40,8 @@ public class Program
         App.UseMiddleware<ExceptionHandlingMiddleware>();
 
         // Swagger en desarrollo o cuando el despliegue lo habilita con Swagger__Enabled=true
-        if (App.Environment.IsDevelopment() || App.Configuration.GetValue<bool>("Swagger:Enabled"))
+        var SwaggerEnabled = App.Environment.IsDevelopment() || App.Configuration.GetValue<bool>("Swagger:Enabled");
+        if (SwaggerEnabled)
         {
             App.UseSwagger();
             App.UseSwaggerUI(Options =>
@@ -57,7 +61,7 @@ public class Program
             Environment = App.Environment.EnvironmentName,
             Version = App.GetType().Assembly.GetName().Version?.ToString() ?? "0.0.0",
             Health = "/health",
-            Swagger = App.Configuration.GetValue<bool>("Swagger:Enabled") ? "/swagger" : "habilitar con Swagger__Enabled=true",
+            Swagger = SwaggerEnabled ? "/swagger" : "habilitar con Swagger__Enabled=true",
         })).AllowAnonymous();
 
         App.Run();

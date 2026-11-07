@@ -7,6 +7,14 @@ interface MenuIconProps {
 
 // Iconos propios en SVG: la librería envuelve el nodo que se le pase.
 function MenuIcon({ Name }: MenuIconProps) {
+  if (Name === 'Dashboard') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M3 13h8V3H3v10Zm10 8h8V11h-8v10ZM3 21h8v-6H3v6Zm10-12h8V3h-8v6Z" />
+      </svg>
+    );
+  }
+
   if (Name === 'Users') {
     return (
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
@@ -46,6 +54,111 @@ function MenuIcon({ Name }: MenuIconProps) {
         <path
           fill="currentColor"
           d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V2Zm12 8H5v10h14V10Zm-9 3h2v2H8v-2Zm4 0h2v2h-2v-2Zm-4 3h2v2H8v-2Zm4 0h2v2h-2v-2Z"
+        />
+      </svg>
+    );
+  }
+
+  if (Name === 'Payments') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M3 6h18v12H3V6Zm2 2v2h14V8H5Zm0 4v4h6v-4H5Zm8 0v4h6v-4h-6Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'Procedures') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 2v4h4l-4-4ZM8 12h8v2H8v-2Zm0 4h5v2H8v-2Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'Notifications') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M12 2a6 6 0 0 0-6 6v4l-2 4h16l-2-4V8a6 6 0 0 0-6-6Zm0 20a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'ReEnrollments') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M12 2a10 10 0 1 1-7.07 2.93L6.34 6.34A8 8 0 1 0 20 12h-2a6 6 0 1 1-6-6v4l4-3.5L12 2Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'Grades') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M5 3h14a2 2 0 0 1 2 2v6h-2V5H5v14h6v2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 4h8v2H8V7Zm0 4h5v2H8v-2Zm8 3 4 2v3h-6v-3l2-2Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'Tracking') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M4 20V10h4v10H4Zm6 0V4h4v16h-4Zm6 0v-7h4v7h-4Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'ClassGroups') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M7 3h10v2H7V3ZM4 6h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm2 4v3h5v-3H6Zm7 0v3h5v-3h-5ZM6 15v2h5v-2H6Zm7 0v2h5v-2h-5Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'Enrollments') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M6 2h9l5 5v15H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 2v4h4l-4-4ZM8 12h8v2H8v-2Zm0 4h8v2H8v-2Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'CourseMaterials') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M4 4h7v2H6v12h6v2H4V4Zm9 0h7v16h-7v-2h5V6h-5V4Zm-3 4h4v2H10V8Zm0 4h4v2H10v-2Zm0 4h4v2H10v-2Z" />
+      </svg>
+    );
+  }
+
+  if (Name === 'Students') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M12 3 2 8l10 5 10-5-10-5Zm0 8.2L4.6 7.6 12 4.2l7.4 3.4L12 11.2ZM6 13.1v3.6c0 1.6 2.7 3.3 6 3.3s6-1.7 6-3.3v-3.6l-2 1v2.4c0 .5-1.8 1.5-4 1.5s-4-1-4-1.5v-2.4l-2-1Z"
+        />
+      </svg>
+    );
+  }
+
+  if (Name === 'Teachers') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M12 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 10c3.9 0 7 1.8 7 4v4H5v-4c0-2.2 3.1-4 7-4Z"
+        />
+      </svg>
+    );
+  }
+
+  if (Name === 'StudyPlans') {
+    return (
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M4 4h7v7H4V4Zm9 0h7v4h-7V4ZM4 13h7v7H4v-7Zm9 2h7v5h-7v-5Z"
         />
       </svg>
     );

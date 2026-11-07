@@ -1,4 +1,4 @@
-import { ITPage, ITSlideToggle, ITStack, ITInput } from '@axzydev/axzy_ui_system';
+import { ITPage, ITSlideToggle, ITStack, ITInput, ITSelect } from '@axzydev/axzy_ui_system';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -58,6 +58,16 @@ export function CrudFormPage<TRow extends CrudRow, TRequest>({
                 isOn={ViewModel.Values[Field.Name] === 'true'}
                 onToggle={(Checked: boolean) => {
                   ViewModel.SetValue(Field.Name, Checked ? 'true' : 'false');
+                }}
+                disabled={ViewModel.IsSubmitting}
+              />
+            ) : Field.Type === 'select' ? (
+              <ITSelect
+                name={Field.Name}
+                options={Field.Options ?? []}
+                value={ViewModel.Values[Field.Name] ?? ''}
+                onChange={(Event: React.ChangeEvent<HTMLSelectElement>) => {
+                  ViewModel.SetValue(Field.Name, Event.target.value);
                 }}
                 disabled={ViewModel.IsSubmitting}
               />

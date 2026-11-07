@@ -21,6 +21,13 @@ public class RoleServiceTests
             .Setup(Unit => Unit.SaveChangesAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
+        // El simulacro ejecuta el bloque como lo haría la transacción real
+        _UnitOfWork
+            .Setup(Unit => Unit.ExecuteInTransactionAsync(
+                It.IsAny<Func<CancellationToken, Task>>(),
+                It.IsAny<CancellationToken>()))
+            .Returns((Func<CancellationToken, Task> Operation, CancellationToken Cancellation) => Operation(Cancellation));
+
         _Roles
             .Setup(Repository => Repository.AddAsync(It.IsAny<Role>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);

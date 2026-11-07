@@ -26,8 +26,8 @@
 ## Abiertas
 
 - [ ] **Proveedor SMTP** para recuperación de contraseña y notificaciones. Queda **pendiente** (no fuera de
-      alcance): la API ya lee `Smtp__Host`, `Smtp__Port`, `Smtp__User`, `Smtp__Password` y
-      `Smtp__From`, así que solo falta elegir proveedor y cargar credenciales.
+      alcance): falta elegir proveedor **y** programar el envío; la API todavía no lee ninguna variable
+      `Smtp__*`. Cuando exista, se agregan a `.env.example` y a `Operations/Environments.md`.
 - [ ] **Montos oficiales de los conceptos de pago**: inscripción, colegiatura, extraordinario y constancia.
       Los valores del seed (`2500.00`, `3200.00`, `800.00`, `500.00`) son de ejemplo.
 - [ ] **Permisos S3 del usuario `axzydev`**: las credenciales son válidas (STS responde), pero

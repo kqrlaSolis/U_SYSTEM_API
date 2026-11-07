@@ -8,32 +8,13 @@
 
 ## Conexión
 
-Instancia de **desarrollo** en Railway (MySQL 8.4). La API nunca lee esta tabla: toma la cadena de
-`ConnectionStrings__DefaultConnection` en `.env`.
+La base vive en el servicio **MySQL** de Railway (MySQL 8.4), en la base **`railway`** que asigna Railway.
+Local y producción usan esta misma base. La API toma la cadena de `ConnectionStrings__DefaultConnection`:
+en local desde `.env` y en producción desde las variables de Railway. Cómo obtenerla y configurarla:
+[`Operations/Environments.md`](../Operations/Environments.md).
 
-| Dato | Valor |
-|---|---|
-| Host / puerto | `iriguchi.proxy.rlwy.net` / `45128` |
-| Base de datos | **`railway`** (la que asigna Railway; el esquema se instala dentro de ella) |
-| Usuario | `root` (solo desarrollo) |
-| Versión del servidor | `8.4.11` |
-
-> Los scripts crean por sí solos una base llamada `USystem` (líneas `CREATE DATABASE` y `USE`). En esta
-> instancia de Railway el esquema se aplicó **dentro de `railway`** omitiendo esas dos sentencias, para que
-> todo aparezca al abrir la conexión que entrega Railway. La copia antigua en `USystem` se conserva como
-> respaldo y se puede eliminar con `DROP DATABASE USystem;`.
-
-Cadena en formato URI, tal como la entrega Railway:
-
-```
-mysql://root:FpbMtyBxtxesmXPskXqJjPhYQAYSOOyN@iriguchi.proxy.rlwy.net:45128/railway
-```
-
-Cadena que consume EF Core con Pomelo (`ConnectionStrings__DefaultConnection`):
-
-```
-Server=iriguchi.proxy.rlwy.net;Port=45128;Database=railway;User=root;Password=FpbMtyBxtxesmXPskXqJjPhYQAYSOOyN;SslMode=Preferred;AllowPublicKeyRetrieval=True;
-```
+> Los scripts crean por sí solos una base llamada `USystem` (líneas `CREATE DATABASE` y `USE`). En Railway el
+> esquema se aplica **dentro de `railway`** con `--target-database railway`, que omite esas dos sentencias.
 
 ### Aplicar los scripts
 
@@ -47,7 +28,7 @@ python tools/ApplyMySqlScripts.py
 python tools/ApplyMySqlScripts.py --target-database railway
 ```
 
-El ejecutor toma la cadena de `.env` (`MYSQL_URL` o `ConnectionStrings__DefaultConnection`), aplica
+El ejecutor toma la cadena de `ConnectionStrings__DefaultConnection` (variable o `.env`), aplica
 `00` → `06` y `99_SeedData`, y al final informa tablas, vistas y columnas en minúscula (debe ser `0`).
 Con `--target-database` se omite `CREATE DATABASE`/`USE` y todo se crea en la base indicada.
 
@@ -55,7 +36,7 @@ Con cliente `mysql`:
 
 ```bash
 cd docs/DataModel/Scripts
-mysql -h iriguchi.proxy.rlwy.net -P 45128 -u root -p railway < 01_Security.sql
+mysql -h <HOST> -P <PUERTO> -u root -p railway < 01_Security.sql   # datos de MYSQL_PUBLIC_URL en Railway
 ```
 
 > **Credencial expuesta.** Esta contraseña se compartió por chat y quedó en la documentación del

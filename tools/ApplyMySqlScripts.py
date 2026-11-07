@@ -68,24 +68,20 @@ def ParseAdoString(ConnectionString):
 
 
 def ResolveConnection(ExplicitUrl):
+    # Misma variable que la API: primero la del proceso, luego la del .env
     if ExplicitUrl:
         return ParseUri(ExplicitUrl)
-
-    EnvironmentUrl = os.environ.get("MYSQL_URL")
-    if EnvironmentUrl:
-        return ParseUri(EnvironmentUrl)
 
     EnvironmentAdo = os.environ.get("ConnectionStrings__DefaultConnection")
     if EnvironmentAdo:
         return ParseAdoString(EnvironmentAdo)
 
     EnvValues = ReadEnvFile(Root / ".env")
-    if EnvValues.get("MYSQL_URL"):
-        return ParseUri(EnvValues["MYSQL_URL"])
     if EnvValues.get("ConnectionStrings__DefaultConnection"):
         return ParseAdoString(EnvValues["ConnectionStrings__DefaultConnection"])
 
-    raise SystemExit("No hay cadena de conexión: usa --url, MYSQL_URL o el archivo .env")
+    raise SystemExit(
+        "No hay cadena de conexión: define ConnectionStrings__DefaultConnection en .env o usa --url")
 
 
 def SplitStatements(Sql):

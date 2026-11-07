@@ -24,17 +24,28 @@ public class UnitOfWork : IUnitOfWork
             return;
         }
 
-        await using var Transaction = await _Context.Database.BeginTransactionAsync(Cancellation);
-        try
+        // Con EnableRetryOnFailure, EF solo permite transacciones manuales dentro de su estrategia:
+        // si la conexión se cae, repite el bloque completo desde el inicio.
+        var Strategy = _Context.Database.CreateExecutionStrategy();
+
+        await Strategy.ExecuteAsync(async () =>
         {
-            await Operation(Cancellation);
-            await _Context.SaveChangesAsync(Cancellation);
-            await Transaction.CommitAsync(Cancellation);
-        }
-        catch (Exception)
-        {
-            await Transaction.RollbackAsync(Cancellation);
-            throw;
-        }
+            await using var Transaction = await _Context.Database.BeginTransactionAsync(Cancellation);
+            try
+            {
+                await Operation(Cancellation);
+                await _Context.SaveChangesAsync(Cancellation);
+                await Transaction.CommitAsync(Cancellation);
+            }
+            catch (Exception)
+            {
+                // Sin token: el rollback debe correr aunque la petición se haya cancelado
+                await Transaction.RollbackAsync(CancellationToken.None);
+
+                // Lo que quedó en memoria ya no coincide con la base; un reintento empieza limpio
+                _Context.ChangeTracker.Clear();
+                throw;
+            }
+        });
     }
 }

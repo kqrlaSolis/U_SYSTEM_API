@@ -1,7 +1,7 @@
 import { ITAlert, ITInput } from '@axzydev/axzy_ui_system';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import LogoUrl from '../../../assets/brand/UsystemBannerAlt.svg';
 import { useAuth } from '../../../shared/auth/AuthContext';
 import { AppButton, FormField } from '../../../shared/components';
@@ -92,6 +92,10 @@ export function LoginPage() {
           }
           IsLoading={ViewModel.IsSubmitting}
         />
+
+        <Link to="/forgot-password" className="USystemLoginLink">
+          {Translation.t('Login.ForgotPassword')}
+        </Link>
 
         <div className="USystemLoginFooter">
           <AppButton

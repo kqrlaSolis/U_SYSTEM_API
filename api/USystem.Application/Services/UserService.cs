@@ -118,20 +118,24 @@ public class UserService : IUserService
             IsActive = true,
         };
 
-        await _UserRepository.AddAsync(NewUser, Cancellation);
-        await _UnitOfWork.SaveChangesAsync(Cancellation);
+        // Usuario, roles y bitácora se guardan juntos: si algo falla no queda un usuario sin roles
+        await _UnitOfWork.ExecuteInTransactionAsync(async Ct =>
+        {
+            await _UserRepository.AddAsync(NewUser, Ct);
+            await _UnitOfWork.SaveChangesAsync(Ct);
 
-        await _UserRepository.ReplaceRolesAsync(NewUser.Id, RoleIds, Cancellation);
-        await _UnitOfWork.SaveChangesAsync(Cancellation);
+            await _UserRepository.ReplaceRolesAsync(NewUser.Id, RoleIds, Ct);
+            await _UnitOfWork.SaveChangesAsync(Ct);
 
-        await _AuditService.LogAsync(
-            "Create",
-            "Users",
-            nameof(User),
-            NewUser.Id.ToString(CultureInfo.InvariantCulture),
-            null,
-            new { NewUser.Username, NewUser.Email, RoleIds },
-            Cancellation);
+            await _AuditService.LogAsync(
+                "Create",
+                "Users",
+                nameof(User),
+                NewUser.Id.ToString(CultureInfo.InvariantCulture),
+                null,
+                new { NewUser.Username, NewUser.Email, RoleIds },
+                Ct);
+        }, Cancellation);
 
         var Roles = await _UserRepository.GetRoleNamesAsync(NewUser.Id, Cancellation);
 

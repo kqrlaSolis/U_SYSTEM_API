@@ -6,7 +6,8 @@
 Se cargan por variables de entorno o por un gestor de secretos (AWS Secrets Manager, SSM Parameter Store,
 *User Secrets* en desarrollo).
 
-`.env` está en `.gitignore`; solo se versiona `.env.example` con valores vacíos.
+`.env` está en `.gitignore`; solo se versiona `.env.example` con valores de ejemplo. La lista completa
+de variables y cómo se configura cada ambiente está en [`Environments.md`](Environments.md).
 
 ## Inventario
 
@@ -14,7 +15,6 @@ Se cargan por variables de entorno o por un gestor de secretos (AWS Secrets Mana
 |---|---|---|
 | Cadena de conexión MySQL | `ConnectionStrings__DefaultConnection` | API |
 | Firma del JWT | `Jwt__SecretKey` | API |
-| Credenciales SMTP | `Smtp__Password`, `Smtp__User` | API |
 | Credenciales AWS | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | API |
 | Bucket y región | `AWS_BUCKET_NAME`, `AWS_REGION` | API (no son secretos) |
 
@@ -88,7 +88,7 @@ basta la política de identidad.
 - Una credencial compartida por chat, correo o captura se considera **expuesta**.
 - Rotarla de inmediato: desactivar la clave anterior, crear una nueva y guardarla en el gestor de secretos.
 - Revisar CloudTrail por uso no reconocido.
-- Rotar también JWT y SMTP si se compartieron por el mismo canal.
+- Rotar también `Jwt__SecretKey` si se compartió por el mismo canal.
 
 ## Desarrollo local
 
@@ -97,15 +97,14 @@ cp .env.example .env
 # Completar los valores; .env no se versiona
 ```
 
-La base de datos de desarrollo es un MySQL 8.4 en Railway. Su cadena (`MYSQL_URL` y
-`ConnectionStrings__DefaultConnection`) quedó documentada en [`DataModel/README.md`](../DataModel/README.md#conexión)
-porque se compartió por chat: se considera **expuesta** y se rota antes de producción (ver *Rotación*).
-
-Alternativa en .NET: `dotnet user-secrets set "Jwt:SecretKey" "..."` en `USystem.Api`.
+La base de MySQL en Railway es la misma para local y producción. Su contraseña ya estuvo escrita en
+`docs/DataModel/README.md` (sigue en el historial de git), así que se considera **expuesta**: rotarla en
+Railway (servicio MySQL → `MYSQLPASSWORD`) y actualizar el `.env` local. Producción la toma sola si usa las
+referencias `${{MySQL.…}}`.
 
 ## Producción
 
-- Variables de entorno inyectadas por el orquestador o por el gestor de secretos.
+- Variables en el panel de Railway del servicio de la API (ver [`Environments.md`](Environments.md#correr-en-producción-railway)).
 - Sin secretos en la imagen Docker ni en `appsettings.json`.
 - Acceso al gestor de secretos restringido al rol de la aplicación.
 - Rotación periódica y registro de quién accede.

@@ -6,8 +6,13 @@ const SubjectsPath = '/api/v1/subjects';
 
 // Servicio del módulo: sin estado de UI y sin conocer React
 export const SubjectsService = {
-  async GetPaged(Page: number, PageSize: number, Search: string): Promise<PagedResult<Subject>> {
-    return HttpClient.Get<PagedResult<Subject>>(SubjectsPath, { Page, PageSize, Search });
+  async GetPaged(
+    Page: number,
+    PageSize: number,
+    Search: string,
+    Filters: Record<string, string> = {},
+  ): Promise<PagedResult<Subject>> {
+    return HttpClient.Get<PagedResult<Subject>>(SubjectsPath, { Page, PageSize, Search, ...Filters });
   },
 
   async GetById(Id: number): Promise<Subject> {

@@ -17,6 +17,8 @@ export const SubjectConfig: CrudConfig<Subject, SubjectRequest> = {
   PermissionEdit: 'Subjects.Edit',
   PermissionDelete: 'Subjects.Delete',
 
+  Filters: [{ Field: 'IsActive', LabelKey: 'Subjects.Filters.Active', OptionsKey: 'ActiveStatus' }],
+
   Columns: [
     { Field: 'Code', HeaderKey: 'Subjects.Columns.Code' },
     { Field: 'Name', HeaderKey: 'Subjects.Columns.Name' },
@@ -44,7 +46,7 @@ export const SubjectConfig: CrudConfig<Subject, SubjectRequest> = {
     IsActive: 'true',
   },
 
-  List: (Page, PageSize, Search) => SubjectsService.GetPaged(Page, PageSize, Search),
+  List: (Page, PageSize, Search, Filters) => SubjectsService.GetPaged(Page, PageSize, Search, Filters),
   Load: (Id) => SubjectsService.GetById(Id),
   Create: (Request) => SubjectsService.Create(Request),
   Update: (Id, Request) => SubjectsService.Update(Id, Request),
