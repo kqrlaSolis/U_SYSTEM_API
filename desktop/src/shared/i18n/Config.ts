@@ -61,6 +61,8 @@ void I18next.use(initReactI18next).init({
     escapeValue: false,
   },
   returnNull: false,
+  // Evita el aviso promocional de i18next en consola (y en la salida de las pruebas)
+  showSupportNotice: false,
   react: {
     useSuspense: false,
   },

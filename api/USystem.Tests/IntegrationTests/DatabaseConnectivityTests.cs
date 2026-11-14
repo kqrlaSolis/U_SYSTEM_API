@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using USystem.Api.Configuration;
 using USystem.Infrastructure.Persistence;
+using USystem.Tests.Support;
 
 namespace USystem.Tests.IntegrationTests;
 
@@ -21,15 +22,9 @@ public class DatabaseConnectivityTests
         return Configuration.GetConnectionString("DefaultConnection");
     }
 
-    [Fact]
+    [DatabaseFact]
     public async Task EfModelMatchesTheSeededDatabase()
     {
-        if (Environment.GetEnvironmentVariable("USYSTEM_RUN_DB_TESTS") != "1")
-        {
-            // Prueba opcional: sin la bandera no se toca la base de datos real
-            return;
-        }
-
         var ConnectionString = ResolveConnectionString();
         Assert.False(string.IsNullOrWhiteSpace(ConnectionString));
 

@@ -8,6 +8,7 @@ export function useDashboardViewModel(Enabled = true) {
   const [Dashboard, SetDashboard] = useState<Dashboard | null>(null);
   const [IsLoading, SetIsLoading] = useState(true);
   const [ErrorMessage, SetErrorMessage] = useState<string | null>(null);
+  const [LastUpdatedAt, SetLastUpdatedAt] = useState<Date | null>(null);
 
   const Load = useCallback(async () => {
     if (!Enabled) {
@@ -20,6 +21,7 @@ export function useDashboardViewModel(Enabled = true) {
 
     try {
       SetDashboard(await ReportsService.GetDashboard());
+      SetLastUpdatedAt(new Date());
     } catch (CaughtError) {
       SetErrorMessage(GetErrorMessage(CaughtError));
     } finally {
@@ -35,6 +37,7 @@ export function useDashboardViewModel(Enabled = true) {
     Dashboard,
     IsLoading,
     ErrorMessage,
+    LastUpdatedAt,
     Reload: Load,
   };
 }

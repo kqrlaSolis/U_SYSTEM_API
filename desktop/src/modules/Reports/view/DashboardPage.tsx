@@ -1,98 +1,170 @@
-import { ITAlert, ITCard, ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
+import { ITAlert, ITBadget, ITCard, ITPage, ITProgress, ITSkeleton, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
-import { useDashboardViewModel } from '../viewmodel/useDashboardViewModel';
+import { useNavigate } from 'react-router-dom';
+import { GetNavigationIcon } from '../../../app/layout/NavigationIcons';
+import { AppButton, KpiTile } from '../../../shared/components';
+import { useDashboardPageViewModel } from '../viewmodel/useDashboardPageViewModel';
+import { TermProgressCard } from './TermProgressCard';
 
-// Dashboard con los indicadores clave del sistema.
+// Dashboard: periodo en curso, indicadores académicos, cobertura, finanzas y trámites.
 export function DashboardPage() {
-  const ViewModel = useDashboardViewModel();
+  const ViewModel = useDashboardPageViewModel();
   const Translation = useTranslation();
-  const Data = ViewModel.Dashboard;
+  const Navigator = useNavigate();
 
-  const FormatAmount = (Amount: number): string =>
-    new Intl.NumberFormat(Translation.i18n.language === 'en' ? 'en-US' : 'es-MX', {
-      style: 'currency',
-      currency: 'MXN',
-    }).format(Amount);
+  const Actions = (
+    <div className="USystemInlineActions">
+      {ViewModel.LastUpdated !== null && (
+        <ITText as="span" muted>
+          {Translation.t('Dashboard.UpdatedAt', { Time: ViewModel.LastUpdated })}
+        </ITText>
+      )}
+      <AppButton
+        Label={Translation.t('Dashboard.Refresh')}
+        Variant="outlined"
+        Size="sm"
+        IsLoading={ViewModel.IsRefreshing}
+        OnClick={() => void ViewModel.Reload()}
+      />
+    </div>
+  );
 
   return (
     <ITPage
       title={Translation.t('Dashboard.Title')}
       description={Translation.t('Dashboard.Subtitle')}
+      actions={Actions}
       maxWidth="7xl"
-      loading={ViewModel.IsLoading && Data === null}
       error={ViewModel.ErrorMessage ?? undefined}
       errorTitle={Translation.t('Common.Error')}
       errorActionLabel={Translation.t('Common.Retry')}
       onRetry={ViewModel.Reload}
     >
-      {Data !== null && (
-        <ITStack spacing={4}>
-          {Data.CurrentTermId === null ? (
-            <ITAlert variant="warning" title={Translation.t('Dashboard.NoTerm')}>
-              {Translation.t('Dashboard.NoTermHint')}
-            </ITAlert>
-          ) : (
-            <ITAlert variant="info" title={Translation.t('Dashboard.CurrentTerm')}>
-              {Data.CurrentTermCode} · {Data.CurrentTermName} ·{' '}
-              {Translation.t(`AcademicTerms.Status.${Data.CurrentTermStatus}`)} ·{' '}
-              {Data.CurrentTermStartDate} → {Data.CurrentTermEndDate}
-            </ITAlert>
-          )}
-          <ITCard title={Translation.t('Dashboard.Academic')}>
-            <dl className="USystemStatusList">
-              <div>
-                <dt>{Translation.t('Dashboard.Students')}</dt>
-                <dd>{Data.ActiveStudents}</dd>
+      <div className="USystemDashboard">
+        {ViewModel.RefreshError !== null && (
+          <ITAlert variant="warning" title={Translation.t('Dashboard.RefreshError')}>
+            {ViewModel.RefreshError}
+          </ITAlert>
+        )}
+
+        {ViewModel.HasNoTerm ? (
+          <ITAlert variant="warning" title={Translation.t('Dashboard.NoTerm')}>
+            {Translation.t('Dashboard.NoTermHint')}
+          </ITAlert>
+        ) : (
+          <TermProgressCard Term={ViewModel.Term} IsLoading={ViewModel.IsLoading} HasNoTerm={false} Wide />
+        )}
+
+        <section className="USystemDashboardSection" aria-labelledby="DashboardAcademic">
+          <h2 id="DashboardAcademic" className="USystemDashboardSectionTitle">
+            {Translation.t('Dashboard.Academic')}
+          </h2>
+          <div className="USystemKpis">
+            {ViewModel.IsLoading
+              ? [0, 1, 2, 3].map((Item) => (
+                  <ITSkeleton key={Item} variant="rectangular" height={116} className="USystemKpiSkeleton" />
+                ))
+              : ViewModel.Academic.map((Kpi) => (
+                  <KpiTile
+                    key={Kpi.Id}
+                    Label={Translation.t(Kpi.LabelKey)}
+                    Value={Kpi.Value}
+                    Hint={Kpi.Hint}
+                    Icon={GetNavigationIcon(Kpi.Icon)}
+                    OnClick={Kpi.Path === null ? null : () => Navigator(Kpi.Path as string)}
+                  />
+                ))}
+          </div>
+        </section>
+
+        <div className="USystemDashboardCards">
+          <ITCard title={Translation.t('Dashboard.Coverage')}>
+            {ViewModel.IsLoading ? (
+              <ITSkeleton variant="text" count={3} />
+            ) : ViewModel.Coverage === null ? (
+              <ITText as="p" muted>
+                {Translation.t('Dashboard.CoverageEmpty')}
+              </ITText>
+            ) : (
+              <div className="USystemDashboardMetric">
+                <span className="USystemDashboardFigure">{ViewModel.Coverage.Percent} %</span>
+                <ITProgress value={ViewModel.Coverage.Percent} color="success" size="md" />
+                <ITText as="p" muted>
+                  {Translation.t('Dashboard.CoverageHint', {
+                    Enrolled: ViewModel.Coverage.Enrolled,
+                    Active: ViewModel.Coverage.Active,
+                  })}
+                </ITText>
               </div>
-              <div>
-                <dt>{Translation.t('Dashboard.Teachers')}</dt>
-                <dd>{Data.ActiveTeachers}</dd>
-              </div>
-              <div>
-                <dt>{Translation.t('Dashboard.Groups')}</dt>
-                <dd>{Data.OpenClassGroups}</dd>
-              </div>
-              <div>
-                <dt>{Translation.t('Dashboard.Enrollments')}</dt>
-                <dd>{Data.TotalEnrollments}</dd>
-              </div>
-              <div>
-                <dt>{Translation.t('Dashboard.TermEnrollments')}</dt>
-                <dd>{Data.TermEnrollments}</dd>
-              </div>
-            </dl>
+            )}
           </ITCard>
 
           <ITCard title={Translation.t('Dashboard.Finance')}>
-            <dl className="USystemStatusList">
-              <div>
-                <dt>{Translation.t('Dashboard.PendingCharges')}</dt>
-                <dd>{Data.PendingCharges}</dd>
+            {ViewModel.Finance === null ? (
+              <ITSkeleton variant="text" count={3} />
+            ) : (
+              <div className="USystemDashboardMetric">
+                <span className="USystemDashboardLabel">{Translation.t('Dashboard.PendingAmount')}</span>
+                <span className="USystemDashboardFigure">{ViewModel.Finance.Amount}</span>
+                <dl className="USystemDashboardPairs">
+                  <div>
+                    <dt>{Translation.t('Dashboard.PendingCharges')}</dt>
+                    <dd>{ViewModel.Finance.Count}</dd>
+                  </div>
+                  <div>
+                    <dt>{Translation.t('Dashboard.AverageCharge')}</dt>
+                    <dd>{ViewModel.Finance.Average}</dd>
+                  </div>
+                </dl>
+                {ViewModel.Finance.Path !== null && (
+                  <AppButton
+                    Label={Translation.t('Dashboard.SeeCharges')}
+                    Variant="text"
+                    Size="sm"
+                    OnClick={() => Navigator(ViewModel.Finance?.Path as string)}
+                  />
+                )}
               </div>
-              <div>
-                <dt>{Translation.t('Dashboard.PendingAmount')}</dt>
-                <dd>{FormatAmount(Data.PendingAmount)}</dd>
-              </div>
-            </dl>
+            )}
           </ITCard>
 
           <ITCard title={Translation.t('Dashboard.Procedures')}>
-            <dl className="USystemStatusList">
-              <div>
-                <dt>{Translation.t('Dashboard.Requested')}</dt>
-                <dd>{Data.RequestedProcedures}</dd>
+            {ViewModel.Procedures === null ? (
+              <ITSkeleton variant="text" count={3} />
+            ) : (
+              <div className="USystemDashboardMetric">
+                <dl className="USystemDashboardPairs">
+                  <div>
+                    <dt>{Translation.t('Dashboard.Requested')}</dt>
+                    <dd className="USystemDashboardPairFigure">
+                      {ViewModel.Procedures.RequestedText}
+                      {ViewModel.Procedures.Requested > 0 && (
+                        <ITBadget label={Translation.t('Dashboard.NeedsAttention')} color="warning" size="sm" />
+                      )}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>{Translation.t('Dashboard.Issued')}</dt>
+                    <dd className="USystemDashboardPairFigure">{ViewModel.Procedures.Issued}</dd>
+                  </div>
+                </dl>
+                {ViewModel.Procedures.Path !== null && (
+                  <AppButton
+                    Label={Translation.t('Dashboard.SeeProcedures')}
+                    Variant="text"
+                    Size="sm"
+                    OnClick={() => Navigator(ViewModel.Procedures?.Path as string)}
+                  />
+                )}
               </div>
-              <div>
-                <dt>{Translation.t('Dashboard.Issued')}</dt>
-                <dd>{Data.IssuedProcedures}</dd>
-              </div>
-            </dl>
-            <ITText as="p" muted>
-              {Translation.t('Dashboard.Hint')}
-            </ITText>
+            )}
           </ITCard>
-        </ITStack>
-      )}
+        </div>
+
+        <ITText as="p" muted>
+          {Translation.t('Dashboard.Hint')}
+        </ITText>
+      </div>
     </ITPage>
   );
 }
