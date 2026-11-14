@@ -24,6 +24,7 @@
   --usystem-brand-strong: #1f2c45;
   --usystem-mint: #7db394;
   --usystem-mint-soft: #eaf3ee;
+  --usystem-tint: var(--usystem-mint-soft);
   color-scheme: light;
 }
 
@@ -132,68 +133,436 @@ body {
   word-break: break-word;
 }
 
-.USystemHero {
+/* Inicio ---------------------------------------------------------------- */
+.USystemHome {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Modo oscuro de inicio y dashboard: tonos propios, no una inversión automática */
+.dark .USystemHome,
+.dark .USystemDashboard {
+  --usystem-surface-strong: #182235;
+  --usystem-border: #2b3a55;
+  --usystem-text: #e6ecf5;
+  --usystem-text-muted: #9fb0c8;
+  --usystem-brand: #c9d6ee;
+  --usystem-tint: rgba(125, 179, 148, 0.14);
+}
+
+.USystemHomeHero {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--usystem-border);
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(125, 179, 148, 0.22), transparent 55%),
+    linear-gradient(135deg, var(--usystem-surface-strong) 0%, var(--usystem-tint) 100%);
 }
 
-.USystemHeroText {
+.USystemHomeGreeting {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.USystemHomeAvatar {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #ffffff;
+  background-color: var(--usystem-brand-strong);
+}
+
+.dark .USystemHomeAvatar {
+  color: #182235;
+  background-color: var(--usystem-mint);
+}
+
+.USystemHomeGreetingText {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  min-width: 260px;
-  flex: 1 1 320px;
+  gap: 0.3rem;
+  min-width: 0;
 }
 
-.USystemHeroTitle {
+.USystemHomeDate {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  color: var(--usystem-text-muted);
+}
+
+.USystemHomeTitle {
   margin: 0;
-  font-size: 1.35rem;
+  font-size: 1.6rem;
+  line-height: 1.2;
   color: var(--usystem-brand);
 }
 
-.USystemHeroBanner {
-  flex: 0 1 420px;
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  border-radius: 0.75rem;
+.USystemHomeRoles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
-.USystemModuleGrid {
+.USystemHomeActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Indicadores */
+.USystemKpis {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 0.75rem;
 }
 
-.USystemModuleCard {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.9rem 1rem;
+.USystemKpi {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'label icon'
+    'value icon'
+    'hint hint';
+  align-items: start;
+  row-gap: 0.2rem;
+  min-height: 116px;
+  padding: 1rem 1.1rem;
   text-align: left;
-  cursor: pointer;
+  font: inherit;
+  color: var(--usystem-text);
   background-color: var(--usystem-surface-strong);
   border: 1px solid var(--usystem-border);
-  border-radius: 0.75rem;
-  transition: border-color 150ms ease, transform 150ms ease;
+  border-radius: 0.875rem;
 }
 
-.USystemModuleCard:hover {
-  border-color: var(--usystem-brand);
+.USystemKpiLink {
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.USystemKpiLink:hover {
+  border-color: var(--usystem-mint);
+  box-shadow: 0 6px 18px rgba(31, 44, 69, 0.08);
   transform: translateY(-1px);
 }
 
-.USystemModuleName {
+.USystemKpiLink:focus-visible,
+.USystemHomeShortcut:focus-visible {
+  outline: 2px solid var(--usystem-mint);
+  outline-offset: 2px;
+}
+
+.USystemKpiIcon {
+  grid-area: icon;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.65rem;
+  color: var(--usystem-brand);
+  background-color: var(--usystem-tint);
+}
+
+.USystemKpiLabel {
+  grid-area: label;
+  font-size: 0.75rem;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--usystem-text-muted);
+}
+
+.USystemKpiValue {
+  grid-area: value;
+  font-size: 1.85rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
   color: var(--usystem-brand);
 }
 
-.USystemModuleHint {
+.USystemKpiHint {
+  grid-area: hint;
   font-size: 0.8rem;
   color: var(--usystem-text-muted);
+}
+
+.USystemKpiSkeleton {
+  border-radius: 0.875rem;
+}
+
+/* Columnas: accesos a la izquierda, periodo y cuenta a la derecha */
+.USystemHomeColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .USystemHomeColumns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.USystemHomeSide {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.USystemHomeGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.USystemHomeGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.USystemHomeGroupTitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--usystem-text-muted);
+}
+
+.USystemHomeShortcutGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.6rem;
+}
+
+.USystemHomeShortcut {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+  padding: 0.7rem 0.8rem;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  color: var(--usystem-text);
+  background-color: var(--usystem-surface-strong);
+  border: 1px solid var(--usystem-border);
+  border-radius: 0.75rem;
+  transition: border-color 150ms ease, background-color 150ms ease;
+}
+
+.USystemHomeShortcut:hover {
+  border-color: var(--usystem-mint);
+  background-color: var(--usystem-tint);
+}
+
+.USystemHomeShortcutIcon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--usystem-brand);
+}
+
+.USystemHomeShortcutName {
+  overflow: hidden;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Periodo en curso */
+.USystemTerm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.USystemTermHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.USystemTermCode {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--usystem-brand);
+}
+
+.USystemTermProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.USystemTermMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--usystem-text-muted);
+}
+
+.USystemTermIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.USystemTermWide {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(240px, 2fr) minmax(200px, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.USystemTermWide .USystemTermDates {
+  padding-top: 0;
+  border-top: 0;
+}
+
+@media (max-width: 900px) {
+  .USystemTermWide {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+.USystemTermDates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--usystem-border);
+}
+
+.USystemTermDates dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--usystem-text-muted);
+}
+
+.USystemTermDates dd {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
+
+.USystemHomeAccount {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Dashboard ------------------------------------------------------------- */
+.USystemDashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.USystemDashboardSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.USystemDashboardSectionTitle {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--usystem-text-muted);
+}
+
+.USystemDashboardCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.USystemDashboardMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.USystemDashboardMetric > :not(button) {
+  align-self: stretch;
+}
+
+.USystemDashboardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--usystem-text-muted);
+}
+
+.USystemDashboardFigure {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--usystem-brand);
+}
+
+.USystemDashboardPairs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--usystem-border);
+}
+
+.USystemDashboardPairs dt {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--usystem-text-muted);
+}
+
+.USystemDashboardPairs dd {
+  margin: 0.2rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--usystem-text);
+}
+
+.USystemDashboardPairFigure {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .USystemLottie {

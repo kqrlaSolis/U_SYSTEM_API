@@ -1,150 +1,151 @@
-import { ITBadget, ITCard, ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
+import { ITAlert, ITBadget, ITCard, ITPage, ITSkeleton, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../shared/auth/AuthContext';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
-import { NormalizeLanguage } from '../../../shared/i18n/Config';
-import { FormatDate } from '../../../shared/utils/Format';
-import { useDashboardViewModel } from '../../Reports/viewmodel/useDashboardViewModel';
+import { GetNavigationIcon } from '../../../app/layout/NavigationIcons';
+import { AppButton, KpiTile } from '../../../shared/components';
+import { TermProgressCard } from '../../Reports/view/TermProgressCard';
+import { useHomeViewModel } from '../viewmodel/useHomeViewModel';
 
-// Inicio: saludo, resumen del periodo y accesos a los módulos más usados.
+// Inicio: saludo y acciones del día, indicadores, periodo en curso y accesos agrupados por área.
 export function HomePage() {
   const Translation = useTranslation();
-  const Auth = useAuth();
-  const Permissions = usePermissions();
   const Navigator = useNavigate();
-  const CurrentUser = Auth.CurrentUser;
-  const Language = NormalizeLanguage(Translation.i18n.language);
-  const Today = FormatDate(new Date(), Language);
-  const CanSeeReports = Permissions.Can('Reports.View');
-  const Summary = useDashboardViewModel(CanSeeReports);
-  const DashboardData = CanSeeReports ? Summary.Dashboard : null;
-
-  const Modules = [
-    { Path: '/dashboard', LabelKey: 'Nav.Dashboard', Permission: 'Reports.View' },
-    { Path: '/students', LabelKey: 'Nav.Students', Permission: 'Students.View' },
-    { Path: '/enrollments', LabelKey: 'Nav.Enrollments', Permission: 'Enrollments.View' },
-    { Path: '/grades', LabelKey: 'Nav.Grades', Permission: 'Grades.View' },
-    { Path: '/procedures', LabelKey: 'Nav.Procedures', Permission: 'Procedures.View' },
-    { Path: '/charges', LabelKey: 'Nav.Payments', Permission: 'Payments.View' },
-    { Path: '/teachers', LabelKey: 'Nav.Teachers', Permission: 'Teachers.View' },
-    { Path: '/class-groups', LabelKey: 'Nav.ClassGroups', Permission: 'ClassGroups.View' },
-    { Path: '/careers', LabelKey: 'Nav.Careers', Permission: 'Careers.View' },
-    { Path: '/subjects', LabelKey: 'Nav.Subjects', Permission: 'Subjects.View' },
-  ].filter((Module) => Permissions.Can(Module.Permission));
-
-  const Roles = CurrentUser?.Roles ?? [];
-  const FirstName = CurrentUser?.FullName.split(' ')[0] ?? '';
+  const ViewModel = useHomeViewModel();
 
   return (
-    <ITPage
-      title={Translation.t('Home.Title')}
-      description={Translation.t('Home.Subtitle')}
-      maxWidth="7xl"
-    >
-      <ITStack spacing={4}>
-        <ITCard>
-          <div className="USystemHero">
-            <div className="USystemHeroText">
-              <h2 className="USystemHeroTitle">
-                {CurrentUser === null
-                  ? Translation.t('Home.Title')
-                  : Translation.t('Home.Hello', { Name: FirstName })}
-              </h2>
-              <ITText as="p" muted>
-                {Translation.t('Home.WelcomeHint')}
-              </ITText>
-              <div className="USystemInlineActions">
-                {Roles.map((Role) => (
-                  <ITBadget key={Role} label={Role} color="info" size="sm" />
-                ))}
-                <ITText as="span" muted>
-                  {Today}
-                </ITText>
-              </div>
-            </div>
-
-            {/* <img className="USystemHeroBanner" src={BannerUrl} alt="" /> */}
-          </div>
-        </ITCard>
-
-        {CanSeeReports && (
-          <ITCard title={Translation.t('Home.QuickSummary')}>
-            {DashboardData === null ? (
-              <ITText as="p" muted>
-                {Translation.t('Common.Loading')}
-              </ITText>
-            ) : (
-              <dl className="USystemStatusList">
-                <div>
-                  <dt>{Translation.t('Dashboard.Students')}</dt>
-                  <dd>{DashboardData.ActiveStudents}</dd>
-                </div>
-                <div>
-                  <dt>{Translation.t('Dashboard.Groups')}</dt>
-                  <dd>{DashboardData.OpenClassGroups}</dd>
-                </div>
-                <div>
-                  <dt>{Translation.t('Dashboard.PendingCharges')}</dt>
-                  <dd>{DashboardData.PendingCharges}</dd>
-                </div>
-                <div>
-                  <dt>{Translation.t('Dashboard.Requested')}</dt>
-                  <dd>{DashboardData.RequestedProcedures}</dd>
-                </div>
-              </dl>
+    <ITPage maxWidth="7xl">
+      <div className="USystemHome">
+        <section className="USystemHomeHero">
+          <div className="USystemHomeGreeting">
+            {ViewModel.Initials.length > 0 && (
+              <span className="USystemHomeAvatar" aria-hidden="true">
+                {ViewModel.Initials}
+              </span>
             )}
-          </ITCard>
+            <div className="USystemHomeGreetingText">
+              <span className="USystemHomeDate">{ViewModel.LongDate}</span>
+              <h1 className="USystemHomeTitle">
+                {ViewModel.FirstName.length > 0
+                  ? Translation.t('Home.Hello', { Name: ViewModel.FirstName })
+                  : Translation.t('Home.Title')}
+              </h1>
+              {ViewModel.Roles.length > 0 && (
+                <div className="USystemHomeRoles">
+                  {ViewModel.Roles.map((Role) => (
+                    <ITBadget key={Role} label={Role} color="info" size="sm" />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {ViewModel.QuickActions.length > 0 && (
+            <div className="USystemHomeActions">
+              {ViewModel.QuickActions.map((Action, Index) => (
+                <AppButton
+                  key={Action.Id}
+                  Label={Translation.t(Action.LabelKey)}
+                  Variant={Index === 0 ? 'filled' : 'outlined'}
+                  Size="sm"
+                  OnClick={() => Navigator(Action.Path)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {ViewModel.CanSeeReports && (
+          <section aria-label={Translation.t('Home.QuickSummary')}>
+            {ViewModel.SummaryError !== null ? (
+              <ITAlert variant="warning" title={Translation.t('Home.SummaryError')}>
+                <div className="USystemInlineActions">
+                  <span>{ViewModel.SummaryError}</span>
+                  <AppButton
+                    Label={Translation.t('Common.Retry')}
+                    Variant="text"
+                    Size="sm"
+                    OnClick={() => void ViewModel.ReloadSummary()}
+                  />
+                </div>
+              </ITAlert>
+            ) : (
+              <div className="USystemKpis">
+                {ViewModel.IsLoadingSummary
+                  ? [0, 1, 2, 3].map((Item) => (
+                      <ITSkeleton key={Item} variant="rectangular" height={116} className="USystemKpiSkeleton" />
+                    ))
+                  : ViewModel.Indicators.map((Indicator) => (
+                      <KpiTile
+                        key={Indicator.Id}
+                        Label={Translation.t(Indicator.LabelKey)}
+                        Value={Indicator.Value}
+                        Hint={Indicator.Hint}
+                        Icon={GetNavigationIcon(Indicator.Icon)}
+                        OnClick={Indicator.Path === null ? null : () => Navigator(Indicator.Path as string)}
+                      />
+                    ))}
+              </div>
+            )}
+          </section>
         )}
 
-        <ITCard title={Translation.t('Home.Modules')}>
-          <div className="USystemModuleGrid">
-            {Modules.map((Module) => (
-              <button
-                key={Module.Path}
-                type="button"
-                className="USystemModuleCard"
-                onClick={() => Navigator(Module.Path)}
-              >
-                <span className="USystemModuleName">{Translation.t(Module.LabelKey)}</span>
-                <span className="USystemModuleHint">{Translation.t('Home.OpenModule')}</span>
-              </button>
-            ))}
-          </div>
-        </ITCard>
+        <div className="USystemHomeColumns">
+          <ITCard title={Translation.t('Home.Shortcuts')} className="USystemHomeShortcuts">
+            <div className="USystemHomeGroups">
+              {ViewModel.Groups.map((Group) => (
+                <section key={Group.Id} className="USystemHomeGroup">
+                  <h2 className="USystemHomeGroupTitle">{Translation.t(Group.TitleKey)}</h2>
+                  <div className="USystemHomeShortcutGrid">
+                    {Group.Items.map((Item) => (
+                      <button
+                        key={Item.Id}
+                        type="button"
+                        className="USystemHomeShortcut"
+                        onClick={() => Navigator(Item.Path)}
+                      >
+                        <span className="USystemHomeShortcutIcon">{GetNavigationIcon(Item.Icon)}</span>
+                        <span className="USystemHomeShortcutName">{Translation.t(Item.LabelKey)}</span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          </ITCard>
 
-        {/* <ITCard title={Translation.t('Home.TechDetails')}>
-          <ITStack spacing={3}>
-            <LottieAnimation
-              Data={BannerAnimation}
-              Height={120}
-              AriaLabel={Translation.t('Common.AppName')}
-            />
-            <dl className="USystemStatusList">
-              <div>
-                <dt>{Translation.t('Home.ApiBaseUrl')}</dt>
-                <dd>{ApiBaseUrl}</dd>
+          <div className="USystemHomeSide">
+            {ViewModel.CanSeeReports && (
+              <TermProgressCard
+                Term={ViewModel.Term}
+                IsLoading={ViewModel.IsLoadingSummary}
+                HasNoTerm={ViewModel.HasNoTerm}
+              />
+            )}
+
+            <ITCard title={Translation.t('Home.Account')}>
+              <div className="USystemHomeAccount">
+                <ITText as="p" muted>
+                  {Translation.t('Home.AccountHint')}
+                </ITText>
+                <div className="USystemInlineActions">
+                  <AppButton
+                    Label={Translation.t('Home.Profile')}
+                    Variant="outlined"
+                    Size="sm"
+                    OnClick={() => Navigator('/profile')}
+                  />
+                  <AppButton
+                    Label={Translation.t('Home.ChangePassword')}
+                    Variant="text"
+                    Size="sm"
+                    OnClick={() => Navigator('/change-password')}
+                  />
+                </div>
               </div>
-              <div>
-                <dt>{Translation.t('Home.AppVersion')}</dt>
-                <dd>{AppVersion}</dd>
-              </div>
-              <div>
-                <dt>{Translation.t('Home.Runtime')}</dt>
-                <dd>
-                  {IsDesktopRuntime
-                    ? Translation.t('Home.RuntimeDesktop')
-                    : Translation.t('Home.RuntimeBrowser')}
-                </dd>
-              </div>
-              <div>
-                <dt>{Translation.t('Home.Language')}</dt>
-                <dd>{Language}</dd>
-              </div>
-            </dl>
-          </ITStack>
-        </ITCard> */}
-      </ITStack>
+            </ITCard>
+          </div>
+        </div>
+      </div>
     </ITPage>
   );
 }

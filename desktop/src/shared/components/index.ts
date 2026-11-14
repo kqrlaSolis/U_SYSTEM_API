@@ -15,6 +15,8 @@ export { FilterBar } from './FilterBar';
 export type { FilterBarProps, FilterField } from './FilterBar';
 export { FormField } from './FormField';
 export type { FormFieldProps } from './FormField';
+export { KpiTile } from './KpiTile';
+export type { KpiTileProps } from './KpiTile';
 export { LottieAnimation } from './LottieAnimation';
 export type { LottieAnimationProps } from './LottieAnimation';
 export { SearchBox } from './SearchBox';

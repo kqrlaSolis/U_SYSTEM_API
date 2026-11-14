@@ -1,7 +1,8 @@
 import { vi } from 'vitest';
 
 // jsdom no implementa matchMedia ni ResizeObserver y AXZY UI los usa en el tema.
-const EmptyMediaQueryList = (Query: string) => ({  matches: false,
+const EmptyMediaQueryList = (Query: string) => ({
+  matches: false,
   media: Query,
   onchange: null,
   addListener: () => undefined,
