@@ -25,22 +25,6 @@ export function FormatDate(Value: Date | string, Language?: string): string {
   }).format(DateValue);
 }
 
-export function FormatDateTime(Value: Date | string, Language?: string): string {
-  const DateValue = typeof Value === 'string' ? new Date(Value) : Value;
-
-  if (Number.isNaN(DateValue.getTime())) {
-    return '';
-  }
-
-  return new Intl.DateTimeFormat(ResolveLocale(Language), {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(DateValue);
-}
-
 export function FormatNumber(
   Value: number,
   Language?: string,

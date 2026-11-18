@@ -47,8 +47,7 @@ USystem/
 └── desktop/
     ├── package.json
     ├── electron/
-    │   ├── Main.ts
-    │   └── Preload.ts
+    │   └── Main.ts
     └── src/
         ├── app/
         │   ├── Router.tsx

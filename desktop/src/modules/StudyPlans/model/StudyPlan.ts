@@ -50,10 +50,6 @@ export interface StudyPlanPrerequisiteItem {
   PrerequisiteSubjectId: number;
 }
 
-export interface StudyPlanSubjectsRequest {
-  Subjects: StudyPlanSubjectItem[];
-}
-
 export interface StudyPlanPrerequisitesRequest {
   Prerequisites: StudyPlanPrerequisiteItem[];
 }

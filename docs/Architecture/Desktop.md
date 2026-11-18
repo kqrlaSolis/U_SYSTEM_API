@@ -107,7 +107,7 @@ desktop/src/
 │       ├── viewmodel/    useUserListViewModel.ts, useUserFormViewModel.ts
 │       └── view/         UserListPage.tsx, UserFormPage.tsx
 ├── shared/
-│   ├── components/       Envoltorios de AXZY UI (DataTable.tsx, FormField.tsx, ConfirmDialog.tsx)
+│   ├── components/       Envoltorios de AXZY UI (DataTable.tsx, FormField.tsx, FilterBar.tsx)
 │   ├── crud/             CrudListPage/CrudFormPage + ViewModels genéricos de catálogos
 │   ├── hooks/            usePermissions.ts, usePagedQuery.ts
 │   ├── http/             HttpClient.ts (JWT, refresh, Accept-Language, errores), ApiResponse.ts
@@ -300,7 +300,7 @@ se envuelven: se usan `ITLayout` e `ITPage` de la librería. La documentación d
 
 ## Electron
 
-- `contextIsolation: true` y `nodeIntegration: false`; el preload expone solo lo necesario.
+- `contextIsolation: true`, `nodeIntegration: false` y `sandbox: true`, sin preload: el renderer no tiene acceso a Node ni a IPC.
 - URL de la API por entorno (`VITE_API_BASE_URL`).
 - Idioma inicial desde `Localization.DefaultLanguage`; la preferencia del usuario se guarda en
   `localStorage` (`USystem.Language`).

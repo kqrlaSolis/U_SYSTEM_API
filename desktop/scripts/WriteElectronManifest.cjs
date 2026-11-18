@@ -1,7 +1,6 @@
-// El paquete raíz es ESM ("type": "module"), pero Electron necesita CommonJS para
-// el proceso principal y, sobre todo, para el preload: con sandbox activo el
-// preload no puede ser un módulo ESM. Este manifiesto hace que dist-electron se
-// resuelva como CommonJS sin renombrar los archivos que emite tsc.
+// El paquete raíz es ESM ("type": "module"), pero el proceso principal de Electron se
+// compila a CommonJS. Este manifiesto hace que dist-electron se resuelva como CommonJS
+// sin renombrar los archivos que emite tsc.
 const FileSystem = require('node:fs');
 const NodePath = require('node:path');
 

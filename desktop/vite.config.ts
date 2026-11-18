@@ -23,7 +23,6 @@ export default defineConfig({
           React: ['react', 'react-dom', 'react-router-dom'],
           AxzyUi: ['@axzydev/axzy_ui_system'],
           I18n: ['i18next', 'react-i18next'],
-          Lottie: ['lottie-react', 'lottie-web'],
         },
       },
     },

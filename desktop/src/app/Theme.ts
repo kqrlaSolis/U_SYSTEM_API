@@ -53,8 +53,6 @@ export const USystemDarkTheme: Partial<ITThemePalette> = {
 };
 
 // Tema por defecto de la aplicación: el claro
-export const USystemDefaultTheme = USystemTheme;
-
 // Configuración de producción del provider.
 // appearance="flat" ⇒ bordes finos sin sombras; showFab=false ⇒ sin diseñador de temas flotante.
 export const USystemAppearance = 'flat' as const;

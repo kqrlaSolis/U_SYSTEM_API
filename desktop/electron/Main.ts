@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, session, shell } from 'electron';
+import { app, BrowserWindow, Menu, session, shell } from 'electron';
 import { existsSync, readFileSync } from 'node:fs';
 import NodePath from 'node:path';
 import NodeUrl from 'node:url';
@@ -39,7 +39,6 @@ function CreateMainWindow(): BrowserWindow {
     title: 'U SYSTEM',
     ...(WindowIconPath === undefined ? {} : { icon: WindowIconPath }),
     webPreferences: {
-      preload: NodePath.join(__dirname, 'Preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
@@ -138,14 +137,6 @@ function ApplyContentSecurityPolicy(): void {
   });
 }
 
-function RegisterIpcHandlers(): void {
-  ipcMain.on('usystem:get-app-version', (Event) => {
-    Event.returnValue = app.getVersion();
-  });
-
-  ipcMain.handle('usystem:open-external', async (_Event, Url: string) => OpenExternalUrl(Url));
-}
-
 // Menú mínimo construido con roles: Electron los traduce al idioma del sistema.
 function BuildApplicationMenu(): void {
   const Template: Electron.MenuItemConstructorOptions[] = [
@@ -175,7 +166,6 @@ if (!HasSingleInstanceLock) {
 
   void app.whenReady().then(() => {
     ApplyContentSecurityPolicy();
-    RegisterIpcHandlers();
     BuildApplicationMenu();
 
     MainWindow = CreateMainWindow();

@@ -25,9 +25,8 @@ export const AuthStorage = {
     AccessToken = null;
   },
 
-  // Fase 0: el refresh token se guarda en localStorage porque todavía no existe
-  // almacenamiento seguro en el preload. TODO(Fase 1): moverlo a safeStorage de
-  // Electron expuesto por window.USystem y borrar la copia del renderer.
+  // Pendiente de seguridad: el refresh token se guarda en localStorage. Debe moverse a
+  // safeStorage de Electron (requiere un preload que lo exponga) y borrar la copia del renderer.
   GetRefreshToken(): string | null {
     const StoredToken = ReadRefreshToken();
     return StoredToken !== null && StoredToken.length > 0 ? StoredToken : null;

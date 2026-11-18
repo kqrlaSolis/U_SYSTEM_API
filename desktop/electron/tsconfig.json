@@ -15,5 +15,5 @@
     "sourceMap": false,
     "types": ["node"]
   },
-  "include": ["Main.ts", "Preload.ts", "Types.d.ts"]
+  "include": ["Main.ts"]
 }

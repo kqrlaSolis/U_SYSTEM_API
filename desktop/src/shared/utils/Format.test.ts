@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FormatCurrency, FormatDate, FormatDateTime, FormatNumber } from './Format';
+import { FormatCurrency, FormatDate, FormatNumber } from './Format';
 
 describe('Format', () => {
   it('formatea fechas con el locale del idioma activo', () => {
@@ -25,23 +25,8 @@ describe('Format', () => {
 
   it('devuelve cadena vacía con una fecha inválida', () => {
     expect(FormatDate('no-es-fecha')).toBe('');
-    expect(FormatDateTime('no-es-fecha')).toBe('');
   });
 
-  it('formatea fecha y hora incluyendo la hora', () => {
-    const Formatted = FormatDateTime('2024-03-05T08:30:00', 'es');
-
-    expect(Formatted.length).toBeGreaterThan(0);
-    expect(Formatted).toBe(
-      new Intl.DateTimeFormat('es-MX', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(new Date('2024-03-05T08:30:00')),
-    );
-  });
 
   it('formatea números y moneda con Intl según el idioma', () => {
     expect(FormatNumber(1234.5, 'es')).toBe(new Intl.NumberFormat('es-MX').format(1234.5));

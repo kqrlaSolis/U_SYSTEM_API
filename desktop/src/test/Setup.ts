@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 // jsdom no implementa matchMedia ni ResizeObserver y AXZY UI los usa en el tema.
 const EmptyMediaQueryList = (Query: string) => ({
   matches: false,
@@ -37,8 +35,3 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
   globalThis.ResizeObserver = ResizeObserverStub as unknown as typeof ResizeObserver;
 }
 
-// lottie-web detecta capacidades de canvas al importarse y jsdom no lo soporta:
-// en pruebas la animación se reemplaza por un nodo vacío.
-vi.mock('lottie-react', () => ({
-  Lottie: () => null,
-}));

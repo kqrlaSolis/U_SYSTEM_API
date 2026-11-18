@@ -565,11 +565,6 @@ body {
   gap: 0.5rem;
 }
 
-.USystemLottie {
-  width: 100%;
-  max-width: 420px;
-}
-
 .USystemRowActions {
   display: flex;
   align-items: center;

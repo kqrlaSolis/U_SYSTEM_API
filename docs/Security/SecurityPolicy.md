@@ -40,7 +40,7 @@ CURP, domicilio, documentos oficiales y situación económica.
 
 ## Electron
 
-- `contextIsolation: true` y `nodeIntegration: false`; preload mínimo.
+- `contextIsolation: true`, `nodeIntegration: false` y `sandbox: true`; sin preload.
 - Sin `eval` ni carga de contenido remoto en la ventana principal.
 
 ## Antes de producción

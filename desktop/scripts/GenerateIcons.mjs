@@ -24,7 +24,6 @@ const RenderPng = async (Size) =>
 
 const Png512 = await RenderPng(512);
 await writeFile(NodePath.join(Target, 'icon.png'), Png512);
-await writeFile(NodePath.join(Target, 'icon-256.png'), await RenderPng(256));
 
 const IcoBuffers = await Promise.all(IcoSizes.map((Size) => RenderPng(Size)));
 await writeFile(NodePath.join(Target, 'icon.ico'), await pngToIco(IcoBuffers));

@@ -6,7 +6,7 @@ directories:
   output: release
   buildResources: build
 
-# El renderer compilado y el proceso principal/.preload viajan dentro del asar
+# El renderer compilado y el proceso principal viajan dentro del asar
 files:
   - dist/**
   - dist-electron/**

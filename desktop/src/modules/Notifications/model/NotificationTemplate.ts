@@ -13,10 +13,3 @@ export interface NotificationTemplateRequest {
   Body: string;
   IsActive: boolean;
 }
-
-export interface SendNotificationRequest {
-  TemplateCode: string;
-  RecipientEmail: string;
-  StudentId: number | null;
-  Variables: Record<string, string>;
-}
