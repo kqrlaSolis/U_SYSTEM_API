@@ -1,4 +1,4 @@
-// Catálogo de permisos generado desde tools/DocsGenerator/Rbac.py.
+// Catálogo de permisos. Debe coincidir con los que inserta database/99_SeedData.sql.
 // Formato Module.Action en inglés y PascalCase; solo los comentarios van en español.
 
 namespace USystem.Domain.Constants;

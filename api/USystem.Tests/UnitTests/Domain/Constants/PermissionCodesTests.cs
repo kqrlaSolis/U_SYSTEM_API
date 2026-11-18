@@ -1,4 +1,4 @@
-// Pruebas del catálogo de permisos generado desde Rbac.py.
+// Pruebas del catálogo de permisos (PermissionCodes).
 using USystem.Domain.Constants;
 
 namespace USystem.Tests.UnitTests.Domain.Constants;

@@ -10,6 +10,7 @@ dist-electron/
 .git/
 docs/
 tools/
+database/
 *.md
 .env
 .env.*

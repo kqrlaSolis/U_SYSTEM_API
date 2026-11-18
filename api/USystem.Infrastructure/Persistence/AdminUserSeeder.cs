@@ -55,7 +55,7 @@ public class AdminUserSeeder
         var Role = await _Context.Roles
             .FirstOrDefaultAsync(CurrentRole => CurrentRole.Name == AdministratorRoleName, Cancellation)
             ?? throw new InvalidOperationException(
-                "Falta el rol Administrator. Ejecuta docs/DataModel/Scripts/99_SeedData.sql primero.");
+                "Falta el rol Administrator. Ejecuta database/99_SeedData.sql primero.");
 
         var Email = _Configuration["Seed:AdminEmail"] ?? DefaultEmail;
         var Username = _Configuration["Seed:AdminUsername"] ?? DefaultUsername;

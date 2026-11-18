@@ -1,4 +1,4 @@
-// Contexto de EF Core para MySQL. Los nombres de tabla y columna coinciden con docs/DataModel/Scripts.
+// Contexto de EF Core para MySQL. Los nombres de tabla y columna coinciden con los scripts de database/.
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using USystem.Domain.Entities;

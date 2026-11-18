@@ -1,63 +1,56 @@
-# U SYSTEM — Documentación
+# Documentación de U SYSTEM
 
-Sistema **administrativo** de gestión escolar universitaria (modelo cuatrimestral).
-
-> **El alumno NO tiene acceso a la aplicación.** U SYSTEM es de uso exclusivo del personal de la escuela.
-> La app del alumno es un proyecto futuro (ver `Architecture/StudentAppReadiness.md`).
-
-## Reglas del proyecto
-
-| # | Regla |
-|---|-------|
-| 1 | El sistema se llama **U SYSTEM**. |
-| 2 | **Todo el código en inglés**: variables, clases, constantes, funciones, tablas, columnas, rutas de permisos y nombres de archivo. **Solo los comentarios van en español.** |
-| 3 | **PascalCase en todo el código**, también en variables locales y parámetros. **Nada de snake_case ni camelCase.** En MySQL, tablas y columnas en PascalCase. |
-| 4 | API: C# .NET 8 en capas (Controller → Service → Repository → Entity) con inversión e inyección de dependencias. |
-| 5 | Desktop: Electron + React TS + AXZY UI System con patrón **MVVM** (Model, ViewModel, View). |
-| 6 | Base de datos: MySQL 8 con cadena de conexión configurable. |
-
-La regla 2 y la 3 se detallan, con las únicas excepciones que imponen los frameworks, en
-[`Guides/CodingConventions.md`](Guides/CodingConventions.md).
-
-## Estructura de esta carpeta
+Documentación técnica del código. Para levantar el proyecto por primera vez, empieza por
+[`Guides/FirstTimeSetup.md`](Guides/FirstTimeSetup.md).
 
 ```
 docs/
-├── README.md
-├── Api/              Convenciones, ejemplo por capas, endpoints por fase y entidades C#
-├── Architecture/     Visión, stack, solución, capas de la API, MVVM del desktop, i18n, fases
-├── AxzyUiSystem/     Documentación oficial de AXZY UI System (63 componentes)
-├── DataModel/        Scripts SQL, convenciones y diccionario de datos por tabla
-├── Guides/           Inicio rápido, convenciones de código, Git, cómo agregar un módulo, glosario
-├── Modules/          Un documento por módulo (21 módulos)
-├── Operations/       Despliegue, respaldos, secretos, almacenamiento, configuración y calendario
-├── Security/         Política, matriz RBAC, datos personales y checklist
-├── Templates/        Plantillas de módulo, entidad, endpoint, historia, caso de prueba, SQL y ADR
-├── Testing/          Estrategia, criterios de aceptación y casos de prueba
-└── Training/         Plan de capacitación por rol
+├── Architecture/   Cómo está hecho el sistema
+├── Conventions/    Reglas para escribir código, base de datos y Git
+├── Database/       Tablas, vistas y relaciones
+├── Security/       Autenticación, permisos y protección de datos
+├── Operations/     Ambientes, despliegue, secretos, archivos y respaldos
+└── Guides/         Paso a paso: instalar, correr y agregar un módulo
 ```
 
-## Por dónde empezar
+## Architecture
 
-1. [`Architecture/Overview.md`](Architecture/Overview.md) y [`Architecture/Phases.md`](Architecture/Phases.md).
-2. [`Architecture/LayeredStructure.md`](Architecture/LayeredStructure.md) — estructura en capas: bibliotecas,
-   clases, objetos de datos, referencias y esquema de la interfaz gráfica.
-3. [`Guides/QuickStart.md`](Guides/QuickStart.md) para levantar el ambiente y
-   [`Operations/Environments.md`](Operations/Environments.md) para las variables de local y producción.
-4. [`DataModel/README.md`](DataModel/README.md) para crear la base de datos.
-5. [`Modules/README.md`](Modules/README.md) para el detalle de cada módulo.
-6. [`Guides/HowToAddAModule.md`](Guides/HowToAddAModule.md) antes de construir el primer módulo.
-7. [`Architecture/Internationalization.md`](Architecture/Internationalization.md) y
-   [`Operations/Storage.md`](Operations/Storage.md) para i18n y archivos.
+| Documento | Contenido |
+|---|---|
+| [`Overview.md`](Architecture/Overview.md) | Qué es el sistema, stack, conceptos y módulos |
+| [`SolutionStructure.md`](Architecture/SolutionStructure.md) | Carpetas y proyectos de la solución |
+| [`Api.md`](Architecture/Api.md) | Capas de la API y flujo de una petición |
+| [`ApiConventions.md`](Architecture/ApiConventions.md) | Contrato JSON, paginación, códigos HTTP y errores |
+| [`Desktop.md`](Architecture/Desktop.md) | Patrón MVVM del desktop y reglas de la UI |
+| [`Internationalization.md`](Architecture/Internationalization.md) | Textos en español e inglés (API y desktop) |
+| [`Decisions.md`](Architecture/Decisions.md) | Decisiones de diseño ya tomadas |
 
-## Fases
+## Conventions
 
-- **Fase 0 — Cimientos:** solución, capas, DI, MySQL, shell de Electron + React + AXZY UI.
-- **Fase 1 — MVP:** Users, Roles, AuditLogs, Careers, StudyPlans, Subjects, AcademicTerms, Settings.
-- **Fase 2 — Operación:** CourseMaterials, Teachers, ClassGroups, Students, Enrollments.
-- **Fase 3 — Seguimiento:** ReEnrollments, Grades, Transcript, AcademicProgress.
-- **Fase 4 — Finanzas y complementarios:** Payments, Procedures, Notifications, Reports.
+| Documento | Contenido |
+|---|---|
+| [`Code.md`](Conventions/Code.md) | Nombres, idioma y estilo en C# y TypeScript |
+| [`Database.md`](Conventions/Database.md) | Nombres de tablas, columnas, llaves y valores |
+| [`Git.md`](Conventions/Git.md) | Ramas, commits y pull requests |
 
-## Pendientes de definición
+## Database, Security y Operations
 
-Ver [`Architecture/PendingDecisions.md`](Architecture/PendingDecisions.md).
+| Documento | Contenido |
+|---|---|
+| [`Database/README.md`](Database/README.md) | Tablas y vistas; los scripts SQL están en [`database/`](../database) |
+| [`Security/SecurityPolicy.md`](Security/SecurityPolicy.md) | Reglas de seguridad y checklist antes de producción |
+| [`Security/Rbac.md`](Security/Rbac.md) | Roles y permisos |
+| [`Operations/Environments.md`](Operations/Environments.md) | Variables de entorno de local y producción |
+| [`Operations/Deployment.md`](Operations/Deployment.md) | Despliegue en Railway |
+| [`Operations/Secrets.md`](Operations/Secrets.md) | Manejo y rotación de secretos |
+| [`Operations/Storage.md`](Operations/Storage.md) | Archivos en S3 |
+| [`Operations/Backups.md`](Operations/Backups.md) | Respaldos de la base de datos |
+| [`Operations/Settings.md`](Operations/Settings.md) | Parámetros de `SystemSettings` |
+
+## Guides
+
+| Documento | Contenido |
+|---|---|
+| [`FirstTimeSetup.md`](Guides/FirstTimeSetup.md) | Bajar y correr el proyecto por primera vez |
+| [`QuickStart.md`](Guides/QuickStart.md) | Comandos para levantar el ambiente |
+| [`HowToAddAModule.md`](Guides/HowToAddAModule.md) | Pasos para agregar un módulo nuevo |

@@ -6,7 +6,7 @@ import { GetNavigationIcon } from './NavigationIcons';
 import { NavigationModules } from './NavigationModules';
 
 // Ítems del menú lateral: módulos visibles según permiso y ruta activa.
-// Se pasan como `sidebar.navigationItems` del ITLayout (ver docs/AxzyUiSystem/).
+// Se pasan como `sidebar.navigationItems` del ITLayout.
 export function useNavigationItems(): ITNavigationItem[] {
   const Translation = useTranslation();
   const Permissions = usePermissions();

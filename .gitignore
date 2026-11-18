@@ -13,6 +13,8 @@ release/
 .vite/
 coverage/
 *.tsbuildinfo
+.claude/ 
+
 
 # Secretos: nunca se versionan
 .env
@@ -30,3 +32,7 @@ logs/
 
 # Respaldos de permisos de Windows generados en esta máquina
 .dsh-acl-recovery/
+
+# Python
+__pycache__/
+*.pyc

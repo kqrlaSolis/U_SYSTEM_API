@@ -38,4 +38,4 @@ Se editan desde el módulo **Settings** (permiso `Settings.Edit`) sin recompilar
 ## Valores de ejemplo
 
 Los montos de los conceptos (`PaymentConcepts`) y de las becas son valores de ejemplo hasta que la
-escuela defina los oficiales (ver `Architecture/PendingDecisions.md`).
+escuela defina los oficiales (ver `Architecture/Decisions.md`).

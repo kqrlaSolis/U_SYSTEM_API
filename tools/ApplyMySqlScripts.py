@@ -1,4 +1,4 @@
-# Aplica los scripts SQL de docs/DataModel/Scripts contra el servidor MySQL configurado.
+# Aplica los scripts SQL de database/ contra el servidor MySQL configurado.
 # Se usa cuando no hay cliente `mysql` instalado: lee la cadena de .env o de las variables de entorno.
 # Regla del proyecto: identificadores en inglés y PascalCase; solo los comentarios van en español.
 
@@ -11,7 +11,7 @@ from urllib.parse import unquote, urlparse
 import pymysql
 
 Root = Path(__file__).resolve().parents[1]
-DefaultScripts = Root / "docs" / "DataModel" / "Scripts"
+DefaultScripts = Root / "database"
 DefaultOrder = [
     "00_CreateDatabase.sql",
     "01_Security.sql",

@@ -1,4 +1,4 @@
-// Contrato estándar de la API (JSON en PascalCase). Ver docs/API/Conventions.md.
+// Contrato estándar de la API (JSON en PascalCase). Ver docs/Architecture/ApiConventions.md.
 export interface ApiResponse<T> {
   Success: boolean;
   Message: string;

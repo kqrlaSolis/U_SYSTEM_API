@@ -110,4 +110,4 @@ un objeto. No escribe nada ni muestra credenciales.
 | `Storage.FileTooLarge` | Excede el máximo |
 | `Storage.UploadFailed` | Error del proveedor |
 
-Los mensajes están en `Api/Resources/ErrorMessagesEs.json` y `ErrorMessagesEn.json`.
+Los mensajes están en `api/USystem.Api/Resources/ErrorMessagesEs.json` y `ErrorMessagesEn.json`.

@@ -22,7 +22,7 @@ python tools/ApplyMySqlScripts.py --target-database railway
 Con cliente `mysql`:
 
 ```bash
-cd docs/DataModel/Scripts
+cd database
 mysql -h <HOST> -P <PUERTO> -u root -p < RunAll.sql   # datos de MYSQL_PUBLIC_URL en Railway
 ```
 

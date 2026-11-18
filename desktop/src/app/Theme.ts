@@ -55,7 +55,7 @@ export const USystemDarkTheme: Partial<ITThemePalette> = {
 // Tema por defecto de la aplicación: el claro
 export const USystemDefaultTheme = USystemTheme;
 
-// Configuración de producción del provider (ver docs/AxzyUiSystem/AXZY-UI-SYSTEM.md).
+// Configuración de producción del provider.
 // appearance="flat" ⇒ bordes finos sin sombras; showFab=false ⇒ sin diseñador de temas flotante.
 export const USystemAppearance = 'flat' as const;
 export const USystemRadius = 10;

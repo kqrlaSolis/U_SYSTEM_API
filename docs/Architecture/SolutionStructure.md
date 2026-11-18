@@ -29,7 +29,7 @@ USystem/
 │   ├── USystem.Domain/               Common, Constants, Entities, Exceptions, Interfaces
 │   │   ├── Common/PagedQuery.cs
 │   │   ├── Common/PagedResult.cs
-│   │   ├── Constants/PermissionCodes.cs   (78 permisos generados desde Rbac.py)
+│   │   ├── Constants/PermissionCodes.cs   (78 permisos; deben coincidir con 99_SeedData.sql)
 │   │   ├── Entities/User.cs               (38 archivos: 37 tablas + AuditableEntity)
 │   │   ├── Exceptions/BusinessRuleException.cs
 │   │   └── Interfaces/IUserRepository.cs
@@ -101,7 +101,4 @@ Api ──► Application ──► Domain ◄── Infrastructure
 | Rutas HTTP | minúsculas con guiones (estándar REST) | `/api/v1/class-groups` |
 
 > Las variables locales y los parámetros en PascalCase son una decisión del proyecto, no del estándar de
-> C#. Ver `Guides/CodingConventions.md` y la configuración de `.editorconfig`.
-
-Documento de entrega con la justificación capa por capa (bibliotecas, clases, objetos de datos,
-referencias entre proyectos y esquema de pantallas): [`LayeredStructure.md`](LayeredStructure.md).
+> C#. Ver `Conventions/Code.md` y la configuración de `.editorconfig`.

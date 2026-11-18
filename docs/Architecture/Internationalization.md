@@ -40,8 +40,8 @@ Las claves son **PascalCase** y, en el caso de los errores, **coinciden con el c
 
 | Archivo | Contenido |
 |---|---|
-| `Api/Resources/ErrorMessagesEs.json` | Mensajes en español |
-| `Api/Resources/ErrorMessagesEn.json` | Mensajes en inglés |
+| `api/USystem.Api/Resources/ErrorMessagesEs.json` | Mensajes en español |
+| `api/USystem.Api/Resources/ErrorMessagesEn.json` | Mensajes en inglés |
 
 Claves planas, en PascalCase, con el mismo nombre del código de error:
 
@@ -260,7 +260,7 @@ Reglas:
 
 ### AXZY UI System
 
-- La documentación completa de la librería está en `docs/AxzyUiSystem/` (63 componentes).
+- La documentación de la librería viene con el paquete (`desktop/node_modules/@axzydev/axzy_ui_system/README.md`).
 - AXZY UI tiene su propio catálogo interno: sin `ITI18nProvider` cae a español. Para que la librería
   siga el idioma de la app se monta `ITI18nProvider` con el locale activo.
 - Las claves internas de AXZY (`common.save`, etc.) son de la librería y **no se renombran**: son la API
@@ -273,8 +273,8 @@ Reglas:
 1. Agregar la clave en `Es.ts`.
 2. Agregar la misma clave en `En.ts` (el tipo lo exige).
 3. Usar `t('Namespace.Key')`; nada de español en el JSX.
-4. Si es un error de API, agregar el código en `Rbac.py`/servicio, y la clave en ambos JSON de
-   `Api/Resources/`.
+4. Si es un error de API, agregar el código en el servicio, y la clave en ambos JSON de
+   `api/USystem.Api/Resources/`.
 5. Ejecutar las pruebas de paridad.
 
 ## Pruebas

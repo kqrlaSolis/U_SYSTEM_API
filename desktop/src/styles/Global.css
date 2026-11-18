@@ -1,4 +1,4 @@
-/* Orden de capas: manda sobre el orden de imports (docs/AxzyUiSystem/AXZY-UI-SYSTEM.md §1).
+/* Orden de capas: manda sobre el orden de imports.
    `axzy-ui-system` va después de `base` (su reset no lo pisa la app) y antes de `utilities`
    (las utilidades de Tailwind pueden ajustar la librería sin usar `!important`). */
 @layer theme, base, axzy-ui-system, components, utilities;

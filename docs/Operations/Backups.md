@@ -23,7 +23,7 @@ gunzip -c USystem_YYYYMMDD_HHMM.sql.gz | mysql -u root -p USystem
 
 ## Automatización
 
-Script de ejemplo: [`Scripts/BackupMysql.sh`](Scripts/BackupMysql.sh).
+Script de ejemplo: [`database/BackupMysql.sh`](../../database/BackupMysql.sh).
 
 ```cron
 # Respaldo diario a las 02:00
