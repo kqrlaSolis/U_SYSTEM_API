@@ -1,5 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { NavigationModules, type NavigationIconName } from '../../../app/layout/NavigationModules';
+import {
+  GetNavigationModules,
+  type NavigationIconName,
+  type NavigationModule,
+} from '../../../app/layout/NavigationModules';
 import { useAuth } from '../../../shared/auth/AuthContext';
 import { usePermissions } from '../../../shared/hooks/usePermissions';
 import { NormalizeLanguage } from '../../../shared/i18n/Config';
@@ -138,11 +142,11 @@ export function useHomeViewModel(Today: Date = new Date()) {
 
   const Term: TermSummary | null = BuildTermSummary(Dashboard, Language, Today);
 
-  const Visible = NavigationModules.filter(
+  const Visible = GetNavigationModules().filter(
     (Module) => Module.Id !== 'home' && (Module.Permission === null || Permissions.Can(Module.Permission)),
   );
   const Grouped = new Set(ShortcutGroups.flatMap((Group) => Group.ModuleIds));
-  const ToShortcut = (Module: (typeof NavigationModules)[number]): HomeShortcut => ({
+  const ToShortcut = (Module: NavigationModule): HomeShortcut => ({
     Id: Module.Id,
     Path: Module.Path,
     LabelKey: Module.LabelKey,
@@ -154,7 +158,7 @@ export function useHomeViewModel(Today: Date = new Date()) {
       Id: Group.Id,
       TitleKey: Group.TitleKey,
       Items: Group.ModuleIds.map((Id) => Visible.find((Module) => Module.Id === Id))
-        .filter((Module): Module is (typeof NavigationModules)[number] => Module !== undefined)
+        .filter((Module): Module is NavigationModule => Module !== undefined)
         .map(ToShortcut),
     })),
     {

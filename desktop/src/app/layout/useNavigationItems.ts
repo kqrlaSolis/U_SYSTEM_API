@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { usePermissions } from '../../shared/hooks/usePermissions';
 import { GetNavigationIcon } from './NavigationIcons';
-import { NavigationModules } from './NavigationModules';
+import { GetNavigationModules } from './NavigationModules';
 
 // Ítems del menú lateral: módulos visibles según permiso y ruta activa.
 // Se pasan como `sidebar.navigationItems` del ITLayout.
@@ -13,7 +13,7 @@ export function useNavigationItems(): ITNavigationItem[] {
   const Location = useLocation();
   const Navigator = useNavigate();
 
-  return NavigationModules.filter(
+  return GetNavigationModules().filter(
     (Module) => Module.Permission === null || Permissions.Can(Module.Permission),
   ).map((Module) => ({
     id: Module.Id,

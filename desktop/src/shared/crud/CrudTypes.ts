@@ -34,6 +34,16 @@ export interface CrudColumn<TRow> {
   Render?: (Row: TRow) => ReactNode;
 }
 
+// Acción extra de una fila. Es solo datos: el botón lo dibuja CrudListPage (la View).
+export interface CrudRowAction<TRow> {
+  Name: string;
+  LabelKey: string;
+  Color?: 'primary' | 'danger';
+  // Si no se indica, la acción aparece en todas las filas
+  IsVisible?: (Row: TRow) => boolean;
+  Run: (Row: TRow) => Promise<unknown>;
+}
+
 export interface CrudConfig<TRow extends CrudRow, TRequest> {
   // Ruta base de la pantalla (minúsculas con guiones)
   Route: string;
@@ -68,8 +78,8 @@ export interface CrudConfig<TRow extends CrudRow, TRequest> {
   Update: (Id: number, Request: TRequest) => Promise<TRow>;
   Remove?: (Id: number) => Promise<void>;
 
-  // Acciones extra por fila (reciben la fila y un recargar del listado)
-  RowActions?: (Row: TRow, Reload: () => Promise<void>) => ReactNode;
+  // Acciones extra por fila: el listado dibuja un botón por acción y recarga al terminar
+  RowActions?: CrudRowAction<TRow>[];
 
   ToForm: (Row: TRow) => Record<string, string>;
   FromForm: (Values: Record<string, string>) => TRequest;

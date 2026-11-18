@@ -90,36 +90,40 @@ La única pantalla fuera del chasis es `LoginPage` (pública): usa su propia tar
 desktop/src/
 ├── main.tsx             ITThemeProvider (tema) + Providers + Router
 ├── app/
+│   ├── ModuleRoutes.ts  Contrato: rutas y entradas del menú de un módulo
+│   ├── AppRoutes.ts     Rutas de todos los módulos, en el orden del menú
+│   ├── Router.tsx       Recorre la lista: rutas públicas y rutas dentro del layout
 │   ├── Theme.ts         Paleta y defaults del provider
-│   ├── Router.tsx
 │   ├── Providers.tsx    I18nProvider + AuthProvider + HashRouter
-│   └── layout/          MainLayout.tsx (ITLayout), NavigationModules.ts,
+│   └── layout/          MainLayout.tsx (ITLayout), NavigationModules.ts (menú derivado de los módulos),
 │                        NavigationIcons.tsx, useNavigationItems.ts
 ├── modules/
-│   ├── Auth/            login, perfil, cambio de contraseña
-│   ├── Careers/         Career.ts, CareersService.ts, CareerConfig.ts + vistas
-│   ├── Home/            Panel de inicio
-│   ├── Roles/           Role.ts, RolesService.ts
-│   ├── Settings/        Parámetros del sistema
-│   ├── Subjects/        Subject.ts, SubjectsService.ts, SubjectConfig.ts + vistas
-│   └── Users/
-│       ├── model/        User.ts, LoginRequest.ts, UsersService.ts
-│       ├── viewmodel/    useUserListViewModel.ts, useUserFormViewModel.ts
-│       └── view/         UserListPage.tsx, UserFormPage.tsx
+│   └── <Module>/
+│       ├── <Module>Routes.tsx   Rutas y entradas del menú del módulo
+│       ├── model/               Tipos, <Module>Service.ts y, en catálogos, <Module>Config.ts
+│       ├── viewmodel/           Hooks use<Pantalla>ViewModel.ts (los catálogos usan los de shared/crud)
+│       └── view/                Páginas <Pantalla>Page.tsx
 ├── shared/
+│   ├── auth/             AuthContext.tsx, RequireAuth.tsx, AuthPaths.ts
 │   ├── components/       Envoltorios de AXZY UI (DataTable.tsx, FormField.tsx, FilterBar.tsx)
 │   ├── crud/             CrudListPage/CrudFormPage + ViewModels genéricos de catálogos
-│   ├── hooks/            usePermissions.ts, usePagedQuery.ts
+│   ├── hooks/            usePermissions.ts, usePagedQuery.ts, useFilterOptions.ts
 │   ├── http/             HttpClient.ts (JWT, refresh, Accept-Language, errores), ApiResponse.ts
 │   ├── i18n/             I18nProvider.tsx, Config.ts, Es.ts, En.ts
-│   └── utils/
+│   └── utils/            Format.ts
 ├── styles/               Global.css (capas de Tailwind + CSS de AXZY UI)
 └── test/                 Setup.ts, RenderWithTheme.tsx
 ```
 
+> **Rutas y menú.** Cada módulo declara en `<Module>Routes.tsx` sus rutas (relativas, sin `/` inicial) y
+> sus entradas del menú (ruta, permiso, icono y etiqueta). `app/AppRoutes.ts` los junta en el orden del menú;
+> el router y la barra lateral solo recorren esa lista. `app/AppRoutes.test.tsx` verifica que cada entrada
+> del menú tenga su ruta y que no haya rutas repetidas.
+
 > **Catálogos CRUD.** Para un módulo de catálogo (carreras, materias, periodos, planes) se declara un
 > `CrudConfig` en `modules/<Módulo>/model/<Módulo>Config.ts` con columnas, campos, permisos y las llamadas
-> al servicio; las pantallas son `CrudListPage` y `CrudFormPage` de `shared/crud`. El patrón MVVM se
+> al servicio; las pantallas son `CrudListPage` y `CrudFormPage` de `shared/crud`. El config es solo datos:
+> las acciones extra por fila (`RowActions`) se declaran como datos y el botón lo dibuja `CrudListPage`. El patrón MVVM se
 > mantiene: Model = config + servicio, ViewModel = `useCrudListViewModel`/`useCrudFormViewModel`, View =
 > las dos páginas. Las pantallas con lógica propia (roles, bitácora, malla de un plan) usan su propio hook.
 

@@ -1,6 +1,4 @@
 import type { CrudConfig } from '../../../shared/crud';
-import { AppButton } from '../../../shared/components';
-import I18next from '../../../shared/i18n/Config';
 import type { Enrollment, EnrollmentRequest } from './Enrollment';
 import { EnrollmentsService } from './EnrollmentsService';
 
@@ -56,23 +54,15 @@ export const EnrollmentConfig: CrudConfig<Enrollment, EnrollmentRequest> = {
   Create: (Request) => EnrollmentsService.Create(Request),
 
   // Cancelar libera cupo en la API; el listado se recarga al terminar
-  RowActions: (Row, Reload) => {
-    if (Row.Status === 'Cancelled') {
-      return null;
-    }
-
-    return (
-      <AppButton
-        Label={I18next.t('Enrollments.CancelAction')}
-        Variant="text"
-        Size="sm"
-        Color="danger"
-        OnClick={() => {
-          void EnrollmentsService.Cancel(Row.Id, 'Cancelada desde el listado').then(() => Reload());
-        }}
-      />
-    );
-  },
+  RowActions: [
+    {
+      Name: 'Cancel',
+      LabelKey: 'Enrollments.CancelAction',
+      Color: 'danger',
+      IsVisible: (Row) => Row.Status !== 'Cancelled',
+      Run: (Row) => EnrollmentsService.Cancel(Row.Id, 'Cancelada desde el listado'),
+    },
+  ],
   // La inscripción no se edita: se cancela desde la API (POST /enrollments/{Id}/cancel)
   Update: async () => {
     throw new Error('EnrollmentsAreImmutable');

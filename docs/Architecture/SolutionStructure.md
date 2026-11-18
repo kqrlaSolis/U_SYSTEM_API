@@ -50,6 +50,7 @@ USystem/
     │   └── Main.ts
     └── src/
         ├── app/
+        │   ├── AppRoutes.ts
         │   ├── Router.tsx
         │   ├── Providers.tsx
         │   └── layout/MainLayout.tsx

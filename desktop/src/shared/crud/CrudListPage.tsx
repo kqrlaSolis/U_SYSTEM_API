@@ -42,7 +42,19 @@ export function CrudListPage<TRow extends CrudRow, TRequest>({
               OnClick={() => Navigator(`${Config.Route}/${Row.Id}`)}
             />
           )}
-          {Config.RowActions !== undefined && Config.RowActions(Row, ViewModel.Reload)}
+          {Config.RowActions?.filter((Action) => Action.IsVisible?.(Row) ?? true).map((Action) => (
+            <AppButton
+              key={Action.Name}
+              Label={Translation.t(Action.LabelKey)}
+              Variant="text"
+              Size="sm"
+              Color={Action.Color ?? 'primary'}
+              AriaLabel={`${Translation.t(Action.LabelKey)} ${Row.Id}`}
+              OnClick={() => {
+                void Action.Run(Row).then(() => ViewModel.Reload());
+              }}
+            />
+          ))}
           {ViewModel.CanDelete && (
             <AppButton
               Label={Translation.t('Common.Delete')}

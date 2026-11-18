@@ -16,8 +16,8 @@ Sigue este orden. Usa como molde un módulo que ya exista, por ejemplo `Careers`
 7. **Auditoría:** invocar `IAuditService` en altas, cambios, bajas y acciones críticas.
 8. **Desktop (MVVM):** crear `desktop/src/modules/<Module>/` con `model/`, `viewmodel/` y `view/`;
    la pantalla se renderiza dentro del `ITLayout` de `app/layout/MainLayout.tsx` y usa `ITPage` para la
-   cabecera y sus estados (nunca un `PageHeader` propio). Agregar la ruta y la entrada de menú en
-   `app/layout/NavigationModules.ts`, protegidas por permiso.
+   cabecera y sus estados (nunca un `PageHeader` propio). Declarar sus rutas y su entrada del menú
+   (con permiso) en `modules/<Module>/<Module>Routes.tsx` y sumarlo a la lista de `app/AppRoutes.ts`.
 9. **i18n:** agregar las claves de la interfaz en `Es.ts` y `En.ts`, y los códigos de error nuevos en
     `api/USystem.Api/Resources/ErrorMessagesEs.json` y `ErrorMessagesEn.json`.
 10. **Pruebas:** unitarias de servicio, integración de repositorio y pruebas de ViewModel.
