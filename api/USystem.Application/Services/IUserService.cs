@@ -21,6 +21,9 @@ public interface IUserService
 
     Task<UserDto> SetStatusAsync(long Id, bool IsActive, CancellationToken Cancellation = default);
 
+    // Baja lógica: llena DeletedAt, desactiva la cuenta y revoca sus sesiones
+    Task DeleteAsync(long Id, CancellationToken Cancellation = default);
+
     Task<TemporaryPasswordResponse> ResetPasswordAsync(
         long Id,
         ResetUserPasswordRequest Request,

@@ -23,6 +23,12 @@ public interface IUserRepository : IRepository<User>
         long? ExcludeUserId = null,
         CancellationToken Cancellation = default);
 
+    // Las llaves únicas de Email y Username incluyen a los usuarios dados de baja lógica
+    Task<bool> ExistsDeletedWithEmailOrUsernameAsync(
+        string Email,
+        string Username,
+        CancellationToken Cancellation = default);
+
     Task<int> CountActiveAdministratorsAsync(CancellationToken Cancellation = default);
 
     Task<IReadOnlyList<string>> GetRoleNamesAsync(long UserId, CancellationToken Cancellation = default);

@@ -80,10 +80,6 @@ export function ReEnrollmentPage() {
               <DataTable<EligibleSubject>
                 Columns={Columns}
                 Rows={ViewModel.Proposal.Subjects}
-                TotalCount={ViewModel.Proposal.Subjects.length}
-                Page={1}
-                PageSize={100}
-                OnPageChange={() => undefined}
                 IsLoading={ViewModel.IsLoading}
                 EmptyMessage={Translation.t('ReEnrollments.Empty')}
               />

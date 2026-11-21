@@ -91,10 +91,6 @@ export function TrackingPage() {
               <DataTable<TranscriptEntry>
                 Columns={Columns}
                 Rows={ViewModel.Transcript.Entries}
-                TotalCount={ViewModel.Transcript.Entries.length}
-                Page={1}
-                PageSize={100}
-                OnPageChange={() => undefined}
                 IsLoading={ViewModel.IsLoading}
                 EmptyMessage={Translation.t('Tracking.Empty')}
               />

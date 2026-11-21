@@ -152,6 +152,11 @@ export const Es = {
       SearchPlaceholder: 'Buscar por usuario, nombre o correo',
       Count: '{{Count}} usuarios',
     },
+    Delete: {
+      Title: 'Eliminar usuario',
+      Message:
+        '¿Eliminar a {{Username}}? Ya no podrá iniciar sesión y se cerrarán sus sesiones abiertas. Su historial se conserva en la bitácora.',
+    },
     Columns: {
       Username: 'Usuario',
       FullName: 'Nombre',
@@ -171,6 +176,8 @@ export const Es = {
       RolesPlaceholder: 'Selecciona los roles',
       Phone: 'Teléfono',
       TemporaryPassword: 'Contraseña temporal',
+      TemporaryPasswordHelp:
+        'Mínimo 8 caracteres con mayúscula, minúscula, número y símbolo (por ejemplo ! @ # $). Déjala vacía para generar una automáticamente.',
       Status: 'Estado',
       ResetPassword: 'Restablecer contraseña',
     },
@@ -654,6 +661,7 @@ export const Es = {
     Required: 'Este campo es obligatorio',
     InvalidEmail: 'El correo no tiene un formato válido',
     MinLength: '{{Field}} debe tener al menos {{Min}} caracteres',
+    PasswordPolicy: 'La contraseña no cumple los requisitos',
   },
   Errors: {
     BadRequest: 'La solicitud no es válida',

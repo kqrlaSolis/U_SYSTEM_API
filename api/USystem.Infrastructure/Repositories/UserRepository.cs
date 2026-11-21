@@ -42,6 +42,16 @@ public class UserRepository : IUserRepository
             User => User.Username == Username && (ExcludeUserId == null || User.Id != ExcludeUserId),
             Cancellation);
 
+    public Task<bool> ExistsDeletedWithEmailOrUsernameAsync(
+        string Email,
+        string Username,
+        CancellationToken Cancellation = default)
+        => _Context.Users
+            .IgnoreQueryFilters()
+            .AnyAsync(
+                User => User.DeletedAt != null && (User.Email == Email || User.Username == Username),
+                Cancellation);
+
     public Task<int> CountActiveAdministratorsAsync(CancellationToken Cancellation = default)
         => (from User in _Context.Users
             join UserRole in _Context.UserRoles on User.Id equals UserRole.UserId
@@ -107,7 +117,9 @@ public class UserRepository : IUserRepository
             return new Dictionary<long, string>();
         }
 
+        // Incluye usuarios dados de baja: la bitácora conserva quién hizo cada cambio
         return await _Context.Users
+            .IgnoreQueryFilters()
             .AsNoTracking()
             .Where(User => UserIds.Contains(User.Id))
             .Select(User => new { User.Id, User.Username })

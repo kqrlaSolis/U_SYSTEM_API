@@ -13,6 +13,8 @@ public static class PermissionCodes
         public const string Create = "Users.Create";
         // Edit users and activate or deactivate accounts
         public const string Edit = "Users.Edit";
+        // Delete users (soft delete)
+        public const string Delete = "Users.Delete";
     }
 
     public static class Roles
@@ -259,6 +261,7 @@ public static class PermissionCodes
         "Users.View",
         "Users.Create",
         "Users.Edit",
+        "Users.Delete",
         "Roles.View",
         "Roles.Create",
         "Roles.Edit",

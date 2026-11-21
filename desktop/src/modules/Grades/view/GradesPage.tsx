@@ -60,10 +60,6 @@ export function GradesPage() {
             <DataTable<Grade>
               Columns={Columns}
               Rows={ViewModel.Items}
-              TotalCount={ViewModel.Items.length}
-              Page={1}
-              PageSize={100}
-              OnPageChange={() => undefined}
               IsLoading={ViewModel.IsLoading}
               EmptyMessage={Translation.t('Grades.Empty')}
             />

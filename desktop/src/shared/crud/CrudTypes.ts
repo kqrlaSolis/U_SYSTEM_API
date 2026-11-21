@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { DataTableColumn } from '../components';
+import type { DataTableColumn, RowActionIconName } from '../components';
 import type { FilterField } from './FilterBar';
 import type { PagedResult } from '../http/ApiResponse';
 
@@ -38,6 +38,8 @@ export interface CrudColumn<TRow> {
 export interface CrudRowAction<TRow> {
   Name: string;
   LabelKey: string;
+  // Ícono del botón; LabelKey queda como nombre accesible y tooltip
+  Icon: RowActionIconName;
   Color?: 'primary' | 'danger';
   // Si no se indica, la acción aparece en todas las filas
   IsVisible?: (Row: TRow) => boolean;

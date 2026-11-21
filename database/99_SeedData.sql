@@ -95,7 +95,8 @@ INSERT INTO Permissions (Id, Code, Module, Description) VALUES
   (75, 'Reports.View', 'Reports', 'View reports and the dashboard'),
   (76, 'Reports.Export', 'Reports', 'Export reports'),
   (77, 'Settings.View', 'Settings', 'View system settings'),
-  (78, 'Settings.Edit', 'Settings', 'Edit system settings');
+  (78, 'Settings.Edit', 'Settings', 'Edit system settings'),
+  (79, 'Users.Delete', 'Users', 'Delete users (soft delete)');
 
 -- Matriz de permisos por rol
 
@@ -178,6 +179,7 @@ INSERT INTO RolePermissions (RoleId, PermissionId) VALUES
   (1, 2),
   (1, 3),
   (1, 1),
+  (1, 79),
   (2, 61),
   (2, 22),
   (2, 10),

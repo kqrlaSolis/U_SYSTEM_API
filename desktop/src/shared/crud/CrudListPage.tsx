@@ -1,7 +1,7 @@
 import { ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppButton, DataTable, SearchBox } from '../components';
+import { AppButton, DataTable, RowActionButton, SearchBox } from '../components';
 import { FilterBar } from './FilterBar';
 import type { DataTableColumn } from '../components';
 import type { CrudConfig, CrudRow } from './CrudTypes';
@@ -35,34 +35,31 @@ export function CrudListPage<TRow extends CrudRow, TRequest>({
       Render: (Row) => (
         <div className="USystemRowActions">
           {ViewModel.CanEdit && (
-            <AppButton
+            <RowActionButton
+              Icon="Edit"
               Label={Translation.t('Common.Edit')}
-              Variant="text"
-              Size="sm"
-              AriaLabel={`${Translation.t('Common.Edit')} ${Row.Id}`}
+              Subject={Row.Id}
               OnClick={() => Navigator(`${Config.Route}/${Row.Id}`)}
             />
           )}
           {Config.RowActions?.filter((Action) => Action.IsVisible?.(Row) ?? true).map((Action) => (
-            <AppButton
+            <RowActionButton
               key={Action.Name}
+              Icon={Action.Icon}
               Label={Translation.t(Action.LabelKey)}
-              Variant="text"
-              Size="sm"
+              Subject={Row.Id}
               Color={Action.Color ?? 'primary'}
-              AriaLabel={`${Translation.t(Action.LabelKey)} ${Row.Id}`}
               OnClick={() => {
                 void Action.Run(Row).then(() => ViewModel.Reload());
               }}
             />
           ))}
           {ViewModel.CanDelete && (
-            <AppButton
+            <RowActionButton
+              Icon="Delete"
               Label={Translation.t('Common.Delete')}
-              Variant="text"
-              Size="sm"
+              Subject={Row.Id}
               Color="danger"
-              AriaLabel={`${Translation.t('Common.Delete')} ${Row.Id}`}
               OnClick={() => {
                 void ViewModel.Remove(Row);
               }}

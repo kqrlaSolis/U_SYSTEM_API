@@ -1,10 +1,12 @@
 import { ITCard, ITInput, ITPage, ITStack } from '@axzydev/axzy_ui_system';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppButton, DataTable } from '../../../shared/components';
+import { AppButton, DataTable, RowActionButton } from '../../../shared/components';
 import type { DataTableColumn } from '../../../shared/components';
 import type { Procedure } from '../model/ProcedureType';
 import { useProcedureListViewModel } from '../viewmodel/useProcedureListViewModel';
+
+const PageSizeOptions = [10, 20, 50];
 
 // Solicitudes de trámite con folio y emisión.
 export function ProcedureListPage() {
@@ -24,10 +26,10 @@ export function ProcedureListPage() {
       Align: 'right',
       Render: (Row) =>
         Row.Status === 'Issued' ? null : (
-          <AppButton
+          <RowActionButton
+            Icon="Issue"
             Label={Translation.t('Procedures.Issue')}
-            Variant="text"
-            Size="sm"
+            Subject={Row.FolioNumber ?? Row.Id}
             IsLoading={ViewModel.IsLoading}
             OnClick={() => {
               void ViewModel.Issue(Row.Id);
@@ -82,10 +84,12 @@ export function ProcedureListPage() {
         <DataTable<Procedure>
           Columns={Columns}
           Rows={ViewModel.Items}
-          TotalCount={ViewModel.Items.length}
-          Page={1}
-          PageSize={100}
-          OnPageChange={() => undefined}
+          TotalCount={ViewModel.TotalCount}
+          Page={ViewModel.Page}
+          PageSize={ViewModel.PageSize}
+          PageSizeOptions={PageSizeOptions}
+          OnPageChange={ViewModel.SetPage}
+          OnPageSizeChange={ViewModel.SetPageSize}
           IsLoading={ViewModel.IsLoading}
           EmptyMessage={Translation.t('Procedures.Empty')}
         />

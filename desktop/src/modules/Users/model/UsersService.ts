@@ -28,6 +28,11 @@ export const UsersService = {
     return HttpClient.Put<User>(`${UsersPath}/${Id}`, Request);
   },
 
+  // Baja lógica: la API llena DeletedAt y revoca las sesiones del usuario
+  async Delete(Id: number): Promise<void> {
+    await HttpClient.Delete<boolean>(`${UsersPath}/${Id}`);
+  },
+
   async SetStatus(Id: number, IsActive: boolean): Promise<User> {
     return HttpClient.Patch<User>(`${UsersPath}/${Id}/status`, { IsActive });
   },

@@ -1,7 +1,7 @@
 import { ITBadget, ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppButton, DataTable, SearchBox } from '../../../shared/components';
+import { AppButton, DataTable, RowActionButton, SearchBox } from '../../../shared/components';
 import { FilterBar } from '../../../shared/crud';
 import type { DataTableColumn } from '../../../shared/components';
 import type { StudyPlan } from '../model/StudyPlan';
@@ -42,19 +42,18 @@ export function StudyPlanListPage() {
       Render: (Row) => (
         <div className="USystemRowActions">
           {ViewModel.CanEdit && (
-            <AppButton
+            <RowActionButton
+              Icon="Edit"
               Label={Translation.t('Common.Edit')}
-              Variant="text"
-              Size="sm"
-              AriaLabel={`${Translation.t('Common.Edit')} ${Row.Code}`}
+              Subject={Row.Code}
               OnClick={() => Navigator(`/study-plans/${Row.Id}`)}
             />
           )}
           {ViewModel.CanEdit && !Row.IsCurrent && (
-            <AppButton
+            <RowActionButton
+              Icon="SetCurrent"
               Label={Translation.t('StudyPlans.Actions.SetCurrent')}
-              Variant="text"
-              Size="sm"
+              Subject={Row.Code}
               IsLoading={ViewModel.BusyId === Row.Id}
               OnClick={() => {
                 void ViewModel.SetCurrent(Row);
@@ -62,10 +61,10 @@ export function StudyPlanListPage() {
             />
           )}
           {ViewModel.CanDelete && !Row.IsCurrent && (
-            <AppButton
+            <RowActionButton
+              Icon="Delete"
               Label={Translation.t('Common.Delete')}
-              Variant="text"
-              Size="sm"
+              Subject={Row.Code}
               Color="danger"
               IsLoading={ViewModel.BusyId === Row.Id}
               OnClick={() => {

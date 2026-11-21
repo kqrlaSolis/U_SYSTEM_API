@@ -1,10 +1,12 @@
 import { ITCard, ITInput, ITPage, ITStack } from '@axzydev/axzy_ui_system';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppButton, DataTable } from '../../../shared/components';
+import { AppButton, DataTable, RowActionButton } from '../../../shared/components';
 import type { DataTableColumn } from '../../../shared/components';
 import type { Charge } from '../model/PaymentConcept';
 import { useChargeListViewModel } from '../viewmodel/useChargeListViewModel';
+
+const PageSizeOptions = [10, 20, 50];
 
 // Cargos por alumno con alta y cancelación.
 export function ChargeListPage() {
@@ -27,10 +29,10 @@ export function ChargeListPage() {
       Align: 'right',
       Render: (Row) =>
         Row.Status === 'Cancelled' || Row.Status === 'Paid' ? null : (
-          <AppButton
+          <RowActionButton
+            Icon="Cancel"
             Label={Translation.t('Payments.CancelCharge')}
-            Variant="text"
-            Size="sm"
+            Subject={Row.Id}
             Color="danger"
             IsLoading={ViewModel.IsLoading}
             OnClick={() => {
@@ -130,10 +132,12 @@ export function ChargeListPage() {
         <DataTable<Charge>
           Columns={Columns}
           Rows={ViewModel.Items}
-          TotalCount={ViewModel.Items.length}
-          Page={1}
-          PageSize={100}
-          OnPageChange={() => undefined}
+          TotalCount={ViewModel.TotalCount}
+          Page={ViewModel.Page}
+          PageSize={ViewModel.PageSize}
+          PageSizeOptions={PageSizeOptions}
+          OnPageChange={ViewModel.SetPage}
+          OnPageSizeChange={ViewModel.SetPageSize}
           IsLoading={ViewModel.IsLoading}
           EmptyMessage={Translation.t('Payments.EmptyCharges')}
         />

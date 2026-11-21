@@ -106,6 +106,22 @@ export function useUserFormViewModel(UserId?: number) {
       Errors.Username = I18next.t('Validation.Required');
     }
 
+    // Misma política que la API (PasswordPolicy.cs); vacía = la API genera una.
+    const Password = Form.TemporaryPassword.trim();
+    if (
+      !IsEditing &&
+      Password.length > 0 &&
+      !(
+        Password.length >= 8 &&
+        /\p{Lu}/u.test(Password) &&
+        /\p{Ll}/u.test(Password) &&
+        /\p{Nd}/u.test(Password) &&
+        /[^\p{L}\p{Nd}]/u.test(Password)
+      )
+    ) {
+      Errors.TemporaryPassword = I18next.t('Validation.PasswordPolicy');
+    }
+
     if (!IsEditing && SelectedRoleIds.length === 0) {
       Errors.RoleIds = I18next.t('Validation.Required');
     }

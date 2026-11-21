@@ -1,33 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
+import { DefaultPageSize, usePagedQuery } from '../../../shared/http/usePagedQuery';
 import type { Procedure } from '../model/ProcedureType';
 import { ProceduresService } from '../model/ProceduresService';
 
 // ViewModel de solicitudes: listado, alta y emisión de trámites.
 export function useProcedureListViewModel() {
-  const [Items, SetItems] = useState<Procedure[]>([]);
+  // Listado paginado en el servidor; las acciones (alta, cancelar/emitir) recargan la página actual
+  const Paged = usePagedQuery<Procedure>({
+    FetchPage: ProceduresService.GetProcedures,
+    PageSize: DefaultPageSize,
+  });
   const [ProcedureTypeId, SetProcedureTypeId] = useState('1');
   const [StudentId, SetStudentId] = useState('1');
-  const [IsLoading, SetIsLoading] = useState(true);
+  const [IsSubmitting, SetIsSubmitting] = useState(false);
   const [ErrorMessage, SetErrorMessage] = useState<string | null>(null);
 
-  const Load = useCallback(async () => {
-    SetIsLoading(true);
+  // Reintentar limpia también el error de la última acción
+  const ReloadPage = Paged.Reload;
+  const Load = useCallback(() => {
     SetErrorMessage(null);
-
-    try {
-      const Page = await ProceduresService.GetProcedures(1, 100, '');
-      SetItems(Page.Items);
-    } catch (CaughtError) {
-      SetErrorMessage(GetErrorMessage(CaughtError));
-    } finally {
-      SetIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void Load();
-  }, [Load]);
+    ReloadPage();
+  }, [ReloadPage]);
 
   const Create = useCallback(async () => {
     const TypeId = Number(ProcedureTypeId);
@@ -37,42 +31,47 @@ export function useProcedureListViewModel() {
       return;
     }
 
-    SetIsLoading(true);
+    SetIsSubmitting(true);
     SetErrorMessage(null);
 
     try {
       await ProceduresService.CreateProcedure(TypeId, ParsedStudentId);
-      await Load();
+      Load();
     } catch (CaughtError) {
       SetErrorMessage(GetErrorMessage(CaughtError));
     } finally {
-      SetIsLoading(false);
+      SetIsSubmitting(false);
     }
   }, [Load, ProcedureTypeId, StudentId]);
 
   const Issue = useCallback(
     async (Id: number) => {
-      SetIsLoading(true);
+      SetIsSubmitting(true);
       SetErrorMessage(null);
 
       try {
         await ProceduresService.Issue(Id, null);
-        await Load();
+        Load();
       } catch (CaughtError) {
         SetErrorMessage(GetErrorMessage(CaughtError));
       } finally {
-        SetIsLoading(false);
+        SetIsSubmitting(false);
       }
     },
     [Load],
   );
 
   return {
-    Items,
+    Items: Paged.Items,
+    TotalCount: Paged.TotalCount,
+    Page: Paged.Page,
+    PageSize: Paged.PageSize,
+    SetPage: Paged.SetPage,
+    SetPageSize: Paged.SetPageSize,
     ProcedureTypeId,
     StudentId,
-    IsLoading,
-    ErrorMessage,
+    IsLoading: Paged.IsLoading || IsSubmitting,
+    ErrorMessage: ErrorMessage ?? Paged.ErrorMessage,
     SetProcedureTypeId,
     SetStudentId,
     Load,

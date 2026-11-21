@@ -46,6 +46,7 @@ Generada desde el catálogo semilla (`99_SeedData.sql`). Leyenda: **Full** = tod
 | `Users.View` | View users |
 | `Users.Create` | Create users |
 | `Users.Edit` | Edit users and activate or deactivate accounts |
+| `Users.Delete` | Delete users (soft delete) |
 | `Roles.View` | View roles and permissions |
 | `Roles.Create` | Create roles |
 | `Roles.Edit` | Edit roles and their permissions |

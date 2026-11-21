@@ -1,4 +1,4 @@
-// CRUD de usuarios del personal, estado de la cuenta y asignación de roles.
+// CRUD de usuarios del personal (con baja lógica), estado de la cuenta y asignación de roles.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using USystem.Api.Attributes;
@@ -60,6 +60,14 @@ public class UsersController : ControllerBase
         CancellationToken Cancellation)
         => Ok(ApiResponse<UserDto>.Ok(
             await _UserService.SetStatusAsync(Id, Request.IsActive, Cancellation)));
+
+    [HttpDelete("{Id:long}")]
+    [RequirePermission(PermissionCodes.Users.Delete)]
+    public async Task<ActionResult<ApiResponse<bool>>> Delete(long Id, CancellationToken Cancellation)
+    {
+        await _UserService.DeleteAsync(Id, Cancellation);
+        return Ok(ApiResponse<bool>.Ok(true));
+    }
 
     [HttpPost("{Id:long}/reset-password")]
     [RequirePermission(PermissionCodes.Users.Edit)]

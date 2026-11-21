@@ -19,6 +19,7 @@ public class UserServiceTests
     private readonly Mock<IUnitOfWork> _UnitOfWork = new();
     private readonly Mock<IAuditService> _Audit = new();
     private readonly Mock<ISettingsProvider> _Settings = new();
+    private readonly Mock<ICurrentUser> _CurrentUser = new();
 
     private UserService BuildService()
     {
@@ -62,7 +63,8 @@ public class UserServiceTests
             _Hasher.Object,
             _UnitOfWork.Object,
             _Audit.Object,
-            _Settings.Object);
+            _Settings.Object,
+            _CurrentUser.Object);
     }
 
     private static User BuildAdministrator() => new()
@@ -237,6 +239,119 @@ public class UserServiceTests
             () => Service.SetStatusAsync(1, false));
 
         Assert.Equal("Auth.LastAdministrator", Error.Code);
+    }
+
+    private static User BuildStaffUser() => new()
+    {
+        Id = 7,
+        FirstName = "Martin",
+        PaternalLastName = "Amaro",
+        Email = "martin@usystem.local",
+        Username = "martinamaro",
+        PasswordHash = "hash",
+        IsActive = true,
+    };
+
+    [Fact]
+    public async Task DeleteIsSoftAndRevokesSessions()
+    {
+        var Service = BuildService();
+        var Staff = BuildStaffUser();
+
+        _CurrentUser.Setup(Current => Current.UserId).Returns(1);
+        _Users
+            .Setup(Repository => Repository.GetByIdAsync(7, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Staff);
+        _Users
+            .Setup(Repository => Repository.GetRoleNamesAsync(7, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new[] { "Teacher" });
+
+        await Service.DeleteAsync(7);
+
+        // Remove es la baja lógica: el DbContext la convierte en DeletedAt
+        _Users.Verify(Repository => Repository.Remove(Staff), Times.Once);
+        Assert.False(Staff.IsActive);
+        _RefreshTokens.Verify(
+            Repository => Repository.RevokeAllForUserAsync(7, It.IsAny<DateTime>(), It.IsAny<CancellationToken>()),
+            Times.Once);
+        _Audit.Verify(
+            Audit => Audit.LogAsync(
+                "Delete",
+                "Users",
+                nameof(User),
+                "7",
+                It.IsAny<object?>(),
+                null,
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteRejectsTheCurrentUser()
+    {
+        var Service = BuildService();
+
+        _CurrentUser.Setup(Current => Current.UserId).Returns(7);
+        _Users
+            .Setup(Repository => Repository.GetByIdAsync(7, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(BuildStaffUser());
+
+        var Error = await Assert.ThrowsAsync<BusinessRuleException>(() => Service.DeleteAsync(7));
+
+        Assert.Equal("Users.CannotDeleteSelf", Error.Code);
+        _Users.Verify(Repository => Repository.Remove(It.IsAny<User>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeletingTheLastAdministratorIsBlocked()
+    {
+        var Service = BuildService();
+
+        _CurrentUser.Setup(Current => Current.UserId).Returns(99);
+        _Users
+            .Setup(Repository => Repository.GetByIdAsync(1, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(BuildAdministrator());
+        _Users
+            .Setup(Repository => Repository.GetRoleNamesAsync(1, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new[] { "Administrator" });
+        _Users
+            .Setup(Repository => Repository.CountActiveAdministratorsAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(1);
+
+        var Error = await Assert.ThrowsAsync<BusinessRuleException>(() => Service.DeleteAsync(1));
+
+        Assert.Equal("Auth.LastAdministrator", Error.Code);
+        _Users.Verify(Repository => Repository.Remove(It.IsAny<User>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeleteOfAMissingUserIsNotFound()
+    {
+        var Service = BuildService();
+
+        _Users
+            .Setup(Repository => Repository.GetByIdAsync(404, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((User?)null);
+
+        await Assert.ThrowsAsync<NotFoundException>(() => Service.DeleteAsync(404));
+    }
+
+    [Fact]
+    public async Task CreateRejectsTheEmailOrUsernameOfADeletedUser()
+    {
+        var Service = BuildService();
+
+        _Users
+            .Setup(Repository => Repository.ExistsDeletedWithEmailOrUsernameAsync(
+                "ana@escuela.mx",
+                "aperez",
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        var Error = await Assert.ThrowsAsync<BusinessRuleException>(
+            () => Service.CreateAsync(BuildCreateRequest()));
+
+        Assert.Equal("Users.BelongsToDeletedUser", Error.Code);
     }
 
     [Fact]

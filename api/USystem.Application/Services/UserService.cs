@@ -1,4 +1,4 @@
-// Reglas del módulo Users: unicidad, política de contraseñas, roles y anti-bloqueo del sistema.
+// Reglas del módulo Users: unicidad, política de contraseñas, roles, baja lógica y anti-bloqueo del sistema.
 using System.Globalization;
 using System.Security.Cryptography;
 using USystem.Application.Common;
@@ -28,6 +28,7 @@ public class UserService : IUserService
     private readonly IUnitOfWork _UnitOfWork;
     private readonly IAuditService _AuditService;
     private readonly ISettingsProvider _Settings;
+    private readonly ICurrentUser _CurrentUser;
 
     public UserService(
         IUserRepository UserRepository,
@@ -36,7 +37,8 @@ public class UserService : IUserService
         IPasswordHasher PasswordHasher,
         IUnitOfWork UnitOfWork,
         IAuditService AuditService,
-        ISettingsProvider Settings)
+        ISettingsProvider Settings,
+        ICurrentUser CurrentUser)
     {
         _UserRepository = UserRepository;
         _RoleRepository = RoleRepository;
@@ -45,6 +47,7 @@ public class UserService : IUserService
         _UnitOfWork = UnitOfWork;
         _AuditService = AuditService;
         _Settings = Settings;
+        _CurrentUser = CurrentUser;
     }
 
     public async Task<PagedResult<UserDto>> GetPagedAsync(
@@ -240,6 +243,46 @@ public class UserService : IUserService
         return UserMapper.ToDto(User, Roles);
     }
 
+    public async Task DeleteAsync(long Id, CancellationToken Cancellation = default)
+    {
+        var User = await _UserRepository.GetByIdAsync(Id, Cancellation)
+            ?? throw new NotFoundException("Users.NotFound");
+
+        // Nadie se elimina a sí mismo: perdería la sesión a media operación
+        if (_CurrentUser.UserId == User.Id)
+        {
+            throw new BusinessRuleException("Users.CannotDeleteSelf");
+        }
+
+        var Roles = await _UserRepository.GetRoleNamesAsync(User.Id, Cancellation);
+
+        // No se puede dejar al sistema sin un Administrator activo
+        if (User.IsActive && Roles.Contains(AdministratorRoleName, StringComparer.Ordinal))
+        {
+            var ActiveAdministrators = await _UserRepository.CountActiveAdministratorsAsync(Cancellation);
+            if (ActiveAdministrators <= 1)
+            {
+                throw new BusinessRuleException("Auth.LastAdministrator");
+            }
+        }
+
+        // Remove se convierte en DeletedAt en el DbContext; IsActive en false por si
+        // alguna consulta ignora el filtro global
+        User.IsActive = false;
+        _UserRepository.Remove(User);
+        await _RefreshTokenRepository.RevokeAllForUserAsync(User.Id, DateTime.UtcNow, Cancellation);
+        await _UnitOfWork.SaveChangesAsync(Cancellation);
+
+        await _AuditService.LogAsync(
+            "Delete",
+            "Users",
+            nameof(User),
+            User.Id.ToString(CultureInfo.InvariantCulture),
+            new { User.Username, User.Email, Roles },
+            null,
+            Cancellation);
+    }
+
     public async Task<TemporaryPasswordResponse> ResetPasswordAsync(
         long Id,
         ResetUserPasswordRequest Request,
@@ -345,6 +388,12 @@ public class UserService : IUserService
             throw BusinessRuleException.Conflict(
                 "Users.DuplicateUsername",
                 new Dictionary<string, string> { ["Username"] = Username });
+        }
+
+        // Sin esta revisión la llave única de la base respondería con un error 500
+        if (await _UserRepository.ExistsDeletedWithEmailOrUsernameAsync(Email, Username, Cancellation))
+        {
+            throw BusinessRuleException.Conflict("Users.BelongsToDeletedUser");
         }
     }
 

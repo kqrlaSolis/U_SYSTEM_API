@@ -8,7 +8,7 @@ public class PermissionCodesTests
     [Fact]
     public void CodesAreUniqueAndComplete()
     {
-        Assert.Equal(78, PermissionCodes.All.Count);
+        Assert.Equal(79, PermissionCodes.All.Count);
         Assert.Equal(PermissionCodes.All.Count, PermissionCodes.All.Distinct().Count());
     }
 

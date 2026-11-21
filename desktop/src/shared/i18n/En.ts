@@ -154,6 +154,11 @@ export const En: TranslationCatalog = {
       SearchPlaceholder: 'Search by username, name or email',
       Count: '{{Count}} users',
     },
+    Delete: {
+      Title: 'Delete user',
+      Message:
+        'Delete {{Username}}? They will no longer be able to sign in and their open sessions will be closed. Their history stays in the audit log.',
+    },
     Columns: {
       Username: 'Username',
       FullName: 'Name',
@@ -173,6 +178,8 @@ export const En: TranslationCatalog = {
       RolesPlaceholder: 'Select the roles',
       Phone: 'Phone',
       TemporaryPassword: 'Temporary password',
+      TemporaryPasswordHelp:
+        'At least 8 characters with uppercase, lowercase, number and symbol (e.g. ! @ # $). Leave it empty to generate one automatically.',
       Status: 'Status',
       ResetPassword: 'Reset password',
     },
@@ -656,6 +663,7 @@ export const En: TranslationCatalog = {
     Required: 'This field is required',
     InvalidEmail: 'The email format is invalid',
     MinLength: '{{Field}} must be at least {{Min}} characters long',
+    PasswordPolicy: 'The password does not meet the requirements',
   },
   Errors: {
     BadRequest: 'The request is not valid',

@@ -1,11 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
+import { DefaultPageSize, usePagedQuery } from '../../../shared/http/usePagedQuery';
 import type { Charge } from '../model/PaymentConcept';
 import { PaymentsService } from '../model/PaymentsService';
 
 // ViewModel de cargos: listado, alta y cancelación.
 export function useChargeListViewModel() {
-  const [Items, SetItems] = useState<Charge[]>([]);
+  // Listado paginado en el servidor; las acciones (alta, cancelar/emitir) recargan la página actual
+  const Paged = usePagedQuery<Charge>({
+    FetchPage: PaymentsService.GetCharges,
+    PageSize: DefaultPageSize,
+  });
   const [StudentId, SetStudentId] = useState('1');
   const [AcademicTermId, SetAcademicTermId] = useState('1');
   const [ConceptId, SetConceptId] = useState('');
@@ -13,26 +18,15 @@ export function useChargeListViewModel() {
   const [Discount, SetDiscount] = useState('0');
   const [Surcharge, SetSurcharge] = useState('0');
   const [DueDate, SetDueDate] = useState('');
-  const [IsLoading, SetIsLoading] = useState(true);
+  const [IsSubmitting, SetIsSubmitting] = useState(false);
   const [ErrorMessage, SetErrorMessage] = useState<string | null>(null);
 
-  const Load = useCallback(async () => {
-    SetIsLoading(true);
+  // Reintentar limpia también el error de la última acción
+  const ReloadPage = Paged.Reload;
+  const Load = useCallback(() => {
     SetErrorMessage(null);
-
-    try {
-      const Page = await PaymentsService.GetCharges(1, 100, '');
-      SetItems(Page.Items);
-    } catch (CaughtError) {
-      SetErrorMessage(GetErrorMessage(CaughtError));
-    } finally {
-      SetIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void Load();
-  }, [Load]);
+    ReloadPage();
+  }, [ReloadPage]);
 
   const Create = useCallback(async () => {
     const ParsedConceptId = Number(ConceptId);
@@ -41,7 +35,7 @@ export function useChargeListViewModel() {
       return;
     }
 
-    SetIsLoading(true);
+    SetIsSubmitting(true);
     SetErrorMessage(null);
 
     try {
@@ -54,33 +48,38 @@ export function useChargeListViewModel() {
         Surcharge: Number(Surcharge === '' ? '0' : Surcharge),
         DueDate,
       });
-      await Load();
+      Load();
     } catch (CaughtError) {
       SetErrorMessage(GetErrorMessage(CaughtError));
     } finally {
-      SetIsLoading(false);
+      SetIsSubmitting(false);
     }
   }, [AcademicTermId, Amount, ConceptId, Discount, DueDate, StudentId, Surcharge, Load]);
 
   const Cancel = useCallback(
     async (Id: number) => {
-      SetIsLoading(true);
+      SetIsSubmitting(true);
       SetErrorMessage(null);
 
       try {
         await PaymentsService.CancelCharge(Id);
-        await Load();
+        Load();
       } catch (CaughtError) {
         SetErrorMessage(GetErrorMessage(CaughtError));
       } finally {
-        SetIsLoading(false);
+        SetIsSubmitting(false);
       }
     },
     [Load],
   );
 
   return {
-    Items,
+    Items: Paged.Items,
+    TotalCount: Paged.TotalCount,
+    Page: Paged.Page,
+    PageSize: Paged.PageSize,
+    SetPage: Paged.SetPage,
+    SetPageSize: Paged.SetPageSize,
     StudentId,
     AcademicTermId,
     ConceptId,
@@ -88,8 +87,8 @@ export function useChargeListViewModel() {
     Discount,
     Surcharge,
     DueDate,
-    IsLoading,
-    ErrorMessage,
+    IsLoading: Paged.IsLoading || IsSubmitting,
+    ErrorMessage: ErrorMessage ?? Paged.ErrorMessage,
     SetStudentId,
     SetAcademicTermId,
     SetConceptId,

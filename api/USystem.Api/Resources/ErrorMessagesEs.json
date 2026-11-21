@@ -38,6 +38,8 @@
   "Users.InvalidRole": "El rol {{Role}} no existe o está inactivo.",
   "Users.AlreadyActive": "El usuario ya estaba activo.",
   "Users.AlreadyInactive": "El usuario ya estaba inactivo.",
+  "Users.CannotDeleteSelf": "No puedes eliminar tu propio usuario.",
+  "Users.BelongsToDeletedUser": "El correo o el nombre de usuario pertenece a un usuario eliminado.",
   "Roles.NotFound": "Rol no encontrado.",
   "Roles.NameTaken": "Ya existe un rol con el nombre {{Name}}.",
   "Roles.SystemProtected": "El rol {{Name}} es un rol de sistema: no se puede eliminar.",

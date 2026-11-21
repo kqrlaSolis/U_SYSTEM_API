@@ -148,6 +148,8 @@ export function UserFormPage() {
               <FormField
                 Label={Translation.t('Users.Form.TemporaryPassword')}
                 HtmlFor="TemporaryPassword"
+                HelpText={Translation.t('Users.Form.TemporaryPasswordHelp')}
+                ErrorMessage={ViewModel.ValidationErrors.TemporaryPassword}
               >
                 <ITInput
                   name="TemporaryPassword"

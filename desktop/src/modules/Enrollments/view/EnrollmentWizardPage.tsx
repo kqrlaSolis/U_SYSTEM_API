@@ -1,7 +1,7 @@
 import { ITAlert, ITCard, ITInput, ITPage, ITSelect, ITStack, ITText } from '@axzydev/axzy_ui_system';
 import type React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppButton, DataTable } from '../../../shared/components';
+import { AppButton, DataTable, RowActionButton } from '../../../shared/components';
 import type { DataTableColumn } from '../../../shared/components';
 import type { ChecklistDocument } from '../model/EnrollmentChecklist';
 import { useCatalogOptions } from '../../../shared/catalogs/useCatalogOptions';
@@ -28,20 +28,20 @@ export function EnrollmentWizardPage() {
       Align: 'right',
       Render: (Row) => (
         <div className="USystemRowActions">
-          <AppButton
+          <RowActionButton
+            Icon="Register"
             Label={Translation.t('Wizard.Register')}
-            Variant="text"
-            Size="sm"
+            Subject={Row.Name}
             IsLoading={ViewModel.IsLoading}
             OnClick={() => {
               void ViewModel.RegisterDocument(Row.DocumentTypeId);
             }}
           />
           {Row.StudentDocumentId !== null && Row.Status !== 'Validated' && (
-            <AppButton
+            <RowActionButton
+              Icon="Validate"
               Label={Translation.t('Wizard.Validate')}
-              Variant="text"
-              Size="sm"
+              Subject={Row.Name}
               IsLoading={ViewModel.IsLoading}
               OnClick={() => {
                 void ViewModel.ValidateDocument(Row.StudentDocumentId as number);
@@ -148,10 +148,6 @@ export function EnrollmentWizardPage() {
               <DataTable<ChecklistDocument>
                 Columns={Columns}
                 Rows={ViewModel.Checklist.Documents}
-                TotalCount={ViewModel.Checklist.Documents.length}
-                Page={1}
-                PageSize={100}
-                OnPageChange={() => undefined}
                 IsLoading={ViewModel.IsLoading}
                 EmptyMessage={Translation.t('Wizard.NoDocuments')}
               />
