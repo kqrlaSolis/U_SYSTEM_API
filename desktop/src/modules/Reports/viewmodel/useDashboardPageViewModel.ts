@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { NavigationIconName } from '../../../app/layout/NavigationModules';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { NormalizeLanguage } from '../../../shared/i18n/Config';
 import { FormatCurrency, FormatNumber } from '../../../shared/utils/Format';
 import { BuildTermSummary, type TermSummary } from '../model/TermSummary';

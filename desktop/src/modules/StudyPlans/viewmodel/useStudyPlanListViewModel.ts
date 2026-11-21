@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import type { StudyPlan } from '../model/StudyPlan';
 import { StudyPlansService } from '../model/StudyPlansService';

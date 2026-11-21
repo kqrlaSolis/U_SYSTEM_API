@@ -1,7 +1,7 @@
 import type { ITNavigationItem } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { usePermissions } from '../../shared/hooks/usePermissions';
+import { usePermissions } from '../../shared/auth/usePermissions';
 import { GetNavigationIcon } from './NavigationIcons';
 import { GetNavigationModules } from './NavigationModules';
 

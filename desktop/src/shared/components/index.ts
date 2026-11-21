@@ -7,8 +7,6 @@ export type {
 } from './AppButton';
 export { DataTable } from './DataTable';
 export type { DataTableColumn, DataTableColumnType, DataTableProps } from './DataTable';
-export { FilterBar } from './FilterBar';
-export type { FilterBarProps, FilterField } from './FilterBar';
 export { FormField } from './FormField';
 export type { FormFieldProps } from './FormField';
 export { KpiTile } from './KpiTile';

@@ -3,3 +3,5 @@ export { CrudListPage } from './CrudListPage';
 export type { CrudConfig, CrudField, CrudFieldType, CrudRow } from './CrudTypes';
 export { useCrudFormViewModel } from './useCrudFormViewModel';
 export { useCrudListViewModel } from './useCrudListViewModel';
+export { FilterBar } from './FilterBar';
+export type { FilterBarProps, FilterField } from './FilterBar';

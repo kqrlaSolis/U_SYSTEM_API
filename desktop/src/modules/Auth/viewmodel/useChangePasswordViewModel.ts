@@ -3,7 +3,7 @@ import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/auth/AuthContext';
 import I18next from '../../../shared/i18n/Config';
-import { AuthService } from '../model/AuthService';
+import { PasswordService } from '../model/PasswordService';
 
 export interface ChangePasswordValidationErrors {
   CurrentPassword?: string;
@@ -59,7 +59,7 @@ export function useChangePasswordViewModel() {
     SetErrorMessage(null);
 
     try {
-      await AuthService.ChangePasswordAsync({ CurrentPassword, NewPassword });
+      await PasswordService.ChangePasswordAsync({ CurrentPassword, NewPassword });
       Auth.MarkPasswordChanged();
       Navigator('/', { replace: true });
     } catch (CaughtError) {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { SettingsService } from '../model/SettingsService';
 import type { SystemSetting } from '../model/SystemSetting';
 

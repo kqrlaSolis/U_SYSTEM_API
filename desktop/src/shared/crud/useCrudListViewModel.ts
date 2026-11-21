@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { GetErrorMessage } from '../http/GetErrorMessage';
-import { usePermissions } from '../hooks/usePermissions';
+import { usePermissions } from '../auth/usePermissions';
 import type { CrudConfig, CrudRow } from './CrudTypes';
 
 const DefaultPageSize = 20;

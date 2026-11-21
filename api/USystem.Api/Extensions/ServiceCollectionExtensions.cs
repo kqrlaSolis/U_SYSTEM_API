@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using USystem.Api.Configuration;
 using USystem.Api.Filters;
 using USystem.Api.Localization;
 using USystem.Api.Security;
@@ -111,9 +112,8 @@ public static class ServiceCollectionExtensions
 
         Services.AddCors(Options => Options.AddPolicy(CorsPolicyName, Policy =>
         {
-            // Orígenes del desktop: Vite en desarrollo y el renderer file:// empaquetado
-            var AllowedOrigins = Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                ?? new[] { "http://localhost:5173", "http://127.0.0.1:5173", "null" };
+            // Orígenes de base del desktop + los extra de configuración (se suman, nunca reemplazan)
+            var AllowedOrigins = CorsConfiguration.ResolveAllowedOrigins(Configuration);
 
             Policy.WithOrigins(AllowedOrigins).AllowAnyHeader().AllowAnyMethod();
         }));

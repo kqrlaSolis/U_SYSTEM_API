@@ -45,7 +45,7 @@ Solo estas variables cambian algo en la API. Lo demás tiene un valor por defect
 | `Seed__AdminPassword` | Solo para `--seed-admin` | — | Contraseña del primer administrador |
 | `Seed__AdminUsername`, `Seed__AdminEmail` | Opcional | — | Por defecto `Administrator` / `admin@usystem.local` |
 | `Swagger__Enabled` | — | Opcional (`true` para demos) | Publica `/swagger` en producción |
-| `Cors__AllowedOrigins__0` | — | Opcional | Origen permitido extra; por defecto `http://localhost:5173` |
+| `Cors__AllowedOrigins__0`, `__1`, ... | Opcional | Opcional | Orígenes extra (sin `/` final). Se **suman** a los de base, que siempre están permitidos: `http://localhost:5173`, `http://127.0.0.1:5173` y `null` (desktop empaquetado) |
 | `Database__ServerVersion` | Opcional | Opcional | Versión de MySQL para EF; por defecto `8.4.11-mysql` |
 
 **No hace falta definir**: `PORT` (lo pone Railway), `ASPNETCORE_ENVIRONMENT` (lo ponen `launchSettings.json`
@@ -146,7 +146,7 @@ AWS_BUCKET_NAME=cfsp-s3-bucket-prod
 - `${{MySQL.…}}` son **referencias**: Railway pone los valores del servicio MySQL por la red interna. Si
   cambias la contraseña de MySQL, la API la toma sola en el siguiente despliegue. Si tu servicio de base de
   datos no se llama `MySQL`, cambia ese nombre en las referencias.
-- Opcionales: `Swagger__Enabled=true` (solo para demos) y `Cors__AllowedOrigins__0=<origen>`.
+- Opcionales: `Swagger__Enabled=true` (solo para demos) y `Cors__AllowedOrigins__0=<origen>` (se suma a los orígenes de base del desktop).
 
 ### 2. Desplegar
 

@@ -103,14 +103,17 @@ desktop/src/
 │       ├── model/               Tipos, <Module>Service.ts y, en catálogos, <Module>Config.ts
 │       ├── viewmodel/           Hooks use<Pantalla>ViewModel.ts (los catálogos usan los de shared/crud)
 │       └── view/                Páginas <Pantalla>Page.tsx
-├── shared/
-│   ├── auth/             AuthContext.tsx, RequireAuth.tsx, AuthPaths.ts
-│   ├── components/       Envoltorios de AXZY UI (DataTable.tsx, FormField.tsx, FilterBar.tsx)
-│   ├── crud/             CrudListPage/CrudFormPage + ViewModels genéricos de catálogos
-│   ├── hooks/            usePermissions.ts, usePagedQuery.ts, useFilterOptions.ts
-│   ├── http/             HttpClient.ts (JWT, refresh, Accept-Language, errores), ApiResponse.ts
+├── shared/               Código común a todos los módulos. Nunca importa de modules/.
+│   ├── auth/             Sesión: AuthContext, RequireAuth, usePermissions, SessionService (login,
+│   │                     refresh, logout, me), AuthStorage (tokens), AuthPaths y sus tipos
+│   ├── catalogs/         useCatalogOptions: carreras, periodos, planes, alumnos y grupos para selects
+│   ├── components/       UI pura sobre AXZY UI, sin datos ni API (AppButton, DataTable, FormField…)
+│   ├── crud/             CRUD genérico de catálogos: CrudListPage/CrudFormPage, sus ViewModels,
+│   │                     CrudTypes y FilterBar
+│   ├── http/             HttpClient (JWT, refresh, Accept-Language, errores), ApiResponse,
+│   │                     ApiErrorException, GetErrorMessage y usePagedQuery
 │   ├── i18n/             I18nProvider.tsx, Config.ts, Es.ts, En.ts
-│   └── utils/            Format.ts
+│   └── utils/            Format.ts (fechas, números y moneda)
 ├── styles/               Global.css (capas de Tailwind + CSS de AXZY UI)
 └── test/                 Setup.ts, RenderWithTheme.tsx
 ```
@@ -207,7 +210,7 @@ export const UsersService = {
 import { useCallback, useEffect, useState } from 'react';
 import { User } from '../model/User';
 import { UsersService } from '../model/UsersService';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 
 const DefaultPageSize = 20;
 

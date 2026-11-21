@@ -1,5 +1,5 @@
-import { DefaultPageSize, usePagedQuery } from '../../../shared/hooks/usePagedQuery';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { DefaultPageSize, usePagedQuery } from '../../../shared/http/usePagedQuery';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import type { User } from '../model/User';
 import { UsersService } from '../model/UsersService';
 

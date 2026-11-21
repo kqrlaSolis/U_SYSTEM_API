@@ -1,6 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { AuthUser } from '../../Auth/model/AuthResponse';
+import type { AuthUser } from '../../../shared/auth/AuthResponse';
 import type { Dashboard } from '../model/Dashboard';
 import { useDashboardPageViewModel } from './useDashboardPageViewModel';
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import type { AcademicTerm } from '../model/AcademicTerm';
 import { AcademicTermsService } from '../model/AcademicTermsService';

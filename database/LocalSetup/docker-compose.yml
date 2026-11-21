@@ -1,0 +1,43 @@
+# U SYSTEM | MySQL 8.4 local con la base USystem completa (esquema + semilla + admin + datos demo).
+# Uso (desde esta carpeta):
+#   docker compose up -d          # la primera vez crea la base (tarda ~30 s)
+#   docker compose logs -f mysql  # espera "ready for connections"
+#   docker compose down -v        # borra todo; el siguiente "up" vuelve a crear la base desde cero
+# Los scripts solo corren cuando el volumen está vacío (primer arranque).
+name: usystem-local
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: usystem-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: "USystemRoot#2026"
+      TZ: "America/Tijuana"
+    ports:
+      # 3307 en tu máquina para no chocar con un MySQL instalado en 3306
+      - "3307:3306"
+    volumes:
+      - usystem-data:/var/lib/mysql
+      - ../00_CreateDatabase.sql:/docker-entrypoint-initdb.d/00_CreateDatabase.sql:ro
+      - ../01_Security.sql:/docker-entrypoint-initdb.d/01_Security.sql:ro
+      - ../02_AcademicCatalogs.sql:/docker-entrypoint-initdb.d/02_AcademicCatalogs.sql:ro
+      - ../03_AcademicOperations.sql:/docker-entrypoint-initdb.d/03_AcademicOperations.sql:ro
+      - ../04_AcademicTracking.sql:/docker-entrypoint-initdb.d/04_AcademicTracking.sql:ro
+      - ../05_Finance.sql:/docker-entrypoint-initdb.d/05_Finance.sql:ro
+      - ../06_Extras.sql:/docker-entrypoint-initdb.d/06_Extras.sql:ro
+      - ../99_SeedData.sql:/docker-entrypoint-initdb.d/07_SeedData.sql:ro
+      - ./10_AdminUser.sql:/docker-entrypoint-initdb.d/08_AdminUser.sql:ro
+      - ./20_DemoData.sql:/docker-entrypoint-initdb.d/09_DemoData.sql:ro
+      - ./30_AppUser.sql:/docker-entrypoint-initdb.d/10_AppUser.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pUSystemRoot#2026"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  usystem-data:

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import I18next from '../../../shared/i18n/Config';
-import { AuthService } from '../model/AuthService';
+import { PasswordService } from '../model/PasswordService';
 
 // ViewModel de "olvidé mi contraseña": envía el correo y muestra un mensaje genérico.
 export function useForgotPasswordViewModel() {
@@ -22,7 +22,7 @@ export function useForgotPasswordViewModel() {
     SetErrorMessage(null);
 
     try {
-      await AuthService.ForgotPasswordAsync({ Email: Email.trim() });
+      await PasswordService.ForgotPasswordAsync({ Email: Email.trim() });
       SetIsSent(true);
     } catch (CaughtError) {
       SetErrorMessage(GetErrorMessage(CaughtError));

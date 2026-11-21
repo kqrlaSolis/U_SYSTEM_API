@@ -1,9 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { AuthResponse, AuthUser } from '../../modules/Auth/model/AuthResponse';
-import { AuthService } from '../../modules/Auth/model/AuthService';
-import { AuthStorage } from '../../modules/Auth/model/AuthStorage';
-import type { LoginRequest } from '../../modules/Auth/model/LoginRequest';
+import type { AuthResponse, AuthUser } from './AuthResponse';
+import { SessionService } from './SessionService';
+import { AuthStorage } from './AuthStorage';
+import type { LoginRequest } from './LoginRequest';
 import { HttpClient } from '../http/HttpClient';
 
 export interface AuthContextValue {
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
 
         try {
-          const Refreshed: AuthResponse = await AuthService.RefreshAsync(StoredRefreshToken);
+          const Refreshed: AuthResponse = await SessionService.RefreshAsync(StoredRefreshToken);
           AuthStorage.SetAccessToken(Refreshed.AccessToken);
           AuthStorage.SetRefreshToken(Refreshed.RefreshToken);
           SetCurrentUser(Refreshed.User);
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       }
 
       try {
-        const Refreshed: AuthResponse = await AuthService.RefreshAsync(StoredRefreshToken);
+        const Refreshed: AuthResponse = await SessionService.RefreshAsync(StoredRefreshToken);
 
         if (!IsMounted) {
           return;
@@ -130,13 +130,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Vuelve a leer el perfil de la API (roles y permisos frescos)
   const ReloadCurrentUser = useCallback(async () => {
-    const Profile = await AuthService.GetMeAsync();
+    const Profile = await SessionService.GetMeAsync();
     SetCurrentUser(Profile);
   }, []);
 
   const SignIn = useCallback(
     async (Request: LoginRequest) => {
-      const Response: AuthResponse = await AuthService.LoginAsync(Request);
+      const Response: AuthResponse = await SessionService.LoginAsync(Request);
       ApplySession(Response);
     },
     [ApplySession],
@@ -147,7 +147,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     try {
       if (StoredRefreshToken !== null) {
-        await AuthService.LogoutAsync(StoredRefreshToken);
+        await SessionService.LogoutAsync(StoredRefreshToken);
       }
     } catch {
       // Aunque la API falle, la sesión local se cierra

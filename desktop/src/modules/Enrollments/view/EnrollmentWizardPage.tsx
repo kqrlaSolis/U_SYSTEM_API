@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { AppButton, DataTable } from '../../../shared/components';
 import type { DataTableColumn } from '../../../shared/components';
 import type { ChecklistDocument } from '../model/EnrollmentChecklist';
-import { useFilterOptions } from '../../../shared/hooks/useFilterOptions';
+import { useCatalogOptions } from '../../../shared/catalogs/useCatalogOptions';
 import { useEnrollmentWizardViewModel } from '../viewmodel/useEnrollmentWizardViewModel';
 
 // Asistente de inscripción: alumno, grupos, documentos, pago y confirmación.
 export function EnrollmentWizardPage() {
   const ViewModel = useEnrollmentWizardViewModel();
   const Translation = useTranslation();
-  const Options = useFilterOptions();
+  const Options = useCatalogOptions();
 
   const Columns: DataTableColumn<ChecklistDocument>[] = [
     { Field: 'Name', Header: Translation.t('Wizard.Document') },

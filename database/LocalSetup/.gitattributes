@@ -1,0 +1,4 @@
+# Los scripts de shell deben conservar LF aunque se clonen en Windows (core.autocrlf=true)
+*.sh text eol=lf
+# PowerShell 5.1 necesita UTF-8 con BOM para mostrar acentos; se guarda tal cual
+*.ps1 text eol=crlf

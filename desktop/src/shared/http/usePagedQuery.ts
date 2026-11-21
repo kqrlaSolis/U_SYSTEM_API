@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import I18next from '../i18n/Config';
-import { ApiErrorException } from '../http/ApiErrorException';
-import type { PagedResult } from '../http/ApiResponse';
+import { ApiErrorException } from './ApiErrorException';
+import type { PagedResult } from './ApiResponse';
 
 export const DefaultPageSize = 20;
 

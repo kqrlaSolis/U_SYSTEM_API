@@ -52,6 +52,10 @@ dotnet run --project api/USystem.Api
 dotnet test
 ```
 
+¿Quieres tu propia base local con datos demo en vez de la de Railway? Corre
+`.\database\LocalSetup\Setup.ps1 -WriteEnv` (Windows) o `bash database/LocalSetup/Setup.sh --write-env`;
+detalles en [`database/LocalSetup/README.md`](database/LocalSetup/README.md).
+
 Solo si la base está vacía:
 
 ```bash

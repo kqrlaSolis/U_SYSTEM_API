@@ -5,7 +5,7 @@ import {
   type NavigationModule,
 } from '../../../app/layout/NavigationModules';
 import { useAuth } from '../../../shared/auth/AuthContext';
-import { usePermissions } from '../../../shared/hooks/usePermissions';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { NormalizeLanguage } from '../../../shared/i18n/Config';
 import { FormatCurrency, FormatNumber } from '../../../shared/utils/Format';
 import { useDashboardViewModel } from '../../Reports/viewmodel/useDashboardViewModel';

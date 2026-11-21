@@ -1,4 +1,4 @@
-import { useAuth } from '../auth/AuthContext';
+import { useAuth } from './AuthContext';
 
 export interface PermissionsApi {
   Permissions: string[];

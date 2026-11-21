@@ -1,7 +1,8 @@
 import { ITBadget, ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppButton, DataTable, FilterBar, SearchBox } from '../../../shared/components';
+import { AppButton, DataTable, SearchBox } from '../../../shared/components';
+import { FilterBar } from '../../../shared/crud';
 import type { DataTableColumn } from '../../../shared/components';
 import type { StudyPlan } from '../model/StudyPlan';
 import { useStudyPlanListViewModel } from '../viewmodel/useStudyPlanListViewModel';

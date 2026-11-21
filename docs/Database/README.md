@@ -15,6 +15,19 @@ desde las variables de Railway ([`Operations/Environments.md`](../Operations/Env
 
 ## Crear la base
 
+### Base local completa (recomendado para desarrollar)
+
+[`database/LocalSetup/`](../../database/LocalSetup/README.md) crea desde cero una base `USystem` en tu
+MySQL local (o en Docker) con esquema, catálogos, administrador, usuario `USystemApp` y datos demo de
+todos los módulos, y puede escribir la cadena de conexión en tu `.env`:
+
+```powershell
+.\database\LocalSetup\Setup.ps1 -WriteEnv        # Windows
+bash database/LocalSetup/Setup.sh --write-env    # macOS / Linux
+```
+
+### Solo los scripts
+
 Con [`tools/ApplyMySqlScripts.py`](../../tools/README.md), sin necesitar el cliente `mysql`:
 
 ```bash

@@ -1,7 +1,8 @@
 import { ITPage, ITStack, ITText } from '@axzydev/axzy_ui_system';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { AppButton, DataTable, FilterBar, SearchBox } from '../components';
+import { AppButton, DataTable, SearchBox } from '../components';
+import { FilterBar } from './FilterBar';
 import type { DataTableColumn } from '../components';
 import type { CrudConfig, CrudRow } from './CrudTypes';
 import { useCrudListViewModel } from './useCrudListViewModel';

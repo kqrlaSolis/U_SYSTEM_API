@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { DataTableColumn } from '../components';
-import type { FilterField } from '../components/FilterBar';
+import type { FilterField } from './FilterBar';
 import type { PagedResult } from '../http/ApiResponse';
 
 // Tipos del CRUD genérico: cada módulo solo declara columnas, campos y servicios.

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import I18next from '../../../shared/i18n/Config';
-import { AuthService } from '../model/AuthService';
+import { PasswordService } from '../model/PasswordService';
 
 const MinimumPasswordLength = 8;
 
@@ -44,7 +44,7 @@ export function useResetPasswordViewModel() {
     SetErrorMessage(null);
 
     try {
-      await AuthService.ResetPasswordAsync({
+      await PasswordService.ResetPasswordAsync({
         Email: Email.trim(),
         Token: Token.trim(),
         NewPassword,
