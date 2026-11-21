@@ -24,7 +24,7 @@ public class GradeService : IGradeService
     // 403: la petición es válida pero el grupo no pertenece al docente
     private const int ForbiddenStatusCode = 403;
 
-    private static readonly string[] UnrestrictedRoleNames =
+    private static readonly string[] _UnrestrictedRoleNames =
     {
         "Administrator",
         "Registrar",
@@ -153,7 +153,7 @@ public class GradeService : IGradeService
     // Solo se acota a quien es Teacher sin un rol con alcance sobre todos los grupos
     private bool IsTeacherScoped()
         => _CurrentUser.IsInRole(TeacherRoleName)
-            && !UnrestrictedRoleNames.Any(_CurrentUser.IsInRole);
+            && !_UnrestrictedRoleNames.Any(_CurrentUser.IsInRole);
 
     // El grupo debe estar asignado al docente vinculado al usuario actual (Teachers.UserId)
     private async Task EnsureAssignedTeacherAsync(ClassGroup Group, CancellationToken Cancellation)
