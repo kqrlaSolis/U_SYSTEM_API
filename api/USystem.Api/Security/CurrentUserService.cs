@@ -46,4 +46,13 @@ public class CurrentUserService : ICurrentUser
 
     public bool HasPermission(string Permission)
         => Principal?.HasClaim(JwtTokenGenerator.PermissionClaimType, Permission) == true;
+
+    public IReadOnlyCollection<string> Roles
+        => Principal?.FindAll(ClaimTypes.Role)
+            .Select(Claim => Claim.Value)
+            .ToArray()
+        ?? Array.Empty<string>();
+
+    public bool IsInRole(string Role)
+        => Principal?.HasClaim(ClaimTypes.Role, Role) == true;
 }

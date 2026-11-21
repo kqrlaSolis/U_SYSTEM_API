@@ -20,6 +20,9 @@ public interface ITeacherRepository : IRepository<Teacher>
         bool IncludeDeleted = false,
         CancellationToken Cancellation = default);
 
+    // Docente vinculado a una cuenta de usuario (Teachers.UserId)
+    Task<Teacher?> GetByUserIdAsync(long UserId, CancellationToken Cancellation = default);
+
     // Un docente con grupos asignados solo se desactiva
     Task<bool> HasClassGroupsAsync(int TeacherId, CancellationToken Cancellation = default);
 }
