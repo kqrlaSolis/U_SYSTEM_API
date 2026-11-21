@@ -141,6 +141,7 @@
   "Grades.Empty": "Capture at least one grade.",
   "Grades.InvalidStatus": "The grade status is not valid.",
   "Grades.GroupNotOpen": "The group is not open for grading.",
+  "Grades.ClassGroupNotAssigned": "You can only view and capture grades for the class groups assigned to you.",
   "ReEnrollments.PendingPrerequisite": "A prerequisite subject is still pending.",
   "Notifications.NotFound": "The notification template does not exist.",
   "Notifications.CodeTaken": "The template code already exists.",

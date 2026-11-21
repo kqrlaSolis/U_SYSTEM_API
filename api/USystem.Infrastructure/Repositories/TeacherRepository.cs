@@ -42,6 +42,11 @@ public class TeacherRepository : ITeacherRepository
             Cancellation);
     }
 
+    public Task<Teacher?> GetByUserIdAsync(long UserId, CancellationToken Cancellation = default)
+        => _Context.Teachers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(Teacher => Teacher.UserId == UserId, Cancellation);
+
     public Task<bool> HasClassGroupsAsync(int TeacherId, CancellationToken Cancellation = default)
         => _Context.ClassGroups.AnyAsync(Group => Group.TeacherId == TeacherId, Cancellation);
 

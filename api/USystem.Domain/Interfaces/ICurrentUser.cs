@@ -14,4 +14,9 @@ public interface ICurrentUser
     IReadOnlyCollection<string> Permissions { get; }
 
     bool HasPermission(string Permission);
+
+    // Roles del token; sirven para acotar datos (p. ej. un docente solo ve sus grupos)
+    IReadOnlyCollection<string> Roles { get; }
+
+    bool IsInRole(string Role);
 }

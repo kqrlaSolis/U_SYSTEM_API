@@ -141,6 +141,7 @@
   "Grades.Empty": "Captura al menos una calificación.",
   "Grades.InvalidStatus": "El estatus de la calificación no es válido.",
   "Grades.GroupNotOpen": "El grupo no está abierto para captura.",
+  "Grades.ClassGroupNotAssigned": "Solo puedes consultar y capturar calificaciones de los grupos que tienes asignados.",
   "ReEnrollments.PendingPrerequisite": "Falta aprobar una materia previa (seriación).",
   "Notifications.NotFound": "La plantilla de notificación no existe.",
   "Notifications.CodeTaken": "La clave de la plantilla ya existe.",
