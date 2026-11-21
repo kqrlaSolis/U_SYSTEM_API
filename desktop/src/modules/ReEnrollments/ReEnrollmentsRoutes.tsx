@@ -6,7 +6,7 @@ import { ReEnrollmentPage } from './view/ReEnrollmentPage';
 export const ReEnrollmentsRoutes: ModuleRoutes = {
   Name: 'ReEnrollments',
   Menu: [
-    { Id: 're-enrollments', Path: '/re-enrollments', LabelKey: 'Nav.ReEnrollments', Icon: 'ReEnrollments', Permission: 'Enrollments.Create' },
+    { Id: 're-enrollments', Path: '/re-enrollments', LabelKey: 'Nav.ReEnrollments', Icon: 'ReEnrollments', Permission: 'ReEnrollments.View' },
   ],
   Private: <Route path="re-enrollments" element={<ReEnrollmentPage />} />,
 };

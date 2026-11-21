@@ -28,16 +28,20 @@ export function EnrollmentWizardPage() {
       Align: 'right',
       Render: (Row) => (
         <div className="USystemRowActions">
-          <RowActionButton
-            Icon="Register"
-            Label={Translation.t('Wizard.Register')}
-            Subject={Row.Name}
-            IsLoading={ViewModel.IsLoading}
-            OnClick={() => {
-              void ViewModel.RegisterDocument(Row.DocumentTypeId);
-            }}
-          />
-          {Row.StudentDocumentId !== null && Row.Status !== 'Validated' && (
+          {ViewModel.CanUploadDocuments && (
+            <RowActionButton
+              Icon="Register"
+              Label={Translation.t('Wizard.Register')}
+              Subject={Row.Name}
+              IsLoading={ViewModel.IsLoading}
+              OnClick={() => {
+                void ViewModel.RegisterDocument(Row.DocumentTypeId);
+              }}
+            />
+          )}
+          {ViewModel.CanValidateDocuments &&
+            Row.StudentDocumentId !== null &&
+            Row.Status !== 'Validated' && (
             <RowActionButton
               Icon="Validate"
               Label={Translation.t('Wizard.Validate')}

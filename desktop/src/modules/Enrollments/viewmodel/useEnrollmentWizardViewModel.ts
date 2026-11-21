@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import I18next from '../../../shared/i18n/Config';
 import type { EnrollmentChecklist } from '../model/EnrollmentChecklist';
@@ -8,6 +9,7 @@ export type WizardStep = 1 | 2 | 3 | 4 | 5;
 
 // ViewModel del asistente de inscripción: alumno, grupos, documentos, pago y confirmación.
 export function useEnrollmentWizardViewModel() {
+  const Permissions = usePermissions();
   const [Step, SetStep] = useState<WizardStep>(1);
   const [StudentId, SetStudentId] = useState('1');
   const [TermId, SetTermId] = useState('2');
@@ -130,6 +132,8 @@ export function useEnrollmentWizardViewModel() {
   }, [CareerId, EnrollmentId, GroupIds, StudentId, TermId]);
 
   return {
+    CanUploadDocuments: Permissions.Can('StudentDocuments.Upload'),
+    CanValidateDocuments: Permissions.Can('StudentDocuments.Validate'),
     Step,
     StudentId,
     TermId,

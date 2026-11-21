@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import { useNavigate } from 'react-router-dom';
 import I18next from '../../../shared/i18n/Config';
@@ -31,6 +32,8 @@ const EmptyForm: UserFormState = {
 
 // ViewModel del formulario de usuarios: alta, edición, roles, estado y contraseña temporal.
 export function useUserFormViewModel(UserId?: number) {
+  const Permissions = usePermissions();
+  const CanAssignRoles = Permissions.Can('Roles.Assign');
   const Navigator = useNavigate();
   const IsEditing = UserId !== undefined;
 
@@ -161,7 +164,10 @@ export function useUserFormViewModel(UserId?: number) {
         Navigator('/users', { replace: true });
       } else {
         await UsersService.Update(UserId, Request);
-        await UsersService.AssignRoles(UserId, SelectedRoleIds);
+        // Sin Roles.Assign la API rechaza el cambio de roles; se guardan solo los datos
+        if (CanAssignRoles) {
+          await UsersService.AssignRoles(UserId, SelectedRoleIds);
+        }
         Navigator('/users', { replace: true });
       }
     } catch (CaughtError) {
@@ -169,7 +175,7 @@ export function useUserFormViewModel(UserId?: number) {
     } finally {
       SetIsSubmitting(false);
     }
-  }, [Form, IsEditing, Navigator, SelectedRoleIds, UserId, Validate]);
+  }, [CanAssignRoles, Form, IsEditing, Navigator, SelectedRoleIds, UserId, Validate]);
 
   const ToggleStatus = useCallback(async () => {
     if (UserId === undefined) {
@@ -213,6 +219,7 @@ export function useUserFormViewModel(UserId?: number) {
   );
 
   return {
+    CanAssignRoles,
     IsEditing,
     User,
     Form,

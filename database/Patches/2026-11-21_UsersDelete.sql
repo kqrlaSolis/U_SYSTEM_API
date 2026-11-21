@@ -2,8 +2,8 @@
 -- U SYSTEM | Parche: permiso Users.Delete (baja lógica de usuarios)
 -- Para bases ya creadas antes de este cambio; las nuevas lo traen en 99_SeedData.sql.
 -- Se puede ejecutar más de una vez sin duplicar datos.
+-- Sin USE: corre en la base a la que estés conectado (en Railway se llama `railway`, en local `USystem`).
 -- =====================================================================
-USE USystem;
 
 INSERT IGNORE INTO Permissions (Id, Code, Module, Description) VALUES
   (79, 'Users.Delete', 'Users', 'Delete users (soft delete)');

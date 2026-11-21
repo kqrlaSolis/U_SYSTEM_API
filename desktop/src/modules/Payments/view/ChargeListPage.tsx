@@ -28,7 +28,7 @@ export function ChargeListPage() {
       Type: 'actions',
       Align: 'right',
       Render: (Row) =>
-        Row.Status === 'Cancelled' || Row.Status === 'Paid' ? null : (
+        !ViewModel.CanCancel || Row.Status === 'Cancelled' || Row.Status === 'Paid' ? null : (
           <RowActionButton
             Icon="Cancel"
             Label={Translation.t('Payments.CancelCharge')}
@@ -55,79 +55,81 @@ export function ChargeListPage() {
       onRetry={ViewModel.Load}
     >
       <ITStack spacing={4}>
-        <ITCard title={Translation.t('Payments.NewCharge')}>
-          <div className="USystemToolbar">
-            <ITInput
-              name="ChargeStudentId"
-              type="number"
-              placeholder={Translation.t('Payments.Columns.Student')}
-              value={ViewModel.StudentId}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetStudentId(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ChargeTermId"
-              type="number"
-              placeholder={Translation.t('Payments.Columns.Term')}
-              value={ViewModel.AcademicTermId}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetAcademicTermId(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ChargeConceptId"
-              type="number"
-              placeholder={Translation.t('Payments.Columns.Concept')}
-              value={ViewModel.ConceptId}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetConceptId(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ChargeAmount"
-              type="number"
-              placeholder={Translation.t('Payments.Columns.Amount')}
-              value={ViewModel.Amount}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetAmount(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ChargeDiscount"
-              type="number"
-              placeholder={Translation.t('Payments.Columns.Discount')}
-              value={ViewModel.Discount}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetDiscount(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ChargeSurcharge"
-              type="number"
-              placeholder={Translation.t('Payments.Columns.Surcharge')}
-              value={ViewModel.Surcharge}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetSurcharge(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ChargeDueDate"
-              placeholder="YYYY-MM-DD"
-              value={ViewModel.DueDate}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetDueDate(Event.target.value);
-              }}
-            />
-            <AppButton
-              Label={Translation.t('Payments.RegisterCharge')}
-              IsLoading={ViewModel.IsLoading}
-              OnClick={() => {
-                void ViewModel.Create();
-              }}
-            />
-          </div>
-        </ITCard>
+        {ViewModel.CanRegister && (
+          <ITCard title={Translation.t('Payments.NewCharge')}>
+            <div className="USystemToolbar">
+              <ITInput
+                name="ChargeStudentId"
+                type="number"
+                placeholder={Translation.t('Payments.Columns.Student')}
+                value={ViewModel.StudentId}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetStudentId(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ChargeTermId"
+                type="number"
+                placeholder={Translation.t('Payments.Columns.Term')}
+                value={ViewModel.AcademicTermId}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetAcademicTermId(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ChargeConceptId"
+                type="number"
+                placeholder={Translation.t('Payments.Columns.Concept')}
+                value={ViewModel.ConceptId}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetConceptId(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ChargeAmount"
+                type="number"
+                placeholder={Translation.t('Payments.Columns.Amount')}
+                value={ViewModel.Amount}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetAmount(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ChargeDiscount"
+                type="number"
+                placeholder={Translation.t('Payments.Columns.Discount')}
+                value={ViewModel.Discount}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetDiscount(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ChargeSurcharge"
+                type="number"
+                placeholder={Translation.t('Payments.Columns.Surcharge')}
+                value={ViewModel.Surcharge}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetSurcharge(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ChargeDueDate"
+                placeholder="YYYY-MM-DD"
+                value={ViewModel.DueDate}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetDueDate(Event.target.value);
+                }}
+              />
+              <AppButton
+                Label={Translation.t('Payments.RegisterCharge')}
+                IsLoading={ViewModel.IsLoading}
+                OnClick={() => {
+                  void ViewModel.Create();
+                }}
+              />
+            </div>
+          </ITCard>
+        )}
 
         <DataTable<Charge>
           Columns={Columns}

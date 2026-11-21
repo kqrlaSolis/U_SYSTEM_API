@@ -40,6 +40,8 @@ export interface CrudRowAction<TRow> {
   LabelKey: string;
   // Ícono del botón; LabelKey queda como nombre accesible y tooltip
   Icon: RowActionIconName;
+  // Permiso que exige la API para esta acción; sin él el botón no se muestra
+  Permission?: string;
   Color?: 'primary' | 'danger';
   // Si no se indica, la acción aparece en todas las filas
   IsVisible?: (Row: TRow) => boolean;

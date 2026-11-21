@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import { HttpClient } from '../../../shared/http/HttpClient';
 import { TrackingService } from '../../Tracking/model/TrackingService';
@@ -26,6 +27,7 @@ const ProposalPath = (StudentId: number) => `/api/v1/students/${StudentId}/re-en
 
 // ViewModel de reinscripción: propone materias elegibles y crea la reinscripción.
 export function useReEnrollmentViewModel() {
+  const Permissions = usePermissions();
   const [StudentId, SetStudentId] = useState('1');
   const [Proposal, SetProposal] = useState<ReEnrollmentProposal | null>(null);
   const [TermId, SetTermId] = useState('');
@@ -89,6 +91,7 @@ export function useReEnrollmentViewModel() {
   }, [GroupIds, Proposal, StudentId, TermId]);
 
   return {
+    CanCreate: Permissions.Can('ReEnrollments.Create'),
     StudentId,
     Proposal,
     TermId,

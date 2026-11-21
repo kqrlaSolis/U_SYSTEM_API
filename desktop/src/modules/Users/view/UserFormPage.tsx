@@ -175,7 +175,7 @@ export function UserFormPage() {
               onChange={(Values: (string | number)[]) => {
                 ViewModel.SetSelectedRoleIds(Values.map((Value) => Number(Value)));
               }}
-              disabled={ViewModel.IsSubmitting}
+              disabled={ViewModel.IsSubmitting || (ViewModel.IsEditing && !ViewModel.CanAssignRoles)}
             />
             {ViewModel.ValidationErrors.RoleIds !== undefined && (
               <ITText as="span" className="USystemFieldError">

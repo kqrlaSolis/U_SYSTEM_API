@@ -42,7 +42,9 @@ export function CrudListPage<TRow extends CrudRow, TRequest>({
               OnClick={() => Navigator(`${Config.Route}/${Row.Id}`)}
             />
           )}
-          {Config.RowActions?.filter((Action) => Action.IsVisible?.(Row) ?? true).map((Action) => (
+          {Config.RowActions?.filter(
+            (Action) => ViewModel.CanRunAction(Action.Permission) && (Action.IsVisible?.(Row) ?? true),
+          ).map((Action) => (
             <RowActionButton
               key={Action.Name}
               Icon={Action.Icon}

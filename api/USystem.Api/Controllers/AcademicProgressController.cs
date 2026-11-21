@@ -20,7 +20,7 @@ public class AcademicProgressController : ControllerBase
         => _ProgressService = ProgressService;
 
     [HttpGet]
-    [RequirePermission(PermissionCodes.Grades.View)]
+    [RequirePermission(PermissionCodes.AcademicProgress.View)]
     public async Task<ActionResult<ApiResponse<AcademicProgressDto>>> Get(
         long StudentId,
         CancellationToken Cancellation)

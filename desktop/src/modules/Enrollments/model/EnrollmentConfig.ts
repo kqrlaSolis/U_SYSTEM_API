@@ -59,6 +59,7 @@ export const EnrollmentConfig: CrudConfig<Enrollment, EnrollmentRequest> = {
       Name: 'Cancel',
       LabelKey: 'Enrollments.CancelAction',
       Icon: 'Cancel',
+      Permission: 'Enrollments.Cancel',
       Color: 'danger',
       IsVisible: (Row) => Row.Status !== 'Cancelled',
       Run: (Row) => EnrollmentsService.Cancel(Row.Id, 'Cancelada desde el listado'),

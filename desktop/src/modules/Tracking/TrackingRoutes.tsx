@@ -6,7 +6,7 @@ import { TrackingPage } from './view/TrackingPage';
 export const TrackingRoutes: ModuleRoutes = {
   Name: 'Tracking',
   Menu: [
-    { Id: 'tracking', Path: '/tracking', LabelKey: 'Nav.Tracking', Icon: 'Tracking', Permission: 'Grades.View' },
+    { Id: 'tracking', Path: '/tracking', LabelKey: 'Nav.Tracking', Icon: 'Tracking', Permission: 'Transcript.View' },
   ],
   Private: <Route path="tracking" element={<TrackingPage />} />,
 };

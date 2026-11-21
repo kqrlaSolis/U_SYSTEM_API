@@ -35,7 +35,7 @@ public class EnrollmentChecklistController : ControllerBase
             await _ChecklistService.GetAsync(StudentId, AcademicTermId, Cancellation)));
 
     [HttpPost("students/{StudentId:long}/documents")]
-    [RequirePermission(PermissionCodes.Enrollments.Create)]
+    [RequirePermission(PermissionCodes.StudentDocuments.Upload)]
     public async Task<ActionResult<ApiResponse<ChecklistDocumentDto>>> Register(
         long StudentId,
         [FromBody] RegisterStudentDocumentRequest Request,
@@ -44,7 +44,7 @@ public class EnrollmentChecklistController : ControllerBase
             await _ChecklistService.RegisterDocumentAsync(StudentId, Request, Cancellation)));
 
     [HttpPost("student-documents/{DocumentId:long}/validate")]
-    [RequirePermission(PermissionCodes.Enrollments.Create)]
+    [RequirePermission(PermissionCodes.StudentDocuments.Validate)]
     public async Task<ActionResult<ApiResponse<ChecklistDocumentDto>>> Validate(
         long DocumentId,
         CancellationToken Cancellation)

@@ -73,6 +73,7 @@ export function useCrudListViewModel<TRow extends CrudRow, TRequest>(
     ErrorMessage,
     PageSize: DefaultPageSize,
     CanCreate: Permissions.Can(Config.PermissionCreate),
+    CanRunAction: (Permission?: string) => Permission === undefined || Permissions.Can(Permission),
     CanEdit: Permissions.Can(Config.PermissionEdit),
     CanDelete:
       Config.PermissionDelete !== undefined && Permissions.Can(Config.PermissionDelete) && Config.Remove !== undefined,

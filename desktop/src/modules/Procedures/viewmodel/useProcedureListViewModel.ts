@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import { DefaultPageSize, usePagedQuery } from '../../../shared/http/usePagedQuery';
 import type { Procedure } from '../model/ProcedureType';
@@ -6,6 +7,7 @@ import { ProceduresService } from '../model/ProceduresService';
 
 // ViewModel de solicitudes: listado, alta y emisión de trámites.
 export function useProcedureListViewModel() {
+  const Permissions = usePermissions();
   // Listado paginado en el servidor; las acciones (alta, cancelar/emitir) recargan la página actual
   const Paged = usePagedQuery<Procedure>({
     FetchPage: ProceduresService.GetProcedures,
@@ -62,6 +64,8 @@ export function useProcedureListViewModel() {
   );
 
   return {
+    CanRequest: Permissions.Can('Procedures.Request'),
+    CanIssue: Permissions.Can('Procedures.Issue'),
     Items: Paged.Items,
     TotalCount: Paged.TotalCount,
     Page: Paged.Page,

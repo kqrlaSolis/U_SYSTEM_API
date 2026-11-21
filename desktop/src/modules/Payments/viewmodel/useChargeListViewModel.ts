@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { usePermissions } from '../../../shared/auth/usePermissions';
 import { GetErrorMessage } from '../../../shared/http/GetErrorMessage';
 import { DefaultPageSize, usePagedQuery } from '../../../shared/http/usePagedQuery';
 import type { Charge } from '../model/PaymentConcept';
@@ -6,6 +7,7 @@ import { PaymentsService } from '../model/PaymentsService';
 
 // ViewModel de cargos: listado, alta y cancelación.
 export function useChargeListViewModel() {
+  const Permissions = usePermissions();
   // Listado paginado en el servidor; las acciones (alta, cancelar/emitir) recargan la página actual
   const Paged = usePagedQuery<Charge>({
     FetchPage: PaymentsService.GetCharges,
@@ -74,6 +76,8 @@ export function useChargeListViewModel() {
   );
 
   return {
+    CanRegister: Permissions.Can('Payments.Register'),
+    CanCancel: Permissions.Can('Payments.Cancel'),
     Items: Paged.Items,
     TotalCount: Paged.TotalCount,
     Page: Paged.Page,

@@ -25,7 +25,7 @@ export function ProcedureListPage() {
       Type: 'actions',
       Align: 'right',
       Render: (Row) =>
-        Row.Status === 'Issued' ? null : (
+        !ViewModel.CanIssue || Row.Status === 'Issued' ? null : (
           <RowActionButton
             Icon="Issue"
             Label={Translation.t('Procedures.Issue')}
@@ -51,35 +51,37 @@ export function ProcedureListPage() {
       onRetry={ViewModel.Load}
     >
       <ITStack spacing={4}>
-        <ITCard title={Translation.t('Procedures.RequestTitle')}>
-          <div className="USystemToolbar">
-            <ITInput
-              name="ProcedureTypeId"
-              type="number"
-              placeholder={Translation.t('Procedures.TypeId')}
-              value={ViewModel.ProcedureTypeId}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetProcedureTypeId(Event.target.value);
-              }}
-            />
-            <ITInput
-              name="ProcedureStudentId"
-              type="number"
-              placeholder={Translation.t('Procedures.StudentId')}
-              value={ViewModel.StudentId}
-              onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
-                ViewModel.SetStudentId(Event.target.value);
-              }}
-            />
-            <AppButton
-              Label={Translation.t('Procedures.Request')}
-              IsLoading={ViewModel.IsLoading}
-              OnClick={() => {
-                void ViewModel.Create();
-              }}
-            />
-          </div>
-        </ITCard>
+        {ViewModel.CanRequest && (
+          <ITCard title={Translation.t('Procedures.RequestTitle')}>
+            <div className="USystemToolbar">
+              <ITInput
+                name="ProcedureTypeId"
+                type="number"
+                placeholder={Translation.t('Procedures.TypeId')}
+                value={ViewModel.ProcedureTypeId}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetProcedureTypeId(Event.target.value);
+                }}
+              />
+              <ITInput
+                name="ProcedureStudentId"
+                type="number"
+                placeholder={Translation.t('Procedures.StudentId')}
+                value={ViewModel.StudentId}
+                onChange={(Event: React.ChangeEvent<HTMLInputElement>) => {
+                  ViewModel.SetStudentId(Event.target.value);
+                }}
+              />
+              <AppButton
+                Label={Translation.t('Procedures.Request')}
+                IsLoading={ViewModel.IsLoading}
+                OnClick={() => {
+                  void ViewModel.Create();
+                }}
+              />
+            </div>
+          </ITCard>
+        )}
 
         <DataTable<Procedure>
           Columns={Columns}

@@ -106,13 +106,15 @@ export function ReEnrollmentPage() {
                 ViewModel.SetGroupIds(Event.target.value);
               }}
             />
-            <AppButton
-              Label={Translation.t('ReEnrollments.Create')}
-              IsLoading={ViewModel.IsLoading}
-              OnClick={() => {
-                void ViewModel.Create();
-              }}
-            />
+            {ViewModel.CanCreate && (
+              <AppButton
+                Label={Translation.t('ReEnrollments.Create')}
+                IsLoading={ViewModel.IsLoading}
+                OnClick={() => {
+                  void ViewModel.Create();
+                }}
+              />
+            )}
           </ITStack>
         </ITCard>
       </ITStack>

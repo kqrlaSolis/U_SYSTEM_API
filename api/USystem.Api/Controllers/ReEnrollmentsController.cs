@@ -26,14 +26,14 @@ public class ReEnrollmentsController : ControllerBase
     }
 
     [HttpGet]
-    [RequirePermission(PermissionCodes.Enrollments.View)]
+    [RequirePermission(PermissionCodes.ReEnrollments.View)]
     public async Task<ActionResult<ApiResponse<ReEnrollmentProposalDto>>> Get(
         long StudentId,
         CancellationToken Cancellation)
         => Ok(ApiResponse<ReEnrollmentProposalDto>.Ok(await _ReEnrollmentService.ProposeAsync(StudentId, Cancellation)));
 
     [HttpPost]
-    [RequirePermission(PermissionCodes.Enrollments.Create)]
+    [RequirePermission(PermissionCodes.ReEnrollments.Create)]
     public async Task<ActionResult<ApiResponse<EnrollmentDto>>> Create(
         long StudentId,
         [FromBody] CreateEnrollmentRequest Request,

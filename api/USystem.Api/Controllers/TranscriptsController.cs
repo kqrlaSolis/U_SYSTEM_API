@@ -20,7 +20,7 @@ public class TranscriptsController : ControllerBase
         => _TranscriptService = TranscriptService;
 
     [HttpGet]
-    [RequirePermission(PermissionCodes.Grades.View)]
+    [RequirePermission(PermissionCodes.Transcript.View)]
     public async Task<ActionResult<ApiResponse<TranscriptDto>>> Get(long StudentId, CancellationToken Cancellation)
         => Ok(ApiResponse<TranscriptDto>.Ok(await _TranscriptService.GetByStudentAsync(StudentId, Cancellation)));
 }
